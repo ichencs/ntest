@@ -36,7 +36,7 @@
 
 
 
-
+#define TEST_MFC_FUNC
 
 
 
@@ -51,4 +51,4 @@
 #endif
 #endif
 
-
+#include "..\vc15-test-m\vc15TestMInc.h"

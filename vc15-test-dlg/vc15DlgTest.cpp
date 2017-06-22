@@ -3,8 +3,9 @@
 //
 
 #include "stdafx.h"
-#include "vc15-test-dlg.h"
-#include "vc15-test-dlgDlg.h"
+#include "vc15DlgTest.h"
+#include "vc15DlgTestDlg.h"
+#include "vc15Test.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -70,6 +71,12 @@ BOOL Cvc15testdlgApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
+#ifdef TEST_MFC_FUNC
+	vc15Test tset;
+	tset.test();
+
+#else
+
 	Cvc15testdlgDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
@@ -94,6 +101,9 @@ BOOL Cvc15testdlgApp::InitInstance()
 	{
 		delete pShellManager;
 	}
+
+#endif
+
 
 #ifndef _AFXDLL
 	ControlBarCleanUp();

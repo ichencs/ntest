@@ -5,7 +5,7 @@
     <THKVER>53</THKVER>
   </PropertyGroup>
   <PropertyGroup>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)$(PlatformSuf)\</OutDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)$(PlatformTarget)\</OutDir>
     <IntDir>$(DevelopTemp)\$(SolutionName)\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
     <_PropertySheetDisplayName>project</_PropertySheetDisplayName>
   </PropertyGroup>
@@ -18,7 +18,7 @@
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)/lib/$(ConfigurationName)$(PlatFormSuf);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(ConfigurationName)$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
 </Project>
