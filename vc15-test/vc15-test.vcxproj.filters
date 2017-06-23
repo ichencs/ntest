@@ -27,12 +27,27 @@
     <ClInclude Include="test_code.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="boost_asio.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test_calculate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="vc15-test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_code.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="boost_asio.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_calculate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

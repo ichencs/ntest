@@ -1,0 +1,11 @@
+
+.svn/entries
+.svn/format
+.svn/pristine/00/007a6e8104819c25e34287b5e3a8de13099e4717.svn-base
+*.svn-base
+*.db
+*.db-journal
+.vs/vc15-test/v14/.suo
+*.user
+*.ipch
+*.opendb
