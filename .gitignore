@@ -9,3 +9,7 @@
 *.user
 *.ipch
 *.opendb
+*.exe
+*.ilk
+*.pdb
+*.lib
