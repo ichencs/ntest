@@ -3,9 +3,9 @@
 //
 
 #include "stdafx.h"
-#include "vc15DlgTest.h"
-#include "vc15DlgTestDlg.h"
-#include "vc15Test.h"
+#include "dlgntest.h"
+#include "ntestdlg.h"
+#include "ntest.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -14,14 +14,14 @@
 
 // Cvc15testdlgApp
 
-BEGIN_MESSAGE_MAP(Cvc15testdlgApp, CWinApp)
+BEGIN_MESSAGE_MAP(CntestdlgApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
 // Cvc15testdlgApp 构造
 
-Cvc15testdlgApp::Cvc15testdlgApp()
+CntestdlgApp::CntestdlgApp()
 {
 	// 支持重新启动管理器
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
@@ -33,12 +33,12 @@ Cvc15testdlgApp::Cvc15testdlgApp()
 
 // 唯一的一个 Cvc15testdlgApp 对象
 
-Cvc15testdlgApp theApp;
+CntestdlgApp theApp;
 
 
 // Cvc15testdlgApp 初始化
 
-BOOL Cvc15testdlgApp::InitInstance()
+BOOL CntestdlgApp::InitInstance()
 {
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
@@ -72,12 +72,12 @@ BOOL Cvc15testdlgApp::InitInstance()
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 #ifdef TEST_MFC_FUNC
-	vc15Test tset;
+	ntest tset;
 	tset.test();
 
 #else
 
-	Cvc15testdlgDlg dlg;
+	Cntestdlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

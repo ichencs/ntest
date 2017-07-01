@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "vc15Test.h"
+#include "ntest.h"
 
 #include <afx.h> 
 #include <afxinet.h>  
@@ -7,17 +7,17 @@
 #define RECVPACK_SIZE 2048  
 using namespace std;
 
-vc15Test::vc15Test()
+ntest::ntest()
 {
 
 }
 
 
-vc15Test::~vc15Test()
+ntest::~ntest()
 {
 }
 
-void vc15Test::test()
+void ntest::test()
 {
 // 	test_CAtlCString();
 // 	test_Others();
@@ -41,7 +41,7 @@ void vc15Test::test()
 }
 
 
-void vc15Test::test_CAtlCString()
+void ntest::test_CAtlCString()
 {
 	CAtlString str1 = _T("Co-Op");
 	CAtlString str2 = _T("con");
@@ -54,7 +54,7 @@ void vc15Test::test_CAtlCString()
 	ASSERT(n < 0);
 }
 
-void vc15Test::text_fileSystem()
+void ntest::text_fileSystem()
 {
 	vc15FileSystem fsystem;
 	CString str;
@@ -81,7 +81,7 @@ void vc15Test::text_fileSystem()
 	str = t.toStringTime();
 }
 
-void vc15Test::test_Others()
+void ntest::test_Others()
 {
 	vc15FileSystem fsystem;
 
@@ -98,7 +98,7 @@ void vc15Test::test_Others()
 
 }
 
-bool vc15Test::DownloadSaveFiles(const char * url, const char * strSaveFile)
+bool ntest::DownloadSaveFiles(const char * url, const char * strSaveFile)
 {
 
 	bool ret = false;

@@ -3,8 +3,8 @@
 //
 
 #include "stdafx.h"
-#include "vc15DlgTest.h"
-#include "vc15DlgTestDlg.h"
+#include "dlgntest.h"
+#include "ntestdlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
@@ -49,20 +49,20 @@ END_MESSAGE_MAP()
 
 
 
-Cvc15testdlgDlg::Cvc15testdlgDlg(CWnd* pParent /*=NULL*/)
+Cntestdlg::Cntestdlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_VC15TESTDLG_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void Cvc15testdlgDlg::DoDataExchange(CDataExchange* pDX)
+void Cntestdlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, TestDlgListBox, m_listBox);
 	DDX_Control(pDX, TestDlgCheckCombboxEx, m_ckcb);
 }
 
-BEGIN_MESSAGE_MAP(Cvc15testdlgDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(Cntestdlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -72,13 +72,13 @@ BEGIN_MESSAGE_MAP(Cvc15testdlgDlg, CDialogEx)
 	ON_BN_CLICKED(MY_HIDE, HideDlg)
 	ON_BN_CLICKED(MY_QUITE, OnExitApp)
 	ON_WM_DESTROY()
-	ON_CBN_SELCHANGE(TestDlgCheckCombboxEx, &Cvc15testdlgDlg::OnCbnSelchangeTestdlgcheckcombboxex)
+	ON_CBN_SELCHANGE(TestDlgCheckCombboxEx, &Cntestdlg::OnCbnSelchangeTestdlgcheckcombboxex)
 END_MESSAGE_MAP()
 
 
 // Cvc15testdlgDlg 消息处理程序
 
-BOOL Cvc15testdlgDlg::OnInitDialog()
+BOOL Cntestdlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -118,7 +118,7 @@ BOOL Cvc15testdlgDlg::OnInitDialog()
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
-void Cvc15testdlgDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void Cntestdlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -135,7 +135,7 @@ void Cvc15testdlgDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  来绘制该图标。  对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void Cvc15testdlgDlg::OnPaint()
+void Cntestdlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -162,13 +162,13 @@ void Cvc15testdlgDlg::OnPaint()
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR Cvc15testdlgDlg::OnQueryDragIcon()
+HCURSOR Cntestdlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 
-BOOL Cvc15testdlgDlg::CrtTrayIcon()
+BOOL Cntestdlg::CrtTrayIcon()
 {
 	NOTIFYICONDATA nid;
 	nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
@@ -183,7 +183,7 @@ BOOL Cvc15testdlgDlg::CrtTrayIcon()
 	return bRes;
 }
 
-BOOL Cvc15testdlgDlg::DelTrayIcon()
+BOOL Cntestdlg::DelTrayIcon()
 {
 	NOTIFYICONDATA nid;
 	nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
@@ -198,7 +198,7 @@ BOOL Cvc15testdlgDlg::DelTrayIcon()
 	return bRes;
 }
 
-void Cvc15testdlgDlg::OnSize(UINT nType, int cx, int cy)
+void Cntestdlg::OnSize(UINT nType, int cx, int cy)
 {
 	CDialogEx::OnSize(nType, cx, cy);
 
@@ -210,7 +210,7 @@ void Cvc15testdlgDlg::OnSize(UINT nType, int cx, int cy)
 	}
 }
 
-void Cvc15testdlgDlg::HideDlg()
+void Cntestdlg::HideDlg()
 {
 	NOTIFYICONDATA nid;
 	nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
@@ -224,7 +224,7 @@ void Cvc15testdlgDlg::HideDlg()
 	ShowWindow(SW_HIDE);
 }
 
-void Cvc15testdlgDlg::ResumeDlg()
+void Cntestdlg::ResumeDlg()
 {
 	NOTIFYICONDATA nid;
 	nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
@@ -239,7 +239,7 @@ void Cvc15testdlgDlg::ResumeDlg()
 	ShowWindow(SW_NORMAL);
 }
 
-LRESULT Cvc15testdlgDlg::OnRClickIconMsg(WPARAM wParam, LPARAM lParam)
+LRESULT Cntestdlg::OnRClickIconMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam != IDR_MAINFRAME)
 		return 1;
@@ -284,13 +284,13 @@ LRESULT Cvc15testdlgDlg::OnRClickIconMsg(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-void Cvc15testdlgDlg::OnExitApp()
+void Cntestdlg::OnExitApp()
 {
 	OnOK();
 }
 
 
-void Cvc15testdlgDlg::OnDestroy()
+void Cntestdlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
@@ -299,7 +299,7 @@ void Cvc15testdlgDlg::OnDestroy()
 }
 
 
-void Cvc15testdlgDlg::OnCbnSelchangeTestdlgcheckcombboxex()
+void Cntestdlg::OnCbnSelchangeTestdlgcheckcombboxex()
 {
 	// TODO: 在此添加控件通知处理程序代码
 }

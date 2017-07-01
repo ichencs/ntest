@@ -10,11 +10,11 @@
 
 
 // Cvc15testdlgDlg 对话框
-class Cvc15testdlgDlg : public CDialogEx
+class Cntestdlg : public CDialogEx
 {
 // 构造
 public:
-	Cvc15testdlgDlg(CWnd* pParent = NULL);	// 标准构造函数
+	Cntestdlg(CWnd* pParent = NULL);	// 标准构造函数
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME

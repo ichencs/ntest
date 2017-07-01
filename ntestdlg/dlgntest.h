@@ -15,10 +15,10 @@
 // 有关此类的实现，请参阅 ntestdlg.cpp
 //
 
-class Cvc15testdlgApp : public CWinApp
+class CntestdlgApp : public CWinApp
 {
 public:
-	Cvc15testdlgApp();
+	CntestdlgApp();
 
 // 重写
 public:
@@ -29,4 +29,4 @@ public:
 	DECLARE_MESSAGE_MAP()
 };
 
-extern Cvc15testdlgApp theApp;
+extern CntestdlgApp theApp;

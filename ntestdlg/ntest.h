@@ -1,9 +1,9 @@
 #pragma once
-class vc15Test
+class ntest
 {
 public:
-	vc15Test();
-	~vc15Test();
+	ntest();
+	~ntest();
 public:
 	void test();
 protected:

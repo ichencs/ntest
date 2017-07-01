@@ -171,8 +171,8 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="testDef.h" />
-    <ClInclude Include="vc15TestBInc.h" />
+    <ClInclude Include="ntestDef.h" />
+    <ClInclude Include="ntestbInc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
