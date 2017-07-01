@@ -25,3 +25,5 @@
 *.pdb
 *.ipch
 *.suo
+*.idb
+*.log

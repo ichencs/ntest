@@ -24,19 +24,10 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="ntestbasicInc.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CheckComboBox.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="dlgntest.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ntestdlg.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ntest.h">
+    <ClInclude Include="testConsole.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,32 +35,8 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CheckComboBox.cpp">
+    <ClCompile Include="testConsole.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="dlgntest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ntestdlg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ntest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="ntestdlg.rc">
-      <Filter>资源文件</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\vc15testdlg.rc2">
-      <Filter>资源文件</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\ntestdlg.ico">
-      <Filter>资源文件</Filter>
-    </Image>
   </ItemGroup>
 </Project>
