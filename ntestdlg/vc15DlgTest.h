@@ -1,5 +1,5 @@
 
-// vc15-test-dlg.h : PROJECT_NAME 应用程序的主头文件
+// ntestdlg.h : PROJECT_NAME 应用程序的主头文件
 //
 
 #pragma once
@@ -12,7 +12,7 @@
 
 
 // Cvc15testdlgApp: 
-// 有关此类的实现，请参阅 vc15-test-dlg.cpp
+// 有关此类的实现，请参阅 ntestdlg.cpp
 //
 
 class Cvc15testdlgApp : public CWinApp

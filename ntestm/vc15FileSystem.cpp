@@ -2,7 +2,7 @@
 #include "vc15FileSystem.h"
 #include <locale.h>
 #include "vc15Time.h"
-// #include "..\vc15-test-dlg\vc15DlgTest.h"
+// #include "..\ntestdlg\vc15DlgTest.h"
 
 
 vc15FileSystem::vc15FileSystem()

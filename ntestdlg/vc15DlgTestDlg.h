@@ -1,5 +1,5 @@
 
-// vc15-test-dlgDlg.h : 头文件
+// ntestdlgDlg.h : 头文件
 //
 
 #pragma once

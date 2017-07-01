@@ -1,5 +1,5 @@
 
-// vc15-test-dlgDlg.cpp : 实现文件
+// ntestdlgDlg.cpp : 实现文件
 //
 
 #include "stdafx.h"

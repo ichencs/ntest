@@ -1,5 +1,5 @@
 
-// vc15-test-dlg.cpp : 定义应用程序的类行为。
+// ntestdlg.cpp : 定义应用程序的类行为。
 //
 
 #include "stdafx.h"

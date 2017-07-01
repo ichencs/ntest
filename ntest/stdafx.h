@@ -10,6 +10,6 @@
 #include <stdio.h>
 #include <tchar.h>
 
-#include "../vc15-test-b/vc15TestBInc.h"
+#include "../ntestb/vc15TestBInc.h"
 
 // TODO:  在此处引用程序需要的其他头文件

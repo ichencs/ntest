@@ -24,19 +24,13 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="test_code.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="vc15DlgTest.h">
+    <ClInclude Include="boost_asio.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="vc15DlgTestDlg.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="vc15Test.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CheckComboBox.h">
+    <ClInclude Include="test_calculate.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,32 +38,17 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="vc15DlgTest.cpp">
+    <ClCompile Include="ntest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="vc15DlgTestDlg.cpp">
+    <ClCompile Include="test_code.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="vc15Test.cpp">
+    <ClCompile Include="boost_asio.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CheckComboBox.cpp">
+    <ClCompile Include="test_calculate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="vc15-test-dlg.rc">
-      <Filter>资源文件</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\vc15testdlg.rc2">
-      <Filter>资源文件</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\vc15-test-dlg.ico">
-      <Filter>资源文件</Filter>
-    </Image>
   </ItemGroup>
 </Project>
