@@ -21,6 +21,8 @@ public:
 	static bool SelFileDlg(__in LPCTSTR defPath ,__out CString& strPathName);
 	static bool SaveFileDlg(__in LPCTSTR savePath, __out CString& strPathName);
 	static bool SaveFile(__in LPCTSTR origin_file,__in LPCTSTR target_file,BOOL bFailIfExists = TRUE);
-	
+
+public:
+	static bool UrlFileSaveAs(__in LPCTSTR szUrl, __in LPCTSTR szPath);
 };
 

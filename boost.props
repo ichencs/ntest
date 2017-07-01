@@ -3,8 +3,9 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(boost)\$(PlatformToolset)_$(PlatformTarget)\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(boost)\include;$(IncludePath)</IncludePath>
-    <ReferencePath>$(boost)\$(PlatformToolset)_$(PlatformTarget)\lib;$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

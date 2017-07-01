@@ -15,6 +15,6 @@ protected:
 protected:
 	void test_Others();
 
-
+	bool DownloadSaveFiles(const char* url, const char* strSaveFile);
 };
 
