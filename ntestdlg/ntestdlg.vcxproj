@@ -207,6 +207,7 @@
     <ClInclude Include="dlgntest.h" />
     <ClInclude Include="ntestdlg.h" />
     <ClInclude Include="ntest.h" />
+    <ClInclude Include="testFilesystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CheckComboBox.cpp" />
@@ -219,6 +220,7 @@
     <ClCompile Include="dlgntest.cpp" />
     <ClCompile Include="ntestdlg.cpp" />
     <ClCompile Include="ntest.cpp" />
+    <ClCompile Include="testFilesystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ntestdlg.rc" />

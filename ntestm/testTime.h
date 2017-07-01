@@ -23,11 +23,11 @@ CTime Format
 	%W —— 一年中的第几周，星期一作为每周的第一天（0 ~ 53）
 	%x   —— 月/日/年，%c的前半段
 */
-class vc15Time
+class testTime
 {
 public:
-	vc15Time();
-	~vc15Time();
+	testTime();
+	~testTime();
 
 public:
 	static CTime& getCurrentTime();

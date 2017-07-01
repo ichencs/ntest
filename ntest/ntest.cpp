@@ -44,6 +44,7 @@ void ReadConfig(const wchar_t* config)
  {
 	 std::shared_ptr<int> num(new int(9));
 	 *num = 1;
+	 testboost tb;
 
 // 	 test_calculate tcal;
 // 	 test_code tcode;

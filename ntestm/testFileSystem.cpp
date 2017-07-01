@@ -1,20 +1,20 @@
 #include "stdafx.h"
-#include "vc15FileSystem.h"
+#include "testFileSystem.h"
 #include <locale.h>
-#include "vc15Time.h"
+#include "testTime.h"
 // #include "..\ntestdlg\vc15DlgTest.h"
 
 
-vc15FileSystem::vc15FileSystem()
+testFileSystem::testFileSystem()
 {
 }
 
 
-vc15FileSystem::~vc15FileSystem()
+testFileSystem::~testFileSystem()
 {
 }
 
-CString vc15FileSystem::GetDllName()
+CString testFileSystem::GetDllName()
 {
 	CString strName = GetDllNameExt();
 	int nsel = strName.ReverseFind('.');
@@ -25,7 +25,7 @@ CString vc15FileSystem::GetDllName()
 	return strName;
 }
 
-CString vc15FileSystem::GetDllNameExt()
+CString testFileSystem::GetDllNameExt()
 {
 	CString strPath;
 	HMODULE hModuleInst = _AtlBaseModule.GetModuleInstance();
@@ -36,7 +36,7 @@ CString vc15FileSystem::GetDllNameExt()
 	return str;
 }
 
-CString vc15FileSystem::GetDllPathName()
+CString testFileSystem::GetDllPathName()
 {
 	CString strPath;
 	HMODULE hModuleInst = _AtlBaseModule.GetModuleInstance();
@@ -45,7 +45,7 @@ CString vc15FileSystem::GetDllPathName()
 	return strPath;
 }
 
-CString vc15FileSystem::GetDllPath()
+CString testFileSystem::GetDllPath()
 {
 	CString strPath;
 	HMODULE hModuleInst = _AtlBaseModule.GetModuleInstance();
@@ -57,7 +57,7 @@ CString vc15FileSystem::GetDllPath()
 	return strPath;
 }
 
-CString vc15FileSystem::GetDesktopPath()
+CString testFileSystem::GetDesktopPath()
 {
 	CString str;
 // 	str = ::GetDesktopPath();	
@@ -66,16 +66,16 @@ CString vc15FileSystem::GetDesktopPath()
 	return str;
 }
 
-bool vc15FileSystem::WriteDllPathFileLine(__in LPCTSTR szText)
+bool testFileSystem::WriteDllPathFileLine(__in LPCTSTR szText)
 {
 	CString strfile = GetDllPathName();
 	int nsel = strfile.ReverseFind('.');
 	strfile = strfile.Mid(0, nsel) + _T(".txt");
-	vc15Time t;
+	testTime t;
 	return WriteFileLine(strfile,t.toStringTime(t.getCurrentTime()) + _T("  ") + szText);
 }
 
-bool vc15FileSystem::WriteFileLine(__in LPCTSTR szPathName, __in LPCTSTR szText)
+bool testFileSystem::WriteFileLine(__in LPCTSTR szPathName, __in LPCTSTR szText)
 {
 	CStdioFile file;
 	char* old_locale = _strdup(setlocale(LC_CTYPE, NULL));
@@ -101,12 +101,12 @@ bool vc15FileSystem::WriteFileLine(__in LPCTSTR szPathName, __in LPCTSTR szText)
 }
 
 
-bool vc15FileSystem::SelDir(__out CString& strDir)
+bool testFileSystem::SelDir(__out CString& strDir)
 {
 	return false;
 }
 
-bool vc15FileSystem::SelFileDlg(__in LPCTSTR defPath, __out CString& strPathName)
+bool testFileSystem::SelFileDlg(__in LPCTSTR defPath, __out CString& strPathName)
 {
 	CFileDialog ff(TRUE, _T("*.*"), defPath,
 		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -119,7 +119,7 @@ bool vc15FileSystem::SelFileDlg(__in LPCTSTR defPath, __out CString& strPathName
 }
 
 
-bool vc15FileSystem::SaveFileDlg(__in LPCTSTR savePath, __out CString& strPathName)
+bool testFileSystem::SaveFileDlg(__in LPCTSTR savePath, __out CString& strPathName)
 {
 	CFileDialog ff(FALSE, _T("*.*"), savePath,
 		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -132,7 +132,7 @@ bool vc15FileSystem::SaveFileDlg(__in LPCTSTR savePath, __out CString& strPathNa
 }
 
 
-bool vc15FileSystem::SaveFile(__in LPCTSTR origin_file, __in LPCTSTR target_file, BOOL bFailIfExists /*= TRUE*/)
+bool testFileSystem::SaveFile(__in LPCTSTR origin_file, __in LPCTSTR target_file, BOOL bFailIfExists /*= TRUE*/)
 {
 	if (!PathFileExists(origin_file) || PathFileExists(target_file))
 		return false;
@@ -141,7 +141,7 @@ bool vc15FileSystem::SaveFile(__in LPCTSTR origin_file, __in LPCTSTR target_file
 	return b == TRUE;
 }
 
-bool vc15FileSystem::UrlFileSaveAs(__in LPCTSTR szUrl, __in LPCTSTR szPath)
+bool testFileSystem::UrlFileSaveAs(__in LPCTSTR szUrl, __in LPCTSTR szPath)
 {
 		SHFILEOPSTRUCT FileOp = { 0 };
 		FileOp.fFlags = FOF_ALLOWUNDO         //允许放回回收站

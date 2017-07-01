@@ -30,9 +30,21 @@
     <ClInclude Include="ntestbInc.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="testboost.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="testRegex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="testboost.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="testRegex.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

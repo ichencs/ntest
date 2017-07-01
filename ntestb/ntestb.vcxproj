@@ -173,6 +173,8 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ntestDef.h" />
     <ClInclude Include="ntestbInc.h" />
+    <ClInclude Include="testboost.h" />
+    <ClInclude Include="testRegex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -181,6 +183,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="testboost.cpp" />
+    <ClCompile Include="testRegex.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

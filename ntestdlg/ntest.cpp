@@ -56,7 +56,7 @@ void ntest::test_CAtlCString()
 
 void ntest::text_fileSystem()
 {
-	vc15FileSystem fsystem;
+	testFileSystem fsystem;
 	CString str;
 	str = fsystem.GetDllName();
 	str = fsystem.GetDllPathName();
@@ -71,7 +71,7 @@ void ntest::text_fileSystem()
 	fsystem.WriteDllPathFileLine(_T("2"));
 	fsystem.WriteDllPathFileLine(_T("3"));
 
-	vc15Time t;
+	testTime t;
 	t.getCurrentTime();
 	FILETIME ft = t.toFileTime();
 	SYSTEMTIME st = t.toSystemTime();
@@ -83,7 +83,7 @@ void ntest::text_fileSystem()
 
 void ntest::test_Others()
 {
-	vc15FileSystem fsystem;
+	testFileSystem fsystem;
 
 	CString str;
 	int num = 5;

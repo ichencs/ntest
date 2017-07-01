@@ -10,5 +10,5 @@
 #pragma message("Automatically linking with release ntestm release lib")
 #endif
 
-#include "vc15FileSystem.h"
-#include "vc15Time.h"
+#include "testFileSystem.h"
+#include "testTime.h"

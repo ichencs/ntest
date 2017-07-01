@@ -1,42 +1,42 @@
 #include "stdafx.h"
-#include "vc15Time.h"
+#include "testTime.h"
 
 
-vc15Time::vc15Time()
+testTime::testTime()
 {
 	current = CTime::GetCurrentTime();
 }
 
 
-vc15Time::~vc15Time()
+testTime::~testTime()
 {
 }
 
-CTime& vc15Time::getCurrentTime()
+CTime& testTime::getCurrentTime()
 {
 	current = CTime::GetCurrentTime();
 	return current;
 }
 
-CString vc15Time::toStringTime(CTime& t)
+CString testTime::toStringTime(CTime& t)
 {
 	CString s = t.Format(_T("%Y-%m-%d %H:%M:%S"));
 // 	CString s = t.Format(_T("%Y-%m-%d %H:%M:%S %W-%A"));
 	return s;
 }
 
-CString vc15Time::toStringTime()
+CString testTime::toStringTime()
 {
 	return toStringTime(current);
 }
 
-CString vc15Time::toStringTime2(CTime& t)
+CString testTime::toStringTime2(CTime& t)
 {
 	CString s = t.Format("%c");
 	return s;
 }
 
-FILETIME vc15Time::toFileTime(CTime& t)
+FILETIME testTime::toFileTime(CTime& t)
 {
 	SYSTEMTIME timeDest;
 	t.GetAsSystemTime(timeDest);
@@ -45,59 +45,59 @@ FILETIME vc15Time::toFileTime(CTime& t)
 	return fileTime;
 }
 
-FILETIME vc15Time::toFileTime()
+FILETIME testTime::toFileTime()
 {
 	return toFileTime(current);
 }
 
-SYSTEMTIME& vc15Time::toSystemTime(CTime& t)
+SYSTEMTIME& testTime::toSystemTime(CTime& t)
 {
 	t.GetAsSystemTime(tm_sys);
 	return tm_sys;
 }
 
-SYSTEMTIME& vc15Time::toSystemTime()
+SYSTEMTIME& testTime::toSystemTime()
 {
 	return toSystemTime(current);
 }
 
-tm& vc15Time::toGmtTm(CTime& t)
+tm& testTime::toGmtTm(CTime& t)
 {
 	t.GetGmtTm(&tm_gtm);
 	return tm_gtm;
 }
 
-tm& vc15Time::toGmtTm()
+tm& testTime::toGmtTm()
 {
 	return toGmtTm(current);
 }
 
-tm& vc15Time::toLocalTm(CTime& t)
+tm& testTime::toLocalTm(CTime& t)
 {
 	t.GetLocalTm(&tm_gtm);
 	return tm_gtm;
 }
 
-tm& vc15Time::toLocalTm()
+tm& testTime::toLocalTm()
 {
 	return toLocalTm(current);
 }
 
-DBTIMESTAMP& vc15Time::toDBTimeStamp(CTime& t)
+DBTIMESTAMP& testTime::toDBTimeStamp(CTime& t)
 {
 	t.GetAsDBTIMESTAMP(tm_dbts);
 	return tm_dbts;
 }
 
-DBTIMESTAMP& vc15Time::toDBTimeStamp()
+DBTIMESTAMP& testTime::toDBTimeStamp()
 {
 	return toDBTimeStamp(current);
 }
 
-CTime vc15Time::current = CTime::GetCurrentTime();
+CTime testTime::current = CTime::GetCurrentTime();
 
-SYSTEMTIME vc15Time::tm_sys;
+SYSTEMTIME testTime::tm_sys;
 
-tm vc15Time::tm_gtm;
+tm testTime::tm_gtm;
 
-DBTIMESTAMP vc15Time::tm_dbts;
+DBTIMESTAMP testTime::tm_dbts;

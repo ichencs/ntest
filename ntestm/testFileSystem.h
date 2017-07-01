@@ -1,10 +1,10 @@
 #pragma once
 
-class vc15FileSystem
+class testFileSystem
 {
 public:
-	vc15FileSystem();
-	~vc15FileSystem();
+	testFileSystem();
+	~testFileSystem();
 
 public:
 	static CString GetDllName();			//不带扩展名
