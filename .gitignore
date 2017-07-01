@@ -12,6 +12,13 @@
 *.ilk
 *.pdb
 *.lib
+*.aps
+*.user
+.svn/format
+.svn/entries
+*.db
+*.db-journal
+*.svn-base
 *.lib
 *.exe
 *.ilk
