@@ -6,3 +6,8 @@
 *.db
 *.db-journal
 *.svn-base
+*.lib
+*.exe
+*.ilk
+*.pdb
+*.ipch

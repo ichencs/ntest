@@ -7,12 +7,16 @@
 #include "test_calculate.h"
 #include "test_code.h"
 #include "boost_asio.h"
+#include <memory>
 
 using namespace std;
 
 
  int main()
  {
+	 std::shared_ptr<int> num(new int(9));
+	 *num = 1;
+
 // 	 test_calculate tcal;
 // 	 test_code tcode;
 // 	 boost_asio basio;
