@@ -8,3 +8,4 @@
 #endif
 
 #include "testConsole.h"
+#include "Pointer.h"
