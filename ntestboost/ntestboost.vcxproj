@@ -171,7 +171,6 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="ntestDef.h" />
     <ClInclude Include="ntestboostInc.h" />
     <ClInclude Include="testboost.h" />
     <ClInclude Include="testFilesystem.h" />

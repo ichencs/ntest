@@ -7,5 +7,7 @@
 #pragma message("Automatically linking with ntestbasic release lib")
 #endif
 
+#include "ntestdef.h"
+#include "ntestg.h"
 #include "testConsole.h"
 #include "Pointer.h"
