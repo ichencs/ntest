@@ -24,12 +24,6 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ntestDef.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ntestbInc.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="testboost.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -37,6 +31,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="testFilesystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ntestboostInc.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
