@@ -10,5 +10,4 @@
 
 #include "ntestdef.h"
 #include "ntestg.h"
-#include "testConsole.h"
 #include "Pointer.h"
