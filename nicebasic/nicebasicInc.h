@@ -9,5 +9,5 @@
 #pragma message("Automatically linking with nicebasic release lib")
 #endif
 
-
+#include "Pointer.h"
 #include "testConsole.h"

@@ -12,7 +12,7 @@
 
 #include "../ntestbasic/ntestbasicInc.h"
 #include "../ntestboost/ntestboostInc.h"
-#include "../ntestbasic/ntestbasicInc.h"
+#include "../nicebasic/nicebasicInc.h"
 
 
 // TODO:  在此处引用程序需要的其他头文件

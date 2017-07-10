@@ -30,9 +30,6 @@
     <ClInclude Include="testPod.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Pointer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ntestg.h">
       <Filter>头文件</Filter>
     </ClInclude>

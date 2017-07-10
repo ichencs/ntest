@@ -145,7 +145,6 @@
     <ClInclude Include="ntestbasicInc.h" />
     <ClInclude Include="ntestdef.h" />
     <ClInclude Include="ntestg.h" />
-    <ClInclude Include="Pointer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testPod.h" />
