@@ -1,31 +1,42 @@
 #include "stdafx.h"
-#include "test_code.h"
-#include <string>
+#include "testString.h"
 #include <iostream>
 #include <sstream>
-#include <vector>
 #include <iterator>
 
-test_code::test_code()
+
+testString::testString()
 {
 }
 
 
-test_code::~test_code()
+testString::~testString()
 {
 }
 
-void test_code::test()
+void testString::test()
 {
-	test_split();
-	test_split2();
-	test_split3();
-	test_split4();
 }
 
-void test_code::test_split()
+void testString::testSplit()
 {
-	using namespace std;
+
+}
+
+vector<wstring> testString::SplitString(const wchar_t * config, wchar_t delimiter)
+{
+	vector<wstring> fragments;
+	while (auto next = wcschr(config, delimiter))
+	{
+		fragments.push_back(wstring(config, next));
+		config = next + 1;
+	}
+	fragments.push_back(wstring(config));
+	return fragments; // C++11¾ÍÊÇºÃ£¡  
+}
+
+void testString::test_split()
+{
 	string str("denmark;sweden;india;us");
 	istringstream f(str);
 	vector<string> strings;
@@ -36,7 +47,7 @@ void test_code::test_split()
 	}
 }
 
-void test_code::test_split2()
+void testString::test_split2()
 {
 	std::string s("Somewhere down the road");
 	std::istringstream iss(s);
@@ -49,9 +60,8 @@ void test_code::test_split2()
 	} while (iss);
 }
 
-void test_code::test_split3()
+void testString::test_split3()
 {
-	using namespace std;
 	string sentence = "And I feel fine...";
 	istringstream iss(sentence);
 	copy(istream_iterator<string>(iss),
@@ -59,9 +69,8 @@ void test_code::test_split3()
 		ostream_iterator<string>(cout, "\n"));
 }
 
-void test_code::test_split4()
+void testString::test_split4()
 {
-	using namespace std;
 	string sentence = "And I feel fine...";
 	istringstream iss(sentence);
 	vector<string> tokens;
@@ -70,29 +79,26 @@ void test_code::test_split4()
 		back_inserter(tokens));
 }
 
-void test_code::test_split5()
+void testString::test_split5()
 {
-	
 
-	
 }
 
-std::vector<std::string> test_code::split(const std::string &s, char delim)
+template<typename Out>
+void testString::split(const std::string &s, char delim, Out result)
+{
+	std::stringstream ss;
+	ss.str(s);
+	std::string item;
+	while (std::getline(ss, item, delim)) {
+		*(result++) = item;
+	}
+
+}
+
+std::vector<std::string> testString::split(const std::string &s, char delim)
 {
 	std::vector<std::string> elems;
 	split(s, delim, std::back_inserter(elems));
 	return elems;
 }
-template<typename Out>
- void test_code::split(const std::string & s, char delim, Out result)
-{
-	 std::stringstream ss;
-	 ss.str(s);
-	 std::string item;
-	 while (std::getline(ss, item, delim)) {
-		 *(result++) = item;
-	 }
-}
-
-// std::vector<std::string> split(const std::string &s, char delim) {
-/*	}*/

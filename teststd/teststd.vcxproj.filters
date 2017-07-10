@@ -24,10 +24,10 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ntestbasicInc.h">
+    <ClInclude Include="teststdInc.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="testPod.h">
+    <ClInclude Include="testString.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="testPod.cpp">
+    <ClCompile Include="testString.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

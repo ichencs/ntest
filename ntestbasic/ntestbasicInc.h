@@ -7,4 +7,3 @@
 #pragma message("Automatically linking with ntestbasic release lib")
 #endif
 
-#include "testConsole.h"
