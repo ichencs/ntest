@@ -24,13 +24,13 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="vc15TestMInc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="testTime.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="testFileSystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="testmfcInc.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

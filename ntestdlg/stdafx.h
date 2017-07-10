@@ -51,4 +51,4 @@
 #endif
 #endif
 
-#include "..\ntestm\vc15TestMInc.h"
+#include "..\ntestmfc\testmfcInc.h"
