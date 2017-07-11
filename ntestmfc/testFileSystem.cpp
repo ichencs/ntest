@@ -108,7 +108,7 @@ bool testFileSystem::SelDir(__out CString& strDir)
 
 bool testFileSystem::SelFileDlg(__in LPCTSTR defPath, __out CString& strPathName)
 {
-	CFileDialog ff(TRUE, _T("*.*"), defPath,
+	CFileDialog ff(FALSE, _T("*.*"), defPath,
 		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
 		_T("所有文件 (*.*)|*.*||"), NULL);
 	if (ff.DoModal() != IDOK)

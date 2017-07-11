@@ -21,9 +21,11 @@ void ntest::test()
 {
 // 	test_CAtlCString();
 // 	test_Others();
-	CString str = _T("900");
-	CString str2;
-	str2.Format(_T("%%%s%%"),str);
+	
+	CString strPath = "F:/vs/";
+	CString strFile;
+	testFileSystem sys;
+	sys.SelFileDlg(strPath,strFile);
 
 // 	text_fileSystem();
 
