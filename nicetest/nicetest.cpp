@@ -13,7 +13,7 @@
  {
 	 std::shared_ptr<int> num(new int(9));
 	 *num = 1;
-// 	 testboost tb;
+ 	 testboost tb;
 	 testPod tp;
 
 // 	 if (DownloadSaveFiles("http://www.nirsoft.net/utils/nircmd.zip", "d:/cppdld_nircmd.zip") == true)

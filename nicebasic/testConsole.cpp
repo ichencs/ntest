@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "testConsole.h"
 #include "windows.h"
+#include <sstream>
+#include <iostream>
 
 testConsole::testConsole()
 {
@@ -49,10 +51,61 @@ void testConsole::Write(const wchar_t* string, int length)
 	}
 }
 
+void testConsole::Write(wchar_t* str)
+{
+	std::wstring wstr(str);
+	Write(wstr);
+}
+
+void testConsole::Write(char* str)
+{
+	std::string wstr(str);
+	Write(wstr);
+}
+
 void testConsole::WriteLine(const std::string & string)
 {
 	Write(string);
 	Write(L"\r\n");
+}
+
+void testConsole::WriteLine(int num)
+{
+	std::string str;
+	std::stringstream ss;
+	ss << num;
+	ss >> str;
+	WriteLine(str);
+}
+
+void testConsole::WriteLine(bool b)
+{
+	std::string str = b?"true":"false";
+// 	std::stringstream ss;
+// 	ss << b;
+// 	ss >> str;
+	WriteLine(str);
+}
+
+void testConsole::WriteLine(double d)
+{
+	std::string str;
+	std::stringstream ss;
+	ss << d;
+	ss >> str;
+	WriteLine(str);
+}
+
+void testConsole::WriteLine(wchar_t* str)
+{
+	std::wstring wstr(str);
+	WriteLine(wstr);
+}
+
+void testConsole::WriteLine(char* str)
+{
+	std::string wstr(str);
+	WriteLine(wstr);
 }
 
 void testConsole::Write(const std::string string)

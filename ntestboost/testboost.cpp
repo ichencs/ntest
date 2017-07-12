@@ -17,13 +17,17 @@ testboost::~testboost()
 void testboost::test()
 {
 	test_regex();
+// 	test_filesystem();
 }
 
 void testboost::test_regex()
 {
 	testRegex treg;
-	treg.test();
+
+}
+
+void testboost::test_filesystem()
+{
 	testFilesystem tfs;
-	tfs.test();
 
 }

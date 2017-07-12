@@ -15,3 +15,7 @@
 
 #include "..\ntestbasic\ntestbasicInc.h"
 #include "..\nicebasic\nicebasicInc.h"
+
+
+#include <boost\regex.hpp>
+using namespace std;

@@ -13,12 +13,23 @@ public:
 public:	//wide char
 	static void WriteLine(const std::wstring & string);
 	static void Write(const std::wstring& wstring);
-	static void Write(const wchar_t* string,int length);
 
 public:
 	static void WriteLine(const std::string & string);
 	static void Write(const std::string string);
+public:
+	static void WriteLine(wchar_t* str);
+	static void WriteLine(char* str);
+	static void Write(wchar_t* str);
+	static void Write(char* str);
+
+	static void WriteLine(int num);
+	static void WriteLine(bool b);
+	static void WriteLine(double d);
+private:
+	static void Write(const wchar_t* string,int length);
 	static void Write(const char* string, int length);
+
 
 };
 

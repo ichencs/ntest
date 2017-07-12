@@ -7,16 +7,24 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nicetest", "nicetest\nicete
 	ProjectSection(ProjectDependencies) = postProject
 		{801F9726-3D1E-4304-91AF-A3E33807C224} = {801F9726-3D1E-4304-91AF-A3E33807C224}
 		{2323882D-B539-4161-8D83-74B4912325DB} = {2323882D-B539-4161-8D83-74B4912325DB}
+		{9124E573-D87B-400A-AD16-952E9549E06A} = {9124E573-D87B-400A-AD16-952E9549E06A}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntestboost", "ntestboost\ntestboost.vcxproj", "{801F9726-3D1E-4304-91AF-A3E33807C224}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2323882D-B539-4161-8D83-74B4912325DB} = {2323882D-B539-4161-8D83-74B4912325DB}
+		{9124E573-D87B-400A-AD16-952E9549E06A} = {9124E573-D87B-400A-AD16-952E9549E06A}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ntestbasic", "ntestbasic\ntestbasic.vcxproj", "{2323882D-B539-4161-8D83-74B4912325DB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9124E573-D87B-400A-AD16-952E9549E06A} = {9124E573-D87B-400A-AD16-952E9549E06A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "teststd", "teststd\teststd.vcxproj", "{311988C6-FF4C-4022-8AE0-E15A4CBC9D95}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9124E573-D87B-400A-AD16-952E9549E06A} = {9124E573-D87B-400A-AD16-952E9549E06A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nicebasic", "nicebasic\nicebasic.vcxproj", "{9124E573-D87B-400A-AD16-952E9549E06A}"
 EndProject

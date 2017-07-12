@@ -8,6 +8,7 @@ using namespace std;
 
 testFilesystem::testFilesystem()
 {
+	test();
 }
 
 
@@ -82,7 +83,5 @@ void testFilesystem::test_path()
  	testConsole::WriteLine("nihao1");
 	testConsole::WriteLine(L"nihao2");
 	std::cout << std::endl;
-	
 
-	system("pause");
 }
