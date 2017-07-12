@@ -11,12 +11,12 @@ Brief:
 ***********************************************************************/
 
 #pragma once
+#include "Basic.h"
 
 
 #define INCRC(x)	(_InterlockedIncrement((volatile long*)(x)))
 #define DECRC(x)	(_InterlockedDecrement((volatile long*)(x)))
 
-struct YesType {};
 
 /***********************************************************************
 ReferenceCounterOperator
@@ -385,37 +385,5 @@ Ptr
 Traits
 ***********************************************************************/
 
-// 	template<typename T>
-// 	struct KeyType<Ptr<T>>
-// 	{
-// 		typedef T* Type;
-// 
-// 		static T* GetKeyValue(const Ptr<T>& key)
-// 		{
-// 			return key.Obj();
-// 		}
-// 	};
-// 
-// 	template<typename T>
-// 	struct POD<Ptr<T>>
-// 	{
-// 		static const bool Result=false;
-// 	};
-// 
-// 	template<typename T>
-// 	struct KeyType<ComPtr<T>>
-// 	{
-// 		typedef T* Type;
-// 
-// 		static T* GetKeyValue(const ComPtr<T>& key)
-// 		{
-// 			return key.Obj();
-// 		}
-// 	};
-// 
-// 	template<typename T>
-// 	struct POD<ComPtr<T>>
-// 	{
-// 		static const bool Result=false;
-// 	};
+
 
