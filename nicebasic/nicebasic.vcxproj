@@ -142,9 +142,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Array.h" />
-    <ClInclude Include="Basic.h" />
-    <ClInclude Include="List.h" />
     <ClInclude Include="nicebasicInc.h" />
     <ClInclude Include="nvariant.h" />
     <ClInclude Include="Pointer.h" />
@@ -154,9 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nvariant.cpp" />
-    <ClCompile Include="Array.cpp" />
-    <ClCompile Include="Basic.cpp" />
-    <ClCompile Include="List.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

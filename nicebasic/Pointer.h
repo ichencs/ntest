@@ -11,7 +11,7 @@ Brief:
 ***********************************************************************/
 
 #pragma once
-#include "Basic.h"
+// #include "Basic.h"
 
 
 #define INCRC(x)	(_InterlockedIncrement((volatile long*)(x)))
