@@ -39,6 +39,9 @@
     <ClInclude Include="boost_asio.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="testXpressive.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -54,6 +57,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="boost_asio.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="testXpressive.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

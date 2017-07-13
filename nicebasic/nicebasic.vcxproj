@@ -143,11 +143,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nicebasicInc.h" />
+    <ClInclude Include="nvariant.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testConsole.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="nvariant.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
