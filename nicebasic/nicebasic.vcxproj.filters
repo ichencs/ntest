@@ -31,6 +31,16 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="nvariant.h">
+    <ClInclude Include="Pointer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Array.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -42,6 +52,13 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="nvariant.cpp">
+    <ClCompile Include="Basic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Array.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
