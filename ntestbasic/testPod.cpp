@@ -20,8 +20,8 @@ void testPod::test()
 {
 	testConsole::SetColor(true, true, false, true);
 	testConsole::WriteLine("测试POD~~~~");
-	test1();
-	test2();
+	test_trival();
+	test_layout();
 }
 
 class a { a() {} };
@@ -34,7 +34,7 @@ class g { virtual void foo() = 0; };
 class h : g {};
 class i {};
 
-void testPod::test1()
+void testPod::test_trival()
 {
 	testConsole::WriteLine("POD1~~~~");
 	std::cout << std::is_trivial<a>::value << std::endl;  // 有不平凡的构造函数  
@@ -83,7 +83,7 @@ class D { virtual void foo() = 0; };
 class E : D {};
 class F { A x; };	
 
-void testPod::test2()
+void testPod::test_layout()
 {
 // 	testConsole::SetColor(true, true, false, true);
 	testConsole::WriteLine("POD2~~~~");

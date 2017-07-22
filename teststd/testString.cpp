@@ -12,6 +12,7 @@ testString::testString()
 
 testString::~testString()
 {
+
 }
 
 void testString::test()
@@ -93,7 +94,6 @@ void testString::split(const std::string &s, char delim, Out result)
 	while (std::getline(ss, item, delim)) {
 		*(result++) = item;
 	}
-
 }
 
 std::vector<std::string> testString::split(const std::string &s, char delim)

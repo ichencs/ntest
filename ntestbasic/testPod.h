@@ -14,8 +14,8 @@ public:
 	~testPod();
 private:
 	void test();
-	void test1();
-	void test2();
+	void test_trival();		//平凡的
+	void test_layout();		//布局的
 
 
 };

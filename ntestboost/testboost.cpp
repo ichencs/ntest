@@ -2,6 +2,7 @@
 #include "testboost.h"
 #include "testRegex.h"
 #include "testFilesystem.h"
+#include "testLog.h"
 
 
 testboost::testboost()
@@ -16,8 +17,9 @@ testboost::~testboost()
 
 void testboost::test()
 {
-	test_regex();
+// 	test_regex();
 // 	test_filesystem();
+	test_log();
 }
 
 void testboost::test_regex()
@@ -30,4 +32,9 @@ void testboost::test_filesystem()
 {
 	testFilesystem tfs;
 
+}
+
+void testboost::test_log()
+{
+	testLog tlog;
 }
