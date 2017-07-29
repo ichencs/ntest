@@ -18,4 +18,5 @@
 
 
 #include <boost\regex.hpp>
+#include "AFX.h"
 using namespace std;
