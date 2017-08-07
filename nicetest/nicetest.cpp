@@ -23,7 +23,7 @@ using namespace std;
 
 	 char strHost[50] = { 0 };
 	 int nsize = sizeof(strHost);
-	 gethostname(strHost, nsize);
+	 int rs = gethostname(strHost, nsize);
 	 return 0;
 
 	 wstring strWnd = L"";

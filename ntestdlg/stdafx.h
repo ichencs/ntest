@@ -51,4 +51,4 @@
 #endif
 #endif
 
-#include "..\ntestmfc\testmfcInc.h"
+#include "..\mfcbasic\testmfcInc.h"

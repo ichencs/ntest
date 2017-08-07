@@ -5,7 +5,6 @@
 #include "stdafx.h"
 #include "dlgntest.h"
 #include "ntestdlg.h"
-#include "ntest.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -72,8 +71,6 @@ BOOL CntestdlgApp::InitInstance()
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 #ifdef TEST_MFC_FUNC
-	ntest tset;
-	tset.test();
 
 #else
 

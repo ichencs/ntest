@@ -24,13 +24,7 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="testTime.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="testFileSystem.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="testmfcInc.h">
+    <ClInclude Include="ntest.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,10 +32,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="testTime.cpp">
+    <ClCompile Include="ntestmfc.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="testFileSystem.cpp">
+    <ClCompile Include="ntest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

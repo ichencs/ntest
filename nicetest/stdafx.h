@@ -17,5 +17,5 @@
 
 // TODO:  在此处引用程序需要的其他头文件
 
-#define SECURITY_WIN32  
 
+#define _WINSOCK_DEPRECATED_NO_WARNINGS

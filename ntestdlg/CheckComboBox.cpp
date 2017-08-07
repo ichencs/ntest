@@ -336,7 +336,7 @@ LRESULT CCheckComboBox::OnGetText(WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	// Copy the 'fake' window text
-	lstrcpyn((LPSTR)lParam, m_strText, (INT)wParam);
+	lstrcpyn((LPWSTR)lParam, m_strText, (INT)wParam);
 	return m_strText.GetLength();
 }
 

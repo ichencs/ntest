@@ -9,14 +9,11 @@ public:
 	void test();
 	void testSizeof();
 	void testObserve();		//π€≤Ï’ﬂ
-	void testMd5();
-
+	void testIP();
 public:
 	void testDomain();
 
 
 protected:
-	CString GetMD5(const CString &strFilePath /*= _T("")*/);
-	CString GetDomain();
 };
 
