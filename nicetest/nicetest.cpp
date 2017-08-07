@@ -7,13 +7,38 @@
 #include "test_calculate.h"
 // #include "boost_asio.h"
 #include <memory>
+#include <iostream>
+#include "Bloger.h"
+#include "testNice.h"
+#include <afxwin.h>
+
+using namespace std;
+
+
 
 
  int main()
  {
-	 std::shared_ptr<int> num(new int(9));
-	 *num = 1;
- 	 testboost tb;
+	 testNice tn;
+
+	 char strHost[50] = { 0 };
+	 int nsize = sizeof(strHost);
+	 gethostname(strHost, nsize);
+	 return 0;
+
+	 wstring strWnd = L"";
+	 HWND hwnd = ::FindWindow(0,strWnd.c_str());
+	 CWnd* pWnd = CWnd::FromHandle(hwnd);
+
+	 double dv = pow(0.1, 3);
+
+	 //目标(被观察者)
+	 system("pause");
+
+	 
+	 std::pair<int,double> par;
+	 
+	 testboost tb;
 	 testPod tp;
 
 // 	 if (DownloadSaveFiles("http://www.nirsoft.net/utils/nircmd.zip", "d:/cppdld_nircmd.zip") == true)

@@ -7,15 +7,17 @@ Classes:
 	Ptr<T>							：智能指针
 
 Brief:
-	来自陈子涵，有删改
+	引用陈子涵所写的智能指针，相对于源代码删减C++11标准支持部分。
 ***********************************************************************/
 
 #pragma once
-// #include "Basic.h"
+// #include "stdafx.h"
 
 
-#define INCRC(x)	(_InterlockedIncrement((volatile long*)(x)))
-#define DECRC(x)	(_InterlockedDecrement((volatile long*)(x)))
+#define INCRC(x)	(_InterlockedIncrement((volatile long*)(x)))		//++
+#define DECRC(x)	(_InterlockedDecrement((volatile long*)(x)))		//--
+
+struct YesType {};
 
 
 /***********************************************************************
@@ -83,10 +85,10 @@ Ptr
 					{
 						originalDestructor(counter, originalReference);
 					}
-					counter=nullptr;
-					reference=nullptr;
-					originalReference=nullptr;
-					originalDestructor=nullptr;
+					counter= 0;
+					reference= 0;
+					originalReference= 0;
+					originalDestructor= 0;
 				}
 			}
 		}
@@ -144,19 +146,20 @@ Ptr
 			Inc();
 		}
 		
+		//&& ：C++ 11 右值引用
 		/// <summary>Move a smart pointer.</summary>
 		/// <param name="pointer">The smart pointer to Move.</param>
-		Ptr(Ptr<T>&& pointer)
-			:counter(pointer.counter)
-			,reference(pointer.reference)
-			,originalReference(pointer.originalReference)
-			,originalDestructor(pointer.originalDestructor)
-		{
-			pointer.counter=0;
-			pointer.reference=0;
-			pointer.originalReference=0;
-			pointer.originalDestructor=0;
-		}
+// 		Ptr(Ptr<T>&& pointer)
+// 			:counter(pointer.counter)
+// 			,reference(pointer.reference)
+// 			,originalReference(pointer.originalReference)
+// 			,originalDestructor(pointer.originalDestructor)
+// 		{
+// 			pointer.counter=0;
+// 			pointer.reference=0;
+// 			pointer.originalReference=0;
+// 			pointer.originalDestructor=0;
+// 		}
 		
 		/// <summary>Cast a smart pointer.</summary>
 		/// <typeparam name="C">The type of the object before casting.</typeparam>
@@ -211,10 +214,10 @@ Ptr
 			Dec();
 			if(pointer)
 			{
-				counter=ReferenceCounterOperator<T>::CreateCounter(pointer);
-				reference=pointer;
-				originalReference=pointer;
-				originalDestructor=&ReferenceCounterOperator<T>::DeleteReference;
+				counter = ReferenceCounterOperator<T>::CreateCounter(pointer);
+				reference = pointer;
+				originalReference = pointer;
+				originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
 				Inc();
 			}
 			else
@@ -244,26 +247,27 @@ Ptr
 			return *this;
 		}
 		
+		//&& ：C++ 11 右值引用
 		/// <summary>Move a smart pointer.</summary>
 		/// <returns>The moved smart pointer.</returns>
 		/// <param name="pointer">The smart pointer to Move.</param>
-		Ptr<T>& operator=(Ptr<T>&& pointer)
-		{
-			if(this!=&pointer)
-			{
-				Dec();
-				counter=pointer.counter;
-				reference=pointer.reference;
-				originalReference=pointer.originalReference;
-				originalDestructor=pointer.originalDestructor;
-				
-				pointer.counter=0;
-				pointer.reference=0;
-				pointer.originalReference=0;
-				pointer.originalDestructor=0;
-			}
-			return *this;
-		}
+// 		Ptr<T>& operator=(Ptr<T>&& pointer)
+// 		{
+// 			if(this!=&pointer)
+// 			{
+// 				Dec();
+// 				counter=pointer.counter;
+// 				reference=pointer.reference;
+// 				originalReference=pointer.originalReference;
+// 				originalDestructor=pointer.originalDestructor;
+// 				
+// 				pointer.counter=0;
+// 				pointer.reference=0;
+// 				pointer.originalReference=0;
+// 				pointer.originalDestructor=0;
+// 			}
+// 			return *this;
+// 		}
 		
 		/// <summary>Cast a smart pointer.</summary>
 		/// <typeparam name="C">The type of the object before casting.</typeparam>
@@ -375,15 +379,6 @@ Ptr
 	};
 
 
-	template<typename T, typename ...TArgs>
-	Ptr<T> MakePtr(TArgs ...args)
-	{
-		return new T(args...);
-	}
-
-/***********************************************************************
-Traits
-***********************************************************************/
 
 
 

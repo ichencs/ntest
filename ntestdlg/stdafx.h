@@ -36,7 +36,7 @@
 
 
 
- #define TEST_MFC_FUNC
+ //#define TEST_MFC_FUNC
 
 
 

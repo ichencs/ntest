@@ -7,5 +7,6 @@ public:
 protected:
 	void test();
 
+
 };
 

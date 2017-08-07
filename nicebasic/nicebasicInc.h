@@ -1,6 +1,5 @@
 #pragma once
 
-#pragma once
 #ifdef _DEBUG
 #pragma comment(lib,"nicebasicd.lib") 
 #pragma message("Automatically linking with nicebasicd debug lib")

@@ -25,13 +25,6 @@ testRegex::~testRegex()
 
 void testRegex::test()
 {
-	CString sreg = "(19|20)\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])";
-	CString text = "2015-01-02";
-
-// 	boost::regex reg(sreg);
-// 	bool bRes = boost::regex_match(text, reg);
-
-
 	testConsole::SetColor(false, true, true, true);
 	testConsole::WriteLine(L"测试正则表达式");
 	match();
