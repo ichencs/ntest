@@ -29,13 +29,11 @@ ntest::~ntest()
 
 void ntest::test()
 {
-// 	test_CAtlCString();
-// 	test_Others();
-	
-	CString strPath = "F:/vs/";
-	CString strFile;
-	testFileSystem sys;
-	sys.SelFileDlg(strPath,strFile);
+	CString strName = GetComputerObjName();
+// 	CString strPath = "F:/vs/";
+// 	CString strFile;
+// 	testFileSystem sys;
+// 	sys.SelFileDlg(strPath,strFile);
 
 // 	text_fileSystem();
 
@@ -47,9 +45,7 @@ void ntest::test()
 //  		 cout << "下载失败" << endl;
 //  	 }
 // 	bool bRes = vc15FileSystem::UrlFileSaveAs("http://www.nirsoft.net/utils/nircmd.zip", "d:/cppdld_nircmd.zip");
-	int nres = URLDownloadToFile(NULL, _T("http://www.nirsoft.net/utils/nircmd.zip"), _T("d:\\qq.exe"), NULL, NULL);
-// 	CDocument::OnFileSaveAs();
-
+// 	int nres = URLDownloadToFile(NULL, _T("http://www.nirsoft.net/utils/nircmd.zip"), _T("d:\\qq.exe"), NULL, NULL);
 }
 
 
@@ -207,15 +203,21 @@ CString ntest::GetDomain()
 	TCHAR str[128] = { 0 };
 	DWORD l = 128;
 	::GetUserNameEx(NameSamCompatible, str, &l);
-	// 	CString s;
-	// 	s.Format(_T("%s"), str);
-	return CString(str);
+	CString s(str);
+	s.MakeLower();
+	return s;
+}
 
+CString ntest::GetComputerObjName()
+{
+	TCHAR str[128] = { 0 };
+	DWORD l = 128;
+	::GetComputerObjectName(NameDisplay, str, &l);
+	return CString(str);
 }
 
 bool ntest::DownloadSaveFiles(const char * url, const char * strSaveFile)
 {
-
 	bool ret = false;
 	CInternetSession Sess(_T("lpload"));
 	Sess.SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000); //5秒的连接超时  

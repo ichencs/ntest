@@ -13,7 +13,7 @@ public:
 public:
 	void testDomain();
 
-
+	double dPrecision(double d, int npre = 3);
 protected:
 };
 

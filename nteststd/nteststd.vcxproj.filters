@@ -24,7 +24,7 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="teststdInc.h">
+    <ClInclude Include="nteststdInc.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="testString.h">

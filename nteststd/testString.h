@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+using namespace std;
 
 class testString
 {
@@ -10,7 +11,8 @@ protected:
 	void test();
 
 	void testSplit();
-
+	std::string toString(int d);
+	std::string toString(double d);
 
 protected:
 	/*--------------------------------*\

@@ -4,9 +4,11 @@
 #include <sstream>
 #include <iterator>
 
+using namespace std;
 
 testString::testString()
 {
+	test();
 }
 
 
@@ -17,6 +19,9 @@ testString::~testString()
 
 void testString::test()
 {
+	string str1, str2;
+	str1 = toString(1);
+	str2 = toString(3.1415);
 }
 
 void testString::testSplit()
@@ -24,10 +29,24 @@ void testString::testSplit()
 
 }
 
+std::string testString::toString(int d)
+{
+	stringstream ss;
+	ss << d;
+	return ss.str();
+}
+
+std::string testString::toString(double d)
+{
+	stringstream ss;
+	ss << d;
+	return ss.str();
+}
+
 vector<wstring> testString::SplitString(const wchar_t * config, wchar_t delimiter)
 {
 	vector<wstring> fragments;
-	while (auto next = wcschr(config, delimiter))
+	while (const wchar_t* next = wcschr(config, delimiter))
 	{
 		fragments.push_back(wstring(config, next));
 		config = next + 1;

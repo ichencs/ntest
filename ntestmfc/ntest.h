@@ -18,7 +18,7 @@ protected:
 
 	CString GetMD5(const CString &strFilePath /*= _T("")*/);
 	CString GetDomain();
-
+	CString GetComputerObjName();
 	bool DownloadSaveFiles(const char* url, const char* strSaveFile);
 };
 

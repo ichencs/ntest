@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "testNice.h"
 #include "Bloger.h"
-#include <ncrypt.h>
+// #include <ncrypt.h>
 
 #include "winsock2.h"
+#include <cmath>
 #pragma comment(lib,"ws2_32.lib")
 
 
@@ -19,6 +20,9 @@ testNice::~testNice()
 
 void testNice::test()
 {
+	double d1 = 1.23456789;
+	double d2 = dPrecision(d1);
+
 	testSizeof();
 	testDomain();
 	testIP();
@@ -86,6 +90,13 @@ void testNice::testIP()
 
 void testNice::testDomain()
 {
+}
+
+double testNice::dPrecision(double d, int npre)
+{
+	double dp = pow(10.0, npre);
+	d = floor(d * dp + 0.5) / dp;
+	return d;
 }
 
 

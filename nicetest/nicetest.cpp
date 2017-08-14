@@ -11,24 +11,24 @@
 #include "Bloger.h"
 #include "testNice.h"
 #include <afxwin.h>
+#include <cmath>
 
 using namespace std;
-
-
 
 
  int main()
  {
 	 testNice tn;
+	 testString tstring;
 
 	 char strHost[50] = { 0 };
 	 int nsize = sizeof(strHost);
-	 int rs = gethostname(strHost, nsize);
+// 	 int rs = gethostname(strHost, nsize);
 	 return 0;
 
-	 wstring strWnd = L"";
-	 HWND hwnd = ::FindWindow(0,strWnd.c_str());
-	 CWnd* pWnd = CWnd::FromHandle(hwnd);
+// 	 wstring strWnd = L"";
+// 	 HWND hwnd = ::FindWindow(0,strWnd.c_str());
+// 	 CWnd* pWnd = CWnd::FromHandle(hwnd);
 
 	 double dv = pow(0.1, 3);
 
@@ -41,15 +41,6 @@ using namespace std;
 	 testboost tb;
 	 testPod tp;
 
-// 	 if (DownloadSaveFiles("http://www.nirsoft.net/utils/nircmd.zip", "d:/cppdld_nircmd.zip") == true)
-// 	 {
-// 		 cout << "下载成功" << endl;
-// 	 }
-// 	 else {
-// 		 cout << "下载失败" << endl;
-// 	 }
-// 	 return 0;
-// 	 make_shared();
 	 system("pause");
      return 0;
  }

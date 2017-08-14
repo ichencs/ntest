@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "nvariant.h"
+#include "NVariant.h"
 
 
-nvariant::nvariant()
+NVariant::NVariant()
 {
 }
 
 
-nvariant::~nvariant()
+NVariant::~NVariant()
 {
 }
