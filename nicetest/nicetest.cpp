@@ -12,14 +12,19 @@
 #include "testNice.h"
 #include <afxwin.h>
 #include <cmath>
+#include "testAes.h"
 
 using namespace std;
 
 
  int main()
  {
-	 testNice tn;
-	 testString tstring;
+// 	 testNice tn;
+// 	 testString tstring;
+
+	 testAes taes;
+	 taes.test();
+	 system("pause");
 
 	 char strHost[50] = { 0 };
 	 int nsize = sizeof(strHost);
