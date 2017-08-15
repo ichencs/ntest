@@ -319,7 +319,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AES.h" />
     <ClInclude Include="Bloger.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="stdafx.h" />
@@ -329,7 +328,6 @@
     <ClInclude Include="test_calculate.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AES.cpp" />
     <ClCompile Include="Bloger.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="stdafx.cpp">

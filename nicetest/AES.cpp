@@ -381,7 +381,7 @@ void AES::iv_inc() {
 	memcpy(iv + 8, &IVC, 8);
 }
 
-int AES::get_size() {
+int AES::get_size(){
 	return size;
 }
 

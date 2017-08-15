@@ -326,6 +326,7 @@
     <ClInclude Include="testboost.h" />
     <ClInclude Include="testFilesystem.h" />
     <ClInclude Include="testLog.h" />
+    <ClInclude Include="testPointer.h" />
     <ClInclude Include="testRegex.h" />
     <ClInclude Include="testXpressive.h" />
   </ItemGroup>
@@ -344,6 +345,7 @@
     <ClCompile Include="testboost.cpp" />
     <ClCompile Include="testFilesystem.cpp" />
     <ClCompile Include="testLog.cpp" />
+    <ClCompile Include="testPointer.cpp" />
     <ClCompile Include="testRegex.cpp" />
     <ClCompile Include="testXpressive.cpp" />
   </ItemGroup>

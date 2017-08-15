@@ -11,3 +11,4 @@
 #include "ntestdef.h"
 #include "ntestg.h"
 #include "testPod.h"
+#include "testMemoryAlignment.h"

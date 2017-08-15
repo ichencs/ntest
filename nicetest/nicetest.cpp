@@ -22,8 +22,11 @@ using namespace std;
 // 	 testNice tn;
 // 	 testString tstring;
 
-	 testAes taes;
-	 taes.test();
+	 testMemoryAlignment tma;
+	 tma.test();
+
+// 	 testAes taes;
+// 	 taes.test();
 	 system("pause");
 
 	 char strHost[50] = { 0 };
