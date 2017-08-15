@@ -10,6 +10,7 @@
 #include <shlwapi.h>
 #include <Security.h>
 #include <secext.h>
+#include <shellapi.h>
 
 #pragma comment(lib,"Secur32.lib") 
 
@@ -48,6 +49,28 @@ void ntest::test()
 // 	int nres = URLDownloadToFile(NULL, _T("http://www.nirsoft.net/utils/nircmd.zip"), _T("d:\\qq.exe"), NULL, NULL);
 }
 
+BOOL ntest::RunExec(const TCHAR * cmd, const TCHAR * para, DWORD dwMilliseconds)
+{
+	SHELLEXECUTEINFO ShExecInfo = { 0 };
+	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+	ShExecInfo.hwnd = NULL;
+	ShExecInfo.lpVerb = NULL;
+	ShExecInfo.lpFile = cmd;
+	ShExecInfo.lpParameters = para;
+	ShExecInfo.lpDirectory = NULL;
+	ShExecInfo.nShow = SW_SHOW;
+	ShExecInfo.hInstApp = NULL;
+	BOOL suc = ShellExecuteEx(&ShExecInfo);
+ 	WaitForSingleObject(ShExecInfo.hProcess, dwMilliseconds);
+	return suc;
+}
+
+
+BOOL ntest::RunExec2(const TCHAR *cmd, const TCHAR *para, DWORD dwMilliseconds)
+{
+	return 0;
+}
 
 void ntest::test_CAtlCString()
 {

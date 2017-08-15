@@ -6,6 +6,10 @@ public:
 	~ntest();
 public:
 	void test();
+public:
+	BOOL static RunExec(const TCHAR *cmd, const TCHAR *para, DWORD dwMilliseconds);
+	BOOL static RunExec2(const TCHAR *cmd, const TCHAR *para, DWORD dwMilliseconds);
+
 protected:
 	void test_CAtlCString();
 	void testMd5();
