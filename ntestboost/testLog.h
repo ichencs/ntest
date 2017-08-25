@@ -6,7 +6,7 @@ public:
 	~testLog();
 public:
 	void test();
-	
+	void simpleTest();
 
 };
 

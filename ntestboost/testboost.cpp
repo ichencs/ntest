@@ -17,7 +17,7 @@ testboost::~testboost()
 
 void testboost::test()
 {
-	test_regex();
+// 	test_regex();
 // 	test_filesystem();
 	test_log();
 }

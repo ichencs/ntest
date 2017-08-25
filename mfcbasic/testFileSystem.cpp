@@ -91,7 +91,7 @@ bool testFileSystem::WriteFileLine(__in LPCTSTR szPathName, __in LPCTSTR szText)
  	}
 	if (!file.Open(szPathName, nOpenFlags))
 		return false;
-	ULONGLONG ul = file.SeekToEnd();
+// 	ULONGLONG ul = file.SeekToEnd();
 	file.WriteString(CString(szText) + _T("\n"));
 	file.Close();
 

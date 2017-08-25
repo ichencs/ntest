@@ -10,7 +10,6 @@
 #include <iostream>
 #include "Bloger.h"
 #include "testNice.h"
-#include <afxwin.h>
 #include <cmath>
 #include "testAes.h"
 
@@ -19,9 +18,12 @@ using namespace std;
 
  int main()
  {
+	 testboost tb;
+
 // 	 testNice tn;
 // 	 testString tstring;
-
+	 int *p = new int(0);
+	 *p++;
 	 testMemoryAlignment tma;
 	 tma.test();
 
@@ -46,7 +48,6 @@ using namespace std;
 	 
 	 std::pair<int,double> par;
 	 
-	 testboost tb;
 	 testPod tp;
 
 	 system("pause");
