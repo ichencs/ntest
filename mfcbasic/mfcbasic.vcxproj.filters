@@ -33,6 +33,12 @@
     <ClInclude Include="testmfcInc.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="NFuncNumber.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NFuncString.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +48,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="testFileSystem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NFuncNumber.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NFuncString.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
