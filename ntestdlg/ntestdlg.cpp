@@ -16,20 +16,20 @@
 
 class CAboutDlg : public CDialogEx
 {
-public:
-	CAboutDlg();
+	public:
+		CAboutDlg();
 
-// 对话框数据
+		// 对话框数据
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_ABOUTBOX };
+		enum { IDD = IDD_ABOUTBOX };
 #endif
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+		virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
-// 实现
-protected:
-	DECLARE_MESSAGE_MAP()
+		// 实现
+	protected:
+		DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -73,6 +73,9 @@ BEGIN_MESSAGE_MAP(Cntestdlg, CDialogEx)
 	ON_BN_CLICKED(MY_QUITE, OnExitApp)
 	ON_WM_DESTROY()
 	ON_CBN_SELCHANGE(TestDlgCheckCombboxEx, &Cntestdlg::OnCbnSelchangeTestdlgcheckcombboxex)
+	ON_BN_CLICKED(IDOK, &Cntestdlg::OnBnClickedOk)
+	ON_LBN_SETFOCUS(TestDlgListBox, &Cntestdlg::OnLbnSetfocusTestdlglistbox)
+	ON_EN_SETFOCUS(IDC_EDIT_TEST1, &Cntestdlg::OnEnSetfocusEditTest1)
 END_MESSAGE_MAP()
 
 
@@ -89,12 +92,14 @@ BOOL Cntestdlg::OnInitDialog()
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
 	CMenu* pSysMenu = GetSystemMenu(FALSE);
+
 	if (pSysMenu != NULL)
 	{
 		BOOL bNameValid;
 		CString strAboutMenu;
 		bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
 		ASSERT(bNameValid);
+
 		if (!strAboutMenu.IsEmpty())
 		{
 			pSysMenu->AppendMenu(MF_SEPARATOR);
@@ -177,7 +182,7 @@ BOOL Cntestdlg::CrtTrayIcon()
 	nid.uID = IDR_MAINFRAME;
 	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 	nid.hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
-	nid.uCallbackMessage = WM_TEST_ICON_MSG;//自定义的消息名称 
+	nid.uCallbackMessage = WM_TEST_ICON_MSG;//自定义的消息名称
 	lstrcpy(nid.szTip, _T("测试对话框"));
 	BOOL bRes = Shell_NotifyIcon(NIM_ADD, &nid);
 	return bRes;
@@ -190,10 +195,10 @@ BOOL Cntestdlg::DelTrayIcon()
 	// 	nid.hWnd = this->m_hWnd;
 	nid.hWnd = GetSafeHwnd();
 	nid.uID = IDR_MAINFRAME;
-// 	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-// 	nid.hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
-// 	nid.uCallbackMessage = WM_TEST_ICON_MSG;//自定义的消息名称 
-// 	lstrcpy(nid.szTip, _T("测试对话框"));
+	// 	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+	// 	nid.hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
+	// 	nid.uCallbackMessage = WM_TEST_ICON_MSG;//自定义的消息名称
+	// 	lstrcpy(nid.szTip, _T("测试对话框"));
 	BOOL bRes = Shell_NotifyIcon(NIM_DELETE, &nid);
 	return bRes;
 }
@@ -218,7 +223,7 @@ void Cntestdlg::HideDlg()
 	nid.uID = IDR_MAINFRAME;
 	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP ;
 	nid.hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
-	nid.uCallbackMessage = WM_TEST_ICON_MSG;//自定义的消息名称 
+	nid.uCallbackMessage = WM_TEST_ICON_MSG;//自定义的消息名称
 	lstrcpy(nid.szTip, _T("托盘中..."));
 	BOOL bRes = Shell_NotifyIcon(NIM_MODIFY, &nid);
 	ShowWindow(SW_HIDE);
@@ -228,12 +233,12 @@ void Cntestdlg::ResumeDlg()
 {
 	NOTIFYICONDATA nid;
 	nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
-// 	nid.hWnd = this->m_hWnd;
+	// 	nid.hWnd = this->m_hWnd;
 	nid.hWnd = GetSafeHwnd();
 	nid.uID = IDR_MAINFRAME;
 	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 	nid.hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
-	nid.uCallbackMessage = WM_TEST_ICON_MSG;//自定义的消息名称 
+	nid.uCallbackMessage = WM_TEST_ICON_MSG;//自定义的消息名称
 	lstrcpy(nid.szTip, _T("测试对话框"));
 	BOOL bRes = Shell_NotifyIcon(NIM_MODIFY, &nid);
 	ShowWindow(SW_NORMAL);
@@ -242,45 +247,51 @@ void Cntestdlg::ResumeDlg()
 LRESULT Cntestdlg::OnRClickIconMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam != IDR_MAINFRAME)
+	{
 		return 1;
+	}
+
 	switch (lParam)
 	{
-	case WM_RBUTTONUP:
-	{
-		LPPOINT lpoint = new tagPOINT;
-		::GetCursorPos(lpoint);//得到鼠标位置 
-		CMenu menu;
-		UINT nState;
+		case WM_RBUTTONUP:
+			{
+				LPPOINT lpoint = new tagPOINT;
+				::GetCursorPos(lpoint);//得到鼠标位置
+				CMenu menu;
+				UINT nState;
 
-		menu.CreatePopupMenu();//声明一个弹出式菜单 
-							   //增加菜单项“关闭”，点击则发送消息WM_DESTROY给主窗口（已 
-							   //隐藏），将程序结束。 
-		menu.AppendMenu(MF_STRING, MY_OPEN, _T("打开"));
-		nState = IsWindowVisible() ? MF_GRAYED : MF_ENABLED;
-		nState = MF_BYCOMMAND | nState;
-		menu.EnableMenuItem(MY_OPEN, nState);
+				menu.CreatePopupMenu();//声明一个弹出式菜单
+				//增加菜单项“关闭”，点击则发送消息WM_DESTROY给主窗口（已
+				//隐藏），将程序结束。
+				menu.AppendMenu(MF_STRING, MY_OPEN, _T("打开"));
+				nState = IsWindowVisible() ? MF_GRAYED : MF_ENABLED;
+				nState = MF_BYCOMMAND | nState;
+				menu.EnableMenuItem(MY_OPEN, nState);
 
-		menu.AppendMenu(MF_STRING, MY_HIDE, _T("隐藏"));
-		nState = IsWindowVisible() ? MF_ENABLED: MF_GRAYED;
-		nState = MF_BYCOMMAND | nState;
-		menu.EnableMenuItem(MY_HIDE, nState);
+				menu.AppendMenu(MF_STRING, MY_HIDE, _T("隐藏"));
+				nState = IsWindowVisible() ? MF_ENABLED : MF_GRAYED;
+				nState = MF_BYCOMMAND | nState;
+				menu.EnableMenuItem(MY_HIDE, nState);
 
-		menu.AppendMenu(MF_STRING, MY_QUITE, _T("关闭"));
-		//确定弹出式菜单的位置 
-		menu.TrackPopupMenu(TPM_LEFTALIGN, lpoint->x, lpoint->y, this);
-		//资源回收 
-		HMENU hmenu = menu.Detach();
-		menu.DestroyMenu();
-		delete lpoint;
+				menu.AppendMenu(MF_STRING, MY_QUITE, _T("关闭"));
+				//确定弹出式菜单的位置
+				menu.TrackPopupMenu(TPM_LEFTALIGN, lpoint->x, lpoint->y, this);
+				//资源回收
+				HMENU hmenu = menu.Detach();
+				menu.DestroyMenu();
+				delete lpoint;
+			}
+			break;
+
+		case WM_LBUTTONDBLCLK:
+			{
+				ResumeDlg();
+			}
+
+		default:
+			break;
 	}
-	break;
-	case WM_LBUTTONDBLCLK:
-	{
-		ResumeDlg();
-	}
-	default:
-		break;
-	}
+
 	return 0;
 }
 
@@ -300,6 +311,25 @@ void Cntestdlg::OnDestroy()
 
 
 void Cntestdlg::OnCbnSelchangeTestdlgcheckcombboxex()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+void Cntestdlg::OnBnClickedOk()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CDialogEx::OnOK();
+}
+
+
+void Cntestdlg::OnLbnSetfocusTestdlglistbox()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+void Cntestdlg::OnEnSetfocusEditTest1()
 {
 	// TODO: 在此添加控件通知处理程序代码
 }

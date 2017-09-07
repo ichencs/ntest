@@ -1,18 +1,27 @@
 #include "stdafx.h"
 #include "Observable.h"
+#include "UnitTest\UnitTest.h"
 
 
 /////////////////////抽象模式实现
 
 
-void CObservable::Attach(CObserver*pObs)
+void CObservable::Attach(CObserver* pObs)
 {
-	if (!pObs)return;
+	if (!pObs)
+	{
+		return;
+	}
+
 	m_setObs.insert(pObs);
 }
-void CObservable::Detach(CObserver*pObs)
+void CObservable::Detach(CObserver* pObs)
 {
-	if (!pObs)return;
+	if (!pObs)
+	{
+		return;
+	}
+
 	m_setObs.erase(pObs);
 }
 void CObservable::DetachAll()
@@ -35,14 +44,24 @@ int CObservable::GetObserversCount()
 {
 	return (int)m_setObs.size();
 }
-void CObservable::Notify(void*pArg/*=NULL*/)
+void CObservable::Notify(void* pArg/*=NULL*/)
 {
-	if (!HasChanged())return;
+	if (!HasChanged())
+	{
+		return;
+	}
+
 	cout << "notify observers…" << endl;
 	ClearChanged();
 	set<CObserver*>::iterator itr = m_setObs.begin();
+
 	for (; itr != m_setObs.end(); itr++)
 	{
 		(*itr)->Update(this, pArg);
 	}
+}
+
+TEST_CASE(TestObservable)
+{
+
 }
