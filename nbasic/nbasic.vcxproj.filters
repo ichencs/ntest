@@ -54,7 +54,6 @@
     <ClCompile Include="Basic.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Exception.cpp" />
-    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="GlobalStorage.cpp" />
     <ClCompile Include="nchar.cpp" />
     <ClCompile Include="NVariant.cpp" />
@@ -62,6 +61,18 @@
     <ClCompile Include="Locale.cpp" />
     <ClCompile Include="Stream\FileStream.cpp">
       <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FileSystem.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FilePath.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\File.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\Folder.cpp">
+      <Filter>FileSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,7 +152,6 @@
     <ClInclude Include="Basic.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Exception.h" />
-    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="GlobalStorage.h" />
     <ClInclude Include="nbasicInc.h" />
     <ClInclude Include="nchar.h" />
@@ -160,6 +170,18 @@
     <ClInclude Include="Stream\FileStream.h">
       <Filter>stream</Filter>
     </ClInclude>
+    <ClInclude Include="FileSystem\FileSystem.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FilePath.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\File.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\Folder.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -173,6 +195,9 @@
     </Filter>
     <Filter Include="stream">
       <UniqueIdentifier>{febf72f4-0584-4664-a5d1-a2759e9f03f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileSystem">
+      <UniqueIdentifier>{8c90714b-5dea-4be9-ae3c-3e515065f9fa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

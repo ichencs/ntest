@@ -276,7 +276,10 @@
     <ClInclude Include="Collections\OperationString.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Exception.h" />
-    <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="FileSystem\File.h" />
+    <ClInclude Include="FileSystem\FilePath.h" />
+    <ClInclude Include="FileSystem\FileSystem.h" />
+    <ClInclude Include="FileSystem\Folder.h" />
     <ClInclude Include="GlobalStorage.h" />
     <ClInclude Include="nbasicInc.h" />
     <ClInclude Include="nchar.h" />
@@ -309,7 +312,10 @@
     <ClCompile Include="Basic.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Exception.cpp" />
-    <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="FileSystem\File.cpp" />
+    <ClCompile Include="FileSystem\FilePath.cpp" />
+    <ClCompile Include="FileSystem\FileSystem.cpp" />
+    <ClCompile Include="FileSystem\Folder.cpp" />
     <ClCompile Include="GlobalStorage.cpp" />
     <ClCompile Include="nchar.cpp" />
     <ClCompile Include="Locale.cpp" />

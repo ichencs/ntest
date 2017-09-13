@@ -4,7 +4,8 @@
 
 
 /////////////////////抽象模式实现
-
+#include <iostream>
+using namespace std;
 
 void CObservable::Attach(CObserver* pObs)
 {

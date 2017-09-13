@@ -14,12 +14,15 @@
 #include "Pointer.h"
 #include "String.h"
 #include "Console.h"
-#include "FileSystem.h"
 #include "Exception.h"
 #include "Locale.h"
 #include "GlobalStorage.h"
 #include "Locale.h"
 #include "Threading.h"
+
+#include ".\FileSystem\Folder.h"
+#include ".\FileSystem\file.h"
+#include ".\FileSystem\FilePath.h"
 
 #include ".\Stream\Accessor.h"
 #include ".\Stream\Interfaces.h"
