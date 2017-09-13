@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "ntest.h"
 #include <afxwin.h>
+#include <winsock.h>
 #pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" ) // 设置入口地址
 
 int main()
@@ -12,8 +13,8 @@ int main()
 	CString str, str2;
 	int num = 3;
 	str.Format(_T("%%.%d"), num);
-	str2.Format(_T("%%f") );
-
+	str2.Format(_T("%%f"));
+	
 	// 	CString strIdsFile = "E:\\项目文档\\501\\三维IDS\\2017-08-10--20170803 IDS读写接口\\模板 测试文件\\111(内部).idsd";
 	// 	CString strPath = "E:\\项目文档\\501\\三维IDS\\2017-08-10--20170803 IDS读写接口\\模板 测试文件";
 	// 	strPath.TrimRight('\\');
@@ -27,10 +28,14 @@ int main()
 	// 	str.TrimRight(_T(".idsd"));
 	// 	str2.TrimRight(_T("idsd"));
 	// 	str2.TrimRight(_T("."));
-
-	// 	ntest tset;
-	// 	tset.test();
-
+	
+	ntest tset;
+	tset.test();
+	
+	char hostname[50] = { 0 };
+	struct hostent* phost = 0;
+	gethostname(hostname, 50);
+	phost = gethostbyname(hostname);
 	return 0;
 }
 

@@ -12,4 +12,4 @@
 
 
 // TODO:  在此处引用程序需要的其他头文件
-#include "..\nicebasic\nicebasicInc.h"
+#include "..\nbasic\nbasicInc.h"

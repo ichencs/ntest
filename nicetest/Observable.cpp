@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Observable.h"
-#include "UnitTest\UnitTest.h"
+#include "UnitTest.h"
 
 
 /////////////////////抽象模式实现
@@ -12,7 +12,7 @@ void CObservable::Attach(CObserver* pObs)
 	{
 		return;
 	}
-
+	
 	m_setObs.insert(pObs);
 }
 void CObservable::Detach(CObserver* pObs)
@@ -21,7 +21,7 @@ void CObservable::Detach(CObserver* pObs)
 	{
 		return;
 	}
-
+	
 	m_setObs.erase(pObs);
 }
 void CObservable::DetachAll()
@@ -50,11 +50,11 @@ void CObservable::Notify(void* pArg/*=NULL*/)
 	{
 		return;
 	}
-
+	
 	cout << "notify observers…" << endl;
 	ClearChanged();
 	set<CObserver*>::iterator itr = m_setObs.begin();
-
+	
 	for (; itr != m_setObs.end(); itr++)
 	{
 		(*itr)->Update(this, pArg);

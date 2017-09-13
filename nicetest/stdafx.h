@@ -10,9 +10,9 @@
 // #include <stdio.h>
 // #include <tchar.h>
 
+#include "../nbasic/nbasicInc.h"
 #include "../ntestbasic/ntestbasicInc.h"
 #include "../ntestboost/ntestboostInc.h"
-#include "../nicebasic/nicebasicInc.h"
 #include "../nteststd/nteststdInc.h"
 // #include <afx.h>
 

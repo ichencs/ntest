@@ -13,8 +13,8 @@
 
 // TODO:  在此处引用程序需要的其他头文件
 
+#include "..\nbasic\nbasicInc.h"
 #include "..\ntestbasic\ntestbasicInc.h"
-#include "..\nicebasic\nicebasicInc.h"
 
 
 #include <boost\regex.hpp>

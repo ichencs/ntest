@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="String.cpp" />
+    <ClCompile Include="Regex\Regex.cpp">
+      <Filter>Regex</Filter>
+    </ClCompile>
+    <ClCompile Include="Regex\RegexAutomaton.cpp">
+      <Filter>Regex</Filter>
+    </ClCompile>
+    <ClCompile Include="Regex\RegexData.cpp">
+      <Filter>Regex</Filter>
+    </ClCompile>
+    <ClCompile Include="Regex\RegexExpression.cpp">
+      <Filter>Regex</Filter>
+    </ClCompile>
+    <ClCompile Include="Regex\RegexParser.cpp">
+      <Filter>Regex</Filter>
+    </ClCompile>
+    <ClCompile Include="Regex\RegexPure.cpp">
+      <Filter>Regex</Filter>
+    </ClCompile>
+    <ClCompile Include="Regex\RegexRich.cpp">
+      <Filter>Regex</Filter>
+    </ClCompile>
+    <ClCompile Include="Regex\RegexWriter.cpp">
+      <Filter>Regex</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream\Accessor.cpp">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream\BroadcastStream.cpp">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream\CacheStream.cpp">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream\CharFormat.cpp">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream\CompressionStream.cpp">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream\memorystream.cpp">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream\memorywrapperstream.cpp">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream\RecorderStream.cpp">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic.cpp" />
+    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="GlobalStorage.cpp" />
+    <ClCompile Include="nchar.cpp" />
+    <ClCompile Include="NVariant.cpp" />
+    <ClCompile Include="Threading.cpp" />
+    <ClCompile Include="Locale.cpp" />
+    <ClCompile Include="Stream\FileStream.cpp">
+      <Filter>stream</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Pointer.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="String.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Regex\Regex.h">
+      <Filter>Regex</Filter>
+    </ClInclude>
+    <ClInclude Include="Regex\RegexAutomaton.h">
+      <Filter>Regex</Filter>
+    </ClInclude>
+    <ClInclude Include="Regex\RegexData.h">
+      <Filter>Regex</Filter>
+    </ClInclude>
+    <ClInclude Include="Regex\RegexExpression.h">
+      <Filter>Regex</Filter>
+    </ClInclude>
+    <ClInclude Include="Regex\RegexPure.h">
+      <Filter>Regex</Filter>
+    </ClInclude>
+    <ClInclude Include="Regex\RegexRich.h">
+      <Filter>Regex</Filter>
+    </ClInclude>
+    <ClInclude Include="Regex\RegexWriter.h">
+      <Filter>Regex</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\Interfaces.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\Operation.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\OperationCopyFrom.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\OperationEnumerable.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\OperationForEach.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\OperationSequence.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\OperationString.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream\Accessor.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream\BroadcastStream.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream\CacheStream.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream\CharFormat.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream\CompressionStream.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream\Interfaces.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream\memorystream.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream\memorywrapperstream.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream\RecorderStream.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic.h" />
+    <ClInclude Include="Console.h" />
+    <ClInclude Include="Exception.h" />
+    <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="GlobalStorage.h" />
+    <ClInclude Include="nbasicInc.h" />
+    <ClInclude Include="nchar.h" />
+    <ClInclude Include="NVariant.h" />
+    <ClInclude Include="Threading.h" />
+    <ClInclude Include="Collections\Pair.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\List.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\Dictionary.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Locale.h" />
+    <ClInclude Include="Stream\FileStream.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="collection">
+      <UniqueIdentifier>{44f6fa25-448e-43f2-a847-50e24a1b131b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Regex">
+      <UniqueIdentifier>{1b2e3b6f-e148-4c0e-8123-f50d57ac3578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="stream">
+      <UniqueIdentifier>{febf72f4-0584-4664-a5d1-a2759e9f03f9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

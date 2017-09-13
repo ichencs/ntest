@@ -27,7 +27,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nteststd", "nteststd\ntests
 		{9124E573-D87B-400A-AD16-952E9549E06A} = {9124E573-D87B-400A-AD16-952E9549E06A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nicebasic", "nicebasic\nicebasic.vcxproj", "{9124E573-D87B-400A-AD16-952E9549E06A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nbasic", "nbasic\nbasic.vcxproj", "{9124E573-D87B-400A-AD16-952E9549E06A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

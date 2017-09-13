@@ -45,16 +45,7 @@
     <ClInclude Include="TestUsing.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="UnitTest\Console.h">
-      <Filter>UnitTest</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitTest\String.h">
-      <Filter>UnitTest</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitTest\UnitTest.h">
-      <Filter>UnitTest</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitTest\Basic.h">
+    <ClInclude Include="UnitTest.h">
       <Filter>UnitTest</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,16 +74,7 @@
     <ClCompile Include="TestUsing.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="UnitTest\Console.cpp">
-      <Filter>UnitTest</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitTest\String.cpp">
-      <Filter>UnitTest</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitTest\UnitTest.cpp">
-      <Filter>UnitTest</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitTest\Basic.cpp">
+    <ClCompile Include="UnitTest.cpp">
       <Filter>UnitTest</Filter>
     </ClCompile>
   </ItemGroup>
