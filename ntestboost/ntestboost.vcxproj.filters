@@ -74,5 +74,8 @@
     <ClCompile Include="testPointer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ntestboost.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

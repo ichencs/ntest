@@ -24,9 +24,6 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="nteststdInc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="testString.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -36,6 +33,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="testString.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="nteststd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
