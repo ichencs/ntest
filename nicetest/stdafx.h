@@ -11,9 +11,6 @@
 // #include <tchar.h>
 
 #include "../nbasic/nbasicInc.h"
-#include "../ntestbasic/ntestbasicInc.h"
-#include "../ntestboost/ntestboostInc.h"
-#include "../nteststd/nteststdInc.h"
 // #include <afx.h>
 
 // TODO:  在此处引用程序需要的其他头文件

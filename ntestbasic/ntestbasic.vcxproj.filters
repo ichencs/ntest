@@ -24,9 +24,6 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ntestbasicInc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="testPod.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -39,18 +36,54 @@
     <ClInclude Include="testMemoryAlignment.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="UnitTest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="testPod.cpp">
+    <ClCompile Include="TestBasic.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ntestg.cpp">
+    <ClCompile Include="TestFileSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="testMemoryAlignment.cpp">
+    <ClCompile Include="TestGlobalStorage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestLocale.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestLocaleString.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestRegex.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestRegex2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestStream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestString.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestThread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestThread2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ntestbasic.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
