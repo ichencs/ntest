@@ -62,9 +62,6 @@
     <ClCompile Include="Stream\FileStream.cpp">
       <Filter>stream</Filter>
     </ClCompile>
-    <ClCompile Include="FileSystem\FileSystem.cpp">
-      <Filter>FileSystem</Filter>
-    </ClCompile>
     <ClCompile Include="FileSystem\FilePath.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
@@ -72,6 +69,9 @@
       <Filter>FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="FileSystem\Folder.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FileInfo.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,9 +170,6 @@
     <ClInclude Include="Stream\FileStream.h">
       <Filter>stream</Filter>
     </ClInclude>
-    <ClInclude Include="FileSystem\FileSystem.h">
-      <Filter>FileSystem</Filter>
-    </ClInclude>
     <ClInclude Include="FileSystem\FilePath.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
@@ -180,6 +177,9 @@
       <Filter>FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="FileSystem\Folder.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FileInfo.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
   </ItemGroup>

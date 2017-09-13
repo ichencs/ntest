@@ -163,6 +163,13 @@ namespace vl
 		{
 		}
 		
+		FilePath FilePath::Current()
+		{
+			collections:: Array<wchar_t> buffer(MAX_PATH);
+			GetCurrentDirectory(MAX_PATH, &buffer[0]);
+			return &buffer[0];
+		}
+		
 		vint FilePath::Compare(const FilePath& a, const FilePath& b)
 		{
 			return WString::Compare(a.fullPath, b.fullPath);
