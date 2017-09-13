@@ -39,7 +39,6 @@ void ClearTestFolders()
 
 TEST_CASE(TestFilePath)
 {
-#if defined VCZH_MSVC
 	ClearTestFolders();
 	{
 		FilePath p;
@@ -112,77 +111,6 @@ TEST_CASE(TestFilePath)
 		FilePath r = p.GetRelativePathFor(q);
 		TEST_ASSERT(r == L"D:\\Windows\\Explorer.exe");
 	}
-#elif defined VCZH_GCC
-	ClearTestFolders();
-	{
-		FilePath p = L"/";
-		TEST_ASSERT(p.IsFile() == false);
-		TEST_ASSERT(p.IsFolder() == true);
-		TEST_ASSERT(p.IsRoot() == true);
-		TEST_ASSERT(p.GetFullPath() == L"/");
-	}
-	{
-		FilePath p = L"/bin/";
-		TEST_ASSERT(p.IsFile() == false);
-		TEST_ASSERT(p.IsFolder() == true);
-		TEST_ASSERT(p.IsRoot() == false);
-		TEST_ASSERT(p.GetFullPath() == L"/bin");
-		TEST_ASSERT(p.GetName() == L"bin");
-		TEST_ASSERT(p.GetFolder().GetFullPath() == L"/");
-	}
-	{
-		FilePath p = L"/bin/ls";
-		TEST_ASSERT(p.IsFile() == true);
-		TEST_ASSERT(p.IsFolder() == false);
-		TEST_ASSERT(p.IsRoot() == false);
-		TEST_ASSERT(p.GetFullPath() == L"/bin/ls");
-		TEST_ASSERT(p.GetName() == L"ls");
-		TEST_ASSERT(p.GetFolder().GetFullPath() == L"/bin");
-	}
-	{
-		FilePath p = L"/bin/vczh.txt";
-		TEST_ASSERT(p.IsFile() == false);
-		TEST_ASSERT(p.IsFolder() == false);
-		TEST_ASSERT(p.IsRoot() == false);
-		TEST_ASSERT(p.GetFullPath() == L"/bin/vczh.txt");
-	}
-	{
-		FilePath p = L"/bin";
-		FilePath q = p / L"ls";
-		TEST_ASSERT(q.GetFullPath() == L"/bin/ls");
-	}
-	{
-		FilePath p = L"/usr/bin/";
-		FilePath q = p / L"../../bin/./ls";
-		TEST_ASSERT(q.GetFullPath() == L"/bin/ls");
-	}
-	{
-		FilePath p = L"/usr/bin/";
-		FilePath q = L"/bin/ls";
-		FilePath r = p.GetRelativePathFor(q);
-		TEST_ASSERT(r == L"../../bin/ls");
-	}
-	{
-		FilePath p = L"/usr/bin/cc";
-		FilePath q = L"/bin/ls";
-		FilePath r = p.GetRelativePathFor(q);
-		TEST_ASSERT(r == L"../../bin/ls");
-	}
-	{
-		bool exceptionThrown = false;
-	
-		try
-		{
-			FilePath p = L"/../../bin";
-		}
-		catch (ArgumentException&)
-		{
-			exceptionThrown = true;
-		}
-	
-		TEST_ASSERT(exceptionThrown == true);
-	}
-#endif
 }
 
 #ifdef VCZH_MSVC
@@ -512,10 +440,45 @@ TEST_CASE(FastAccessFilesWithEncodingTesting)
 
 TEST_CASE(TestFileSystemOthers)
 {
-	//	_splitpath();
 	WString filePath = L"F:\\Users\\Chencs\\Desktop\\ids测试\\d323(内部).idsd";
 	WString strExtension = PathFindExtension(filePath.Buffer());
 	WString name = PathFindFileName(filePath.Buffer());
-	FilePath path = FilePath::Current();
+	FilePath path = FilePath::CurrentPath();
 	Console::WriteLine(strExtension);
+}
+
+TEST_CASE(TestFileInfo)
+{
+	FilePath path = L"C:\\Windows";
+	FileInfo info = path;
+	TEST_ASSERT(info.Exists());
+	TEST_ASSERT(info.IsFolder());
+	TEST_ASSERT(!info.IsFile());
+
+	WString strInfo = info.FileName();
+	strInfo = info.Extemsion();
+
+	path = L"";
+	info.SetPath(path);
+	TEST_ASSERT(!info.IsFile());
+	TEST_ASSERT(!info.Exists());
+	TEST_ASSERT(!info.IsFolder());
+	TEST_ASSERT(!info.IsReadable());
+	TEST_ASSERT(!info.IsWritable());
+	TEST_ASSERT(!info.IsHidden());
+
+	path = FilePath::TheAppPath();
+	info.SetPath(path);
+	TEST_ASSERT(info.IsFile());
+	TEST_ASSERT(info.Exists());
+	TEST_ASSERT(!info.IsFolder());
+	TEST_ASSERT(!info.IsHidden());
+
+	info.SetPath(path.GetFolder());
+	TEST_ASSERT(!info.IsFile());
+	TEST_ASSERT(info.Exists());
+	TEST_ASSERT(info.IsFolder());
+	TEST_ASSERT(!info.IsHidden());
+	path = FilePath::TempPath();
+
 }

@@ -1,10 +1,10 @@
-﻿#include <string.h>
-#include "stdafx.h"
+﻿#include "stdafx.h"
+#include <string.h>
 #include "UnitTest.h"
 
 using namespace vl;
-using namespace vl::stream;
 using namespace vl::collections;
+using namespace vl::stream;
 
 extern WString GetTestResourcePath();
 extern WString GetTestOutputPath();

@@ -1,18 +1,12 @@
-#include "FileInfo.h"
 #include "../Locale.h"
 #include "../Collections/OperationForEach.h"
 #include "../Stream/FileStream.h"
 #include "../Stream/Accessor.h"
 #include "../Exception.h"
-#if defined VCZH_MSVC
 #include <Windows.h>
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi.lib")
-#elif defined VCZH_GCC
-#include <sys/stat.h>
-#include <dirent.h>
-#include <unistd.h>
-#endif
+#include "FileInfo.h"
 
 namespace vl
 {
@@ -23,19 +17,18 @@ namespace vl
 		
 		FileInfo::FileInfo()
 		{
-			memset(&attribute, 0, sizeof(WIN32_FILE_ATTRIBUTE_DATA));
 		}
 		
 		FileInfo::FileInfo(const FilePath& path)
 		{
-			filePath = path;
-			getPropInfo();
+			attrbute.filePath = path;
+			getProperty();
 		}
 		
 		FileInfo::FileInfo(const WString& path)
 		{
-			filePath = path;
-			getPropInfo();
+			attrbute.filePath = path;
+			getProperty();
 		}
 		
 		FileInfo::~FileInfo()
@@ -45,75 +38,100 @@ namespace vl
 		
 		void FileInfo::SetPath(const WString& path)
 		{
-			filePath = path;
-			getPropInfo();
+			attrbute.filePath = path;
+			getProperty();
 		}
 		
 		void FileInfo::SetPath(const FilePath& path)
 		{
-			filePath = path;
-			getPropInfo();
+			attrbute.filePath = path;
+			getProperty();
 		}
 		
 		bool FileInfo::Exists()const
 		{
-			return attribute.dwFileAttributes  != 0;
+			return attrbute.attrbutes  != 0;
 		}
 		
 		bool FileInfo::IsFolder()const
 		{
-			return (attribute.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+			return (attrbute.attrbutes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 		}
 		
 		bool FileInfo::IsFile()const
 		{
-			return (attribute.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+			return Exists() && (attrbute.attrbutes & FILE_ATTRIBUTE_DIRECTORY) == 0;
 		}
 		
 		bool FileInfo::IsReadable() const
 		{
-			return (attribute.dwFileAttributes & FILE_SHARE_READ) == 1;
+			return (attrbute.attrbutes & FILE_SHARE_READ) == 1;
 		}
 		
 		bool FileInfo::IsWritable() const
 		{
-			return (attribute.dwFileAttributes & FILE_SHARE_WRITE) == 1;
+			return (attrbute.attrbutes & FILE_SHARE_WRITE) == 1;
 		}
 		
 		bool FileInfo::IsHidden() const
 		{
-			return (attribute.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) == 1;
+			return (attrbute.attrbutes & FILE_ATTRIBUTE_HIDDEN) == 1;
 		}
 		
 		vl::WString FileInfo::FileName()
 		{
-			return ::PathFindFileName(filePath.GetFullPath().Buffer());
+			return ::PathFindFileName(attrbute.filePath.GetFullPath().Buffer());
 		}
 		
 		vl::WString FileInfo::Extemsion()
 		{
-			return ::PathFindExtension(filePath.GetFullPath().Buffer());
+			return ::PathFindExtension(attrbute.filePath.GetFullPath().Buffer());
 		}
 		
 		vl::DateTime FileInfo::Created()
 		{
-			return DateTime();
+			return attrbute.creation;
 		}
 		
 		vl::DateTime FileInfo::LastModified()
 		{
-			return DateTime();
+			return attrbute.lastWrite;
 		}
 		
 		vl::DateTime FileInfo::LastRead()
 		{
-			return DateTime();
+			return attrbute.lastAccess;
 		}
 		
-		bool FileInfo::getPropInfo()
+		vl::vuint64_t FileInfo::Size()
 		{
-			memset(&attribute, 0, sizeof(WIN32_FILE_ATTRIBUTE_DATA));
-			BOOL result = GetFileAttributesEx(filePath.GetFullPath().Buffer(), GetFileExInfoStandard, &attribute);
+			return attrbute.size;
+		}
+
+		bool FileInfo::getProperty()
+		{
+			WIN32_FILE_ATTRIBUTE_DATA data;
+			memset(&data, 0, sizeof(WIN32_FILE_ATTRIBUTE_DATA));
+			BOOL result = GetFileAttributesEx(attrbute.filePath.GetFullPath().Buffer(), GetFileExInfoStandard, &data);
+			{
+				attrbute.attrbutes = data.dwFileAttributes;
+				ULARGE_INTEGER largeInteger;
+				largeInteger.HighPart = data.ftCreationTime.dwHighDateTime;
+				largeInteger.LowPart = data.ftCreationTime.dwLowDateTime;
+				attrbute.creation = DateTime::FromFileTime(largeInteger.QuadPart);
+
+				largeInteger.HighPart = data.ftLastAccessTime.dwHighDateTime;
+				largeInteger.LowPart = data.ftLastAccessTime.dwLowDateTime;
+				attrbute.lastAccess = DateTime::FromFileTime(largeInteger.QuadPart);
+
+				largeInteger.HighPart = data.ftLastWriteTime.dwHighDateTime;
+				largeInteger.LowPart = data.ftLastWriteTime.dwLowDateTime;
+				attrbute.lastWrite = DateTime::FromFileTime(largeInteger.QuadPart);
+
+				largeInteger.HighPart = data.nFileSizeHigh;
+				largeInteger.LowPart = data.nFileSizeLow;
+				attrbute.size = largeInteger.QuadPart;
+			}
 			return result == TRUE;
 		}
 		

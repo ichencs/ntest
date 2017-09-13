@@ -74,6 +74,8 @@
     <ClCompile Include="FileSystem\FileInfo.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="HttpUtility.cpp" />
+    <ClCompile Include="Environment.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
@@ -182,6 +184,9 @@
     <ClInclude Include="FileSystem\FileInfo.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="HttpUtility.h" />
+    <ClInclude Include="Tuple.h" />
+    <ClInclude Include="Environment.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

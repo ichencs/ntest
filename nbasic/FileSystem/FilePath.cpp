@@ -9,6 +9,8 @@
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi.lib")
 
+#define NICE_MAX_PATH  65536
+
 
 namespace vl
 {
@@ -163,13 +165,27 @@ namespace vl
 		{
 		}
 		
-		FilePath FilePath::Current()
+		FilePath FilePath::CurrentPath()
 		{
-			collections:: Array<wchar_t> buffer(MAX_PATH);
-			GetCurrentDirectory(MAX_PATH, &buffer[0]);
+			wchar_t buffer[NICE_MAX_PATH] = { 0 };
+			GetCurrentDirectory(sizeof(buffer) / sizeof(*buffer), &buffer[0]);
 			return &buffer[0];
 		}
 		
+		FilePath FilePath::TheAppPath()
+		{
+			wchar_t buffer[NICE_MAX_PATH] = {0};
+			GetModuleFileName(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
+			return buffer;
+		}
+
+		FilePath FilePath::TempPath()
+		{
+			wchar_t buffer[NICE_MAX_PATH] = { 0 };
+			GetTempPath(sizeof(buffer) / sizeof(*buffer), buffer);
+			return buffer;
+		}
+
 		vint FilePath::Compare(const FilePath& a, const FilePath& b)
 		{
 			return WString::Compare(a.fullPath, b.fullPath);

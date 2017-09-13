@@ -13,14 +13,28 @@ Framework::FileSystem
 #include "../Collections/List.h"
 #include "../Stream/CharFormat.h"
 #include "FilePath.h"
-#include <Shlwapi.h>
 namespace vl
 {
 	namespace filesystem
 	{
+	
+
 		class FileInfo
 		{
-		 public:
+			struct FileAttrbutes
+			{
+				FileAttrbutes()
+					:attrbutes(0),
+					size(0) {}
+				DateTime creation;
+				DateTime lastAccess;
+				DateTime lastWrite;
+
+				FilePath filePath;
+				vuint64_t attrbutes;
+				vuint64_t size;
+			};	
+		public:
 			FileInfo();
 			FileInfo(const FilePath& path);
 			FileInfo(const WString& path);
@@ -41,11 +55,11 @@ namespace vl
 			DateTime Created();
 			DateTime LastModified();
 			DateTime LastRead();
+			vuint64_t Size();
 		 protected:
-			bool getPropInfo();
+			bool getProperty();
 		 private:
-			WIN32_FILE_ATTRIBUTE_DATA attribute;
-			FilePath filePath;
+			 FileAttrbutes attrbute;
 		};
 		
 		

@@ -19,13 +19,16 @@
 #include "GlobalStorage.h"
 #include "Locale.h"
 #include "Threading.h"
+#include "HttpUtility.h"
+#include "Environment.h"
 
 #include ".\FileSystem\Folder.h"
 #include ".\FileSystem\file.h"
 #include ".\FileSystem\FilePath.h"
+#include ".\FileSystem\FileInfo.h"
 
-#include ".\Stream\Accessor.h"
 #include ".\Stream\Interfaces.h"
+#include ".\Stream\Accessor.h"
 #include ".\Stream\BroadcastStream.h"
 #include ".\Stream\CacheStream.h"
 #include ".\Stream\CharFormat.h"

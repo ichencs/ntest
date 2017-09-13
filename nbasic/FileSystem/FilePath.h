@@ -42,8 +42,9 @@ namespace vl
 			~FilePath();
 			
 		 public:
-			static FilePath Current();
-			
+			static FilePath CurrentPath();
+			static FilePath TheAppPath();
+			static FilePath TempPath();
 		 public:
 			static vint					Compare(const FilePath& a, const FilePath& b);
 			bool						operator==(const FilePath& filePath)const
