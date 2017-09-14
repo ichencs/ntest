@@ -31,5 +31,6 @@
 *.lastcodeanalysissucceeded
 *.opensdf
 Output
-bin\Output
+bin/Output
 nicebasic\bin
+bin/Output/Locale.txt
