@@ -168,24 +168,24 @@ namespace vl
 		FilePath FilePath::CurrentPath()
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
-			GetCurrentDirectory(sizeof(buffer) / sizeof(*buffer), &buffer[0]);
+			::GetCurrentDirectory(sizeof(buffer) / sizeof(*buffer), &buffer[0]);
 			return &buffer[0];
 		}
 		
 		FilePath FilePath::TheAppPath()
 		{
-			wchar_t buffer[NICE_MAX_PATH] = {0};
-			GetModuleFileName(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
+			wchar_t buffer[NICE_MAX_PATH] = { 0 };
+			::GetModuleFileName(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
 			return buffer;
 		}
-
+		
 		FilePath FilePath::TempPath()
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
-			GetTempPath(sizeof(buffer) / sizeof(*buffer), buffer);
+			::GetTempPath(sizeof(buffer) / sizeof(*buffer), buffer);
 			return buffer;
 		}
-
+		
 		vint FilePath::Compare(const FilePath& a, const FilePath& b)
 		{
 			return WString::Compare(a.fullPath, b.fullPath);

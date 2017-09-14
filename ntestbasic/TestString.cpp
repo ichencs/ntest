@@ -207,3 +207,67 @@ TEST_CASE(StringCaser)
 		CheckString(d, "VCZH IS GENIUS");
 	}
 }
+
+TEST_CASE(TestSubMid)
+{
+	WString string = L"0123456789";
+	TEST_ASSERT(string.Mid(0) == L"0123456789");
+	TEST_ASSERT(string.Mid(1) == L"123456789");
+	TEST_ASSERT(string.Mid(1).Mid(1) == L"23456789");
+	TEST_ASSERT(string.Mid(1).Mid(1).Mid(1) == L"3456789");
+	TEST_ASSERT(string.Mid(9) == L"9");
+}
+
+TEST_CASE(TestSplit)
+{
+	using namespace vl::collections;
+	using namespace vl::console;
+	List<WString> strList;
+	WString wstr = L".1.2.3.4.5.6.";
+	SplitString(wstr, strList, L'.');
+	
+	for (vint i = 0; i < strList.Count(); i++)
+	{
+		Console::WriteLine(strList.Get(i));
+	}
+}
+
+TEST_CASE(TestStringTrim)
+{
+	WString string = L"nice to meet you!!!";
+	TEST_ASSERT(string.Trim(L'!') == L"nice to meet you");
+	TEST_ASSERT(string.TrimRight(L'!') == L"nice to meet you");
+	TEST_ASSERT(string.TrimLeft(L'n') == L"ice to meet you!!!");
+	
+	TEST_ASSERT(string.TrimRight(L'!').TrimRight(L'u').TrimRight(L'o').TrimRight(L'y') == L"nice to meet ");
+	TEST_ASSERT(string.TrimLeft(L'n').TrimLeft(L'i').TrimLeft(L'c') == L"e to meet you!!!");
+	
+	string = L"nice";
+	TEST_ASSERT(string.TrimRight(L'e').TrimRight(L'c').TrimRight(L'i').TrimRight(L'n') == L"");
+	TEST_ASSERT(string.TrimLeft(L'n').TrimLeft(L'i').TrimLeft(L'c').TrimLeft(L'e') == L"");
+	string = L"aaaAaaaa";
+	TEST_ASSERT(string.TrimRight('a') == L"aaaA");
+	TEST_ASSERT(string.TrimLeft('a') == L"Aaaaa");
+	TEST_ASSERT(string.Trim('a') == L"A");
+	string = L"abcde";
+	TEST_ASSERT(string.TrimLeft(L'a').TrimLeft(L'b').TrimLeft(L'c').TrimLeft(L'd').TrimLeft(L'e') == L"");
+	
+	//	WString wstrTemp = string.TrimLeft(L'a').TrimRight(L'a');
+	TEST_ASSERT(string.Trim('a') == string.TrimLeft(L'a').TrimRight(L'a'));
+	TEST_ASSERT(string.Mid(3, 1) == L"d");
+	TEST_ASSERT(string.TrimLeft(L"ab") == L"cde");
+	TEST_ASSERT(string.TrimLeft(L"ab").TrimLeft(L"cd") == L"e");
+	TEST_ASSERT(string.TrimLeft(L"ab").TrimLeft(L"cd").TrimLeft(L"e") == L"");
+	
+	TEST_ASSERT(string.TrimLeft(L"ba") == L"cde");
+	TEST_ASSERT(string.TrimLeft(L"ba").TrimLeft(L"cd") == L"e");
+	TEST_ASSERT(string.TrimLeft(L"ba").TrimLeft(L"cde") == L"");
+	
+	TEST_ASSERT(string.TrimRight(L"de") == L"abc");
+	TEST_ASSERT(string.TrimRight(L"ed").TrimLeft(L"bca") == L"");
+	TEST_ASSERT(string.TrimRight(L"cde").TrimLeft(L"ba") == L"");
+	TEST_ASSERT(string.TrimLeft(L"ba").TrimRight(L"cde") == L"");
+	TEST_ASSERT(string.TrimLeft(L"ba").TrimRight(L"de") == L"c");
+	TEST_ASSERT(string.TrimRight(L"ed").TrimRight(L"bc") == L"a");
+	
+}

@@ -267,6 +267,9 @@
     <ClInclude Include="Collections\Interfaces.h" />
     <ClInclude Include="Collections\Dictionary.h" />
     <ClInclude Include="Collections\List.h" />
+    <ClInclude Include="Collections\OperationConcat.h" />
+    <ClInclude Include="Collections\OperationPair.h" />
+    <ClInclude Include="Collections\OperationSet.h" />
     <ClInclude Include="Collections\Pair.h" />
     <ClInclude Include="Collections\Operation.h" />
     <ClInclude Include="Collections\OperationCopyFrom.h" />

@@ -187,6 +187,15 @@
     <ClInclude Include="Tuple.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="Variant.h" />
+    <ClInclude Include="Collections\OperationConcat.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\OperationPair.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\OperationSet.h">
+      <Filter>collection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

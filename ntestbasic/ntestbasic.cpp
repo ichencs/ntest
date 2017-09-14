@@ -9,22 +9,9 @@
 
 WString GetExePath()
 {
-	wchar_t buffer[65536];
-	GetModuleFileName(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
-	vint pos = -1;
-	vint index = 0;
-	
-	while (buffer[index])
-	{
-		if (buffer[index] == L'\\' || buffer[index] == L'/')
-		{
-			pos = index;
-		}
-		
-		index++;
-	}
-	
-	return WString(buffer, pos + 1);
+	using namespace filesystem;
+	FilePath path = FilePath::TheAppPath().GetFolder();
+	return path.GetFullPath();
 }
 
 WString GetTestResourcePath()
@@ -60,7 +47,7 @@ int main()
 	}
 	UnitTest::RunAndDisposeTests();
 	FinalizeGlobalStorage();
-	system("pause");
+	// 	system("pause");
 	return 0;
 }
 
