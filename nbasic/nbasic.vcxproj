@@ -286,7 +286,7 @@
     <ClInclude Include="nbasicInc.h" />
     <ClInclude Include="nchar.h" />
     <ClInclude Include="Locale.h" />
-    <ClInclude Include="NVariant.h" />
+    <ClInclude Include="Variant.h" />
     <ClInclude Include="Pointer.h" />
     <ClInclude Include="Regex\Regex.h" />
     <ClInclude Include="Regex\RegexAutomaton.h" />
@@ -324,7 +324,7 @@
     <ClCompile Include="HttpUtility.cpp" />
     <ClCompile Include="nchar.cpp" />
     <ClCompile Include="Locale.cpp" />
-    <ClCompile Include="NVariant.cpp" />
+    <ClCompile Include="Variant.cpp" />
     <ClCompile Include="Regex\Regex.cpp" />
     <ClCompile Include="Regex\RegexAutomaton.cpp" />
     <ClCompile Include="Regex\RegexData.cpp" />

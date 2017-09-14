@@ -5,13 +5,15 @@
 typedef unsigned int vuint;
 typedef signed char  nschar;
 typedef unsigned long nulong;
-
-class NVariant
+namespace vl
 {
-	public:
-		NVariant();
-		~NVariant();
-	public:
+
+	class Variant
+	{
+	 public:
+		Variant();
+		~Variant();
+	 public:
 		enum Type
 		{
 			Invalid = -1,
@@ -27,8 +29,8 @@ class NVariant
 			
 		};
 		
-	public:
-	
+	 public:
+	 
 		struct Private
 		{
 			union Data
@@ -51,12 +53,15 @@ class NVariant
 			} data;
 			vuint type : 30;
 			bool is_null : 1;
+			
+			
 		};
 		
-	public:
+	 public:
 		Private d;
 		
 		
 		
-};
-
+	};
+	
+}

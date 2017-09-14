@@ -56,7 +56,6 @@
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="GlobalStorage.cpp" />
     <ClCompile Include="nchar.cpp" />
-    <ClCompile Include="NVariant.cpp" />
     <ClCompile Include="Threading.cpp" />
     <ClCompile Include="Locale.cpp" />
     <ClCompile Include="Stream\FileStream.cpp">
@@ -76,6 +75,7 @@
     </ClCompile>
     <ClCompile Include="HttpUtility.cpp" />
     <ClCompile Include="Environment.cpp" />
+    <ClCompile Include="Variant.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
@@ -157,7 +157,6 @@
     <ClInclude Include="GlobalStorage.h" />
     <ClInclude Include="nbasicInc.h" />
     <ClInclude Include="nchar.h" />
-    <ClInclude Include="NVariant.h" />
     <ClInclude Include="Threading.h" />
     <ClInclude Include="Collections\Pair.h">
       <Filter>collection</Filter>
@@ -187,6 +186,7 @@
     <ClInclude Include="HttpUtility.h" />
     <ClInclude Include="Tuple.h" />
     <ClInclude Include="Environment.h" />
+    <ClInclude Include="Variant.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

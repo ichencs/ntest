@@ -3,25 +3,30 @@
 
 
 
-
-nchar::~nchar()
+namespace vl
 {
-}
 
-uint nchar::toLower(uint ucs4)
-{
-	if (isUpper(ucs4))
+	nchar::~nchar()
 	{
-		return ucs4 - ('A' - 'a');
 	}
-	return ucs4;
-}
-
-uint nchar::toUpper(uint ucs4)
-{
-	if (isLower(ucs4))
+	
+	uint nchar::toLower(uint ucs4)
 	{
-		return ucs4 - ('a' - 'A');
+		if (isUpper(ucs4))
+		{
+			return ucs4 - ('A' - 'a');
+		}
+		
+		return ucs4;
 	}
-	return ucs4;
+	
+	uint nchar::toUpper(uint ucs4)
+	{
+		if (isLower(ucs4))
+		{
+			return ucs4 - ('a' - 'A');
+		}
+		
+		return ucs4;
+	}
 }
