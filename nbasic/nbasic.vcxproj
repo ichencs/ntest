@@ -277,8 +277,9 @@
     <ClInclude Include="Collections\OperationForEach.h" />
     <ClInclude Include="Collections\OperationSequence.h" />
     <ClInclude Include="Collections\OperationString.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Console.h" />
-    <ClInclude Include="Environment.h" />
+    <ClInclude Include="system.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="FileSystem\File.h" />
     <ClInclude Include="FileSystem\FilePath.h" />
@@ -316,8 +317,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Basic.cpp" />
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Console.cpp" />
-    <ClCompile Include="Environment.cpp" />
+    <ClCompile Include="system.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="FileSystem\File.cpp" />
     <ClCompile Include="FileSystem\FilePath.cpp" />

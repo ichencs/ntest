@@ -83,8 +83,6 @@ namespace vl
 			/// <param name="ms">Time in milliseconds.</param>
 			/// <param name="abandoned">Returns true if the waiting is canceled by an abandoned object. An abandoned object is caused by it's owner thread existing without releasing it.</param>
 			static vint									WaitAnyForTime(WaitableObject** objects, vint count, vint ms, bool* abandoned);
-#elif defined VCZH_GCC
-			virtual bool								Wait() = 0;
 #endif
 	};
 	

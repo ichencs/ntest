@@ -55,7 +55,6 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="GlobalStorage.cpp" />
-    <ClCompile Include="nchar.cpp" />
     <ClCompile Include="Threading.cpp" />
     <ClCompile Include="Locale.cpp" />
     <ClCompile Include="Stream\FileStream.cpp">
@@ -74,8 +73,14 @@
       <Filter>FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="HttpUtility.cpp" />
-    <ClCompile Include="Environment.cpp" />
-    <ClCompile Include="Variant.cpp" />
+    <ClCompile Include="Variant.cpp">
+      <Filter>NewType</Filter>
+    </ClCompile>
+    <ClCompile Include="nchar.cpp">
+      <Filter>NewType</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
@@ -156,7 +161,6 @@
     <ClInclude Include="Exception.h" />
     <ClInclude Include="GlobalStorage.h" />
     <ClInclude Include="nbasicInc.h" />
-    <ClInclude Include="nchar.h" />
     <ClInclude Include="Threading.h" />
     <ClInclude Include="Collections\Pair.h">
       <Filter>collection</Filter>
@@ -185,8 +189,6 @@
     </ClInclude>
     <ClInclude Include="HttpUtility.h" />
     <ClInclude Include="Tuple.h" />
-    <ClInclude Include="Environment.h" />
-    <ClInclude Include="Variant.h" />
     <ClInclude Include="Collections\OperationConcat.h">
       <Filter>collection</Filter>
     </ClInclude>
@@ -196,6 +198,14 @@
     <ClInclude Include="Collections\OperationSet.h">
       <Filter>collection</Filter>
     </ClInclude>
+    <ClInclude Include="Variant.h">
+      <Filter>NewType</Filter>
+    </ClInclude>
+    <ClInclude Include="nchar.h">
+      <Filter>NewType</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="system.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -212,6 +222,9 @@
     </Filter>
     <Filter Include="FileSystem">
       <UniqueIdentifier>{8c90714b-5dea-4be9-ae3c-3e515065f9fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NewType">
+      <UniqueIdentifier>{1e21d92d-3257-4234-bf3a-3a6e4c41cb7d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

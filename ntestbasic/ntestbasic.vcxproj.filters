@@ -86,7 +86,10 @@
     <ClCompile Include="ntestbasic.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TestEnvironment.cpp">
+    <ClCompile Include="TestNumber.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
