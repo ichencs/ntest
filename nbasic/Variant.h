@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
+#include "Basic.h"
 
 
-typedef unsigned int vuint;
+// typedef unsigned int vuint;
 typedef signed char  nschar;
 typedef unsigned long nulong;
 namespace vl

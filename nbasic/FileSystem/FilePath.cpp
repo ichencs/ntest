@@ -87,50 +87,6 @@ namespace vl
 				}
 			}
 			
-#elif defined VCZH_GCC
-			
-			if (fullPath.Length() == 0)
-			{
-				fullPath = L"/";
-			}
-			
-			if (fullPath[0] != Delimiter)
-			{
-				char buffer[PATH_MAX] = { 0 };
-				getcwd(buffer, PATH_MAX);
-				fullPath = atow(AString(buffer)) + Delimiter + fullPath;
-			}
-			
-			{
-				collections::List<WString> components;
-				GetPathComponents(fullPath, components);
-			
-				for (int i = 0; i < components.Count(); i++)
-				{
-					if (components[i] == L".")
-					{
-						components.RemoveAt(i);
-						i--;
-					}
-					else
-						if (components[i] == L"..")
-						{
-							if (i > 0)
-							{
-								components.RemoveAt(i);
-								components.RemoveAt(i - 1);
-								i -= 2;
-							}
-							else
-							{
-								throw ArgumentException(L"Illegal path.");
-							}
-						}
-				}
-			
-				fullPath = ComponentsToPath(components);
-			}
-			
 #endif
 			
 			if (fullPath != L"/" && fullPath.Length() > 0 && fullPath[fullPath.Length() - 1] == Delimiter)
