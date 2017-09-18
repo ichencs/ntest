@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "UnitTest.h"
+
 #include <Shlwapi.h>
 #include <WinSock.h>
 
@@ -454,10 +454,10 @@ TEST_CASE(TestFileInfo)
 	TEST_ASSERT(info.Exists());
 	TEST_ASSERT(info.IsFolder());
 	TEST_ASSERT(!info.IsFile());
-
+	
 	WString strInfo = info.FileName();
 	strInfo = info.Extemsion();
-
+	
 	path = L"";
 	info.SetPath(path);
 	TEST_ASSERT(!info.IsFile());
@@ -466,19 +466,19 @@ TEST_CASE(TestFileInfo)
 	TEST_ASSERT(!info.IsReadable());
 	TEST_ASSERT(!info.IsWritable());
 	TEST_ASSERT(!info.IsHidden());
-
+	
 	path = FilePath::TheAppPath();
 	info.SetPath(path);
 	TEST_ASSERT(info.IsFile());
 	TEST_ASSERT(info.Exists());
 	TEST_ASSERT(!info.IsFolder());
 	TEST_ASSERT(!info.IsHidden());
-
+	
 	info.SetPath(path.GetFolder());
 	TEST_ASSERT(!info.IsFile());
 	TEST_ASSERT(info.Exists());
 	TEST_ASSERT(info.IsFolder());
 	TEST_ASSERT(!info.IsHidden());
 	path = FilePath::TempPath();
-
+	
 }

@@ -81,6 +81,9 @@
     </ClCompile>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="system.cpp" />
+    <ClCompile Include="UnitTest\UnitTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
@@ -206,6 +209,9 @@
     </ClInclude>
     <ClInclude Include="Color.h" />
     <ClInclude Include="system.h" />
+    <ClInclude Include="UnitTest\UnitTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -225,6 +231,9 @@
     </Filter>
     <Filter Include="NewType">
       <UniqueIdentifier>{1e21d92d-3257-4234-bf3a-3a6e4c41cb7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UnitTest">
+      <UniqueIdentifier>{315ca12f-6244-41a5-9250-e34f5d362975}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

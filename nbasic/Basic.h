@@ -242,28 +242,6 @@ namespace vl
 		typedef typename RemoveCVR<T>::Type		Type;
 	};
 	
-	// 	template<typename T>
-	// 	typename RemoveReference<T>::Type&& MoveValue(T&& value)
-	// 	{
-	// 		return (typename RemoveReference<T>::Type&&)value;
-	// 	}
-	
-	// 	template<typename T>
-	// 	T&& ForwardValue(typename RemoveReference<T>::Type&& value)
-	// 	{
-	// 		return (T&&)value;
-	// 	}
-	
-	// 	template<typename T>
-	// 	T&& ForwardValue(typename RemoveReference<T>::Type& value)
-	// 	{
-	// 		return (T&&)value;
-	// 	}
-	
-	// 	template<typename ...TArgs>
-	// 	struct TypeTuple
-	// 	{
-	// 	};
 	
 	/***********************************************************************
 	»ù´¡
@@ -291,12 +269,7 @@ namespace vl
 			{
 			}
 			
-			/// <summary>Box a movable value.</summary>
-			/// <param name="_object">The value to box.</param>
-			// 		ObjectBox(T&& _object)
-			// 			:object(MoveValue(_object))
-			// 		{
-			// 		}
+			
 			
 			/// <summary>Copy a box.</summary>
 			/// <param name="value">The box.</param>
@@ -305,12 +278,6 @@ namespace vl
 			{
 			}
 			
-			/// <summary>Move a box.</summary>
-			/// <param name="value">The box.</param>
-			// 		ObjectBox(ObjectBox<T>&& value)
-			// 			:object(MoveValue(value.object))
-			// 		{
-			// 		}
 			
 			/// <summary>Box a value.</summary>
 			/// <returns>The boxed value.</returns>
@@ -330,14 +297,6 @@ namespace vl
 				return *this;
 			}
 			
-			/// <summary>Move a box.</summary>
-			/// <returns>The boxed value.</returns>
-			/// <param name="value">The box.</param>
-			// 		ObjectBox<T>& operator=(ObjectBox<T>&& value)
-			// 		{
-			// 			object=MoveValue(value.object);
-			// 			return *this;
-			// 		}
 			
 			/// <summary>Unbox the value.</summary>
 			/// <returns>The original value.</returns>
@@ -368,12 +327,6 @@ namespace vl
 			{
 			}
 			
-			/// <summary>Create a non-null value.</summary>
-			/// <param name="value">The value to move.</param>
-			// 		Nullable(T&& value)
-			// 			:object(new T(MoveValue(value)))
-			// 		{
-			// 		}
 			
 			/// <summary>Copy a nullable value.</summary>
 			/// <param name="nullable">The nullable value to copy.</param>
@@ -382,13 +335,6 @@ namespace vl
 			{
 			}
 			
-			/// <summary>Move a nullable value.</summary>
-			/// <param name="nullable">The nullable value to move.</param>
-			// 		Nullable(Nullable<T>&& nullable)
-			// 			:object(nullable.object)
-			// 		{
-			// 			nullable.object=0;
-			// 		}
 			
 			~Nullable()
 			{
@@ -436,23 +382,7 @@ namespace vl
 				return *this;
 			}
 			
-			/// <summary>Move a nullable value.</summary>
-			/// <returns>The created nullable value.</returns>
-			/// <param name="nullable">The nullable value to move.</param>
-			// 		Nullable<T>& operator=(Nullable<T>&& nullable)
-			// 		{
-			// 			if(this!=&nullable)
-			// 			{
-			// 				if(object)
-			// 				{
-			// 					delete object;
-			// 					object=0;
-			// 				}
-			// 				object=nullable.object;
-			// 				nullable.object=0;
-			// 			}
-			// 			return *this;
-			// 		}
+			
 			
 			static bool Equals(const Nullable<T>& a, const Nullable<T>& b)
 			{
@@ -761,14 +691,6 @@ namespace vl
 		static const bool Result = true;
 	};
 	
-	//template<typename TFrom, typename TTo>
-	//struct RequiresConvertable
-	//{
-	//	static YesType Test(TTo* value);
-	//	static NoType Test(void* value);
-	//
-	//	typedef decltype(Test((TFrom*)0)) YesNoType;
-	//};
 	
 	template<typename T, typename U>
 	struct AcceptAlways

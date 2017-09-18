@@ -274,7 +274,6 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testMemoryAlignment.h" />
     <ClInclude Include="testPod.h" />
-    <ClInclude Include="UnitTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ntestbasic.cpp" />
@@ -302,7 +301,6 @@
     <ClCompile Include="TestString.cpp" />
     <ClCompile Include="TestThread.cpp" />
     <ClCompile Include="TestThread2.cpp" />
-    <ClCompile Include="UnitTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

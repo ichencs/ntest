@@ -1,39 +1,39 @@
 #include "stdafx.h"
-#include "UnitTest.h"
+
 // #include "../../Source/Lazy.h"
 
 using namespace vl;
 
 namespace ObjectsForTestAutoPointer
 {
-	class Base : public Object
-	{
-		public:
-			vint number;
-			
-			Base(vint _number)
-			{
-				number = _number;
-			}
-	};
+class Base : public Object
+{
+ public:
+	vint number;
 	
-	class Derived1 : public Base
+	Base(vint _number)
 	{
-		public:
-			Derived1(vint _number)
-				: Base(_number)
-			{
-			}
-	};
-	
-	class Derived2 : public Base
+		number = _number;
+	}
+};
+
+class Derived1 : public Base
+{
+ public:
+	Derived1(vint _number)
+		: Base(_number)
 	{
-		public:
-			Derived2(vint _number)
-				: Base(_number)
-			{
-			}
-	};
+	}
+};
+
+class Derived2 : public Base
+{
+ public:
+	Derived2(vint _number)
+		: Base(_number)
+	{
+	}
+};
 }
 
 using namespace ObjectsForTestAutoPointer;

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "UnitTest.h"
+
 using namespace vl::console;
 using namespace regex;
 using namespace regex_internal;

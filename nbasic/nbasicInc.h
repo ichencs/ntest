@@ -56,3 +56,4 @@
 #include ".\Regex\RegexPure.h"
 #include ".\Regex\RegexRich.h"
 
+#include ".\UnitTest\UnitTest.h"

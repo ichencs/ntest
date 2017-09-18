@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "UnitTest.h"
+
 using namespace vl;
 
 BEGIN_GLOBAL_STORAGE_CLASS(MyGlobalStorage)

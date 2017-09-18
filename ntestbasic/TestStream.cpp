@@ -1,6 +1,5 @@
 ﻿#include "stdafx.h"
 #include <string.h>
-#include "UnitTest.h"
 
 using namespace vl;
 using namespace vl::collections;
@@ -755,22 +754,22 @@ TEST_CASE(TestLzwEncoding)
 
 namespace lzw_helper
 {
-	void Copy(IStream& dst, IStream& src, Array<vuint8_t>& buffer, vint totalSize)
+void Copy(IStream& dst, IStream& src, Array<vuint8_t>& buffer, vint totalSize)
+{
+	vint BufferSize = buffer.Count();
+	
+	while (true)
 	{
-		vint BufferSize = buffer.Count();
+		vint size = src.Read(&buffer[0], BufferSize);
 		
-		while (true)
+		if (size == 0)
 		{
-			vint size = src.Read(&buffer[0], BufferSize);
-			
-			if (size == 0)
-			{
-				break;
-			}
-			
-			dst.Write(&buffer[0], size);
+			break;
 		}
+		
+		dst.Write(&buffer[0], size);
 	}
+}
 }
 using namespace lzw_helper;
 

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include <stdlib.h>
-#include "UnitTest.h"
 
 using namespace vl;
 using namespace vl::collections;
@@ -1524,24 +1523,24 @@ TEST_CASE(TestRegexLexerColorizer)
 
 namespace TestRegexSpeedHelper
 {
-	void FindRows(WString* lines, int count, const WString& pattern)
+void FindRows(WString* lines, int count, const WString& pattern)
+{
+	Regex regex(pattern);
+	DateTime dt1 = DateTime::LocalTime();
+	
+	for (int i = 0; i < 10000000; i++)
 	{
-		Regex regex(pattern);
-		DateTime dt1 = DateTime::LocalTime();
-		
-		for (int i = 0; i < 10000000; i++)
+		for (int j = 0; j < count; j++)
 		{
-			for (int j = 0; j < count; j++)
-			{
-				bool result = regex.TestHead(lines[j]);
-				TEST_ASSERT(result);
-			}
+			bool result = regex.TestHead(lines[j]);
+			TEST_ASSERT(result);
 		}
-		
-		DateTime dt2 = DateTime::LocalTime();
-		vuint64_t ms = dt2.totalMilliseconds - dt1.totalMilliseconds;
-		UnitTest::PrintInfo(L"Running 10000000 times of Regex::TestHead uses: " + i64tow(ms) + L" milliseconds.");
 	}
+	
+	DateTime dt2 = DateTime::LocalTime();
+	vuint64_t ms = dt2.totalMilliseconds - dt1.totalMilliseconds;
+	UnitTest::PrintInfo(L"Running 10000000 times of Regex::TestHead uses: " + i64tow(ms) + L" milliseconds.");
+}
 }
 using namespace TestRegexSpeedHelper;
 

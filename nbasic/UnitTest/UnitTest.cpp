@@ -1,5 +1,5 @@
-#include "stdafx.h"
 #include "UnitTest.h"
+#include "..\Console.h"
 using namespace vl::console;
 
 

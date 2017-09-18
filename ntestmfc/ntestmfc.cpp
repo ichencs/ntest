@@ -5,7 +5,6 @@
 #include "ntest.h"
 #include <afxwin.h>
 #include <winsock.h>
-#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" ) // 设置入口地址
 
 int main()
 {
@@ -40,10 +39,12 @@ int main()
 	ntest tset;
 	tset.test();
 	
-	char hostname[50] = { 0 };
+	char hostname[300] = { 0 };
 	struct hostent* phost = 0;
-	gethostname(hostname, 50);
+	gethostname(hostname, sizeof(hostname) / sizeof(*hostname));
 	phost = gethostbyname(hostname);
+	
+	system("pause");
 	return 0;
 }
 

@@ -36,9 +36,6 @@
     <ClInclude Include="testMemoryAlignment.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="UnitTest.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -78,9 +75,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="TestThread2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ntestbasic.cpp">

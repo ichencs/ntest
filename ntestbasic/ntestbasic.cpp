@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include <iostream>
 #include <vector>
-#include "UnitTest.h"
 #include <windows.h>
 
 WString GetExePath()

@@ -6,19 +6,19 @@ namespace vl
 {
 	namespace system
 	{
-
+	
 		struct ProcessMemory
 		{
 			ProcessMemory()
-			:pageFaultCount(0),
-				peakWorkingSetSize(0),
-				workingSetSize(0),
-				quotaPeakPagedPoolUsage(0),
-				quotaPagedPoolUsage(0),
-				quotaPeakNonPagedPoolUsage(0),
-				quotaNonPagedPoolUsage(0),
-				pagefileUsage(0),
-				peakPagefileUsage(0)
+				: pageFaultCount(0),
+				  peakWorkingSetSize(0),
+				  workingSetSize(0),
+				  quotaPeakPagedPoolUsage(0),
+				  quotaPagedPoolUsage(0),
+				  quotaPeakNonPagedPoolUsage(0),
+				  quotaNonPagedPoolUsage(0),
+				  pagefileUsage(0),
+				  peakPagefileUsage(0)
 			{
 			}
 			vuint		pageFaultCount;						// 缺页中断次数
@@ -31,34 +31,33 @@ namespace vl
 			vuint64_t	pagefileUsage;						// 使用分页文件
 			vuint64_t	peakPagefileUsage;					// 使用分页文件高峰
 		};
-
-		struct ProcessData;
+		
 		class Process;
 		class Process
 		{
-		public:
-			Process();
-			~Process();
-		protected:
-			void InitializeCurrent();
-		public:
-			static vuint CurrentID();
-			bool GetMemoryInfo(ProcessMemory& memory);
-
-		private:
-			ProcessData* process;
-
+			public:
+				Process();
+				~Process();
+			protected:
+				void InitializeCurrent();
+			public:
+				static vuint CurrentID();
+				bool GetMemoryInfo(ProcessMemory& memory);
+				
+			private:
+				ProcessData* process;
+				
 		};
-
-	
-
-
+		
+		
+		
+		
 		//处理器架构
 		enum eProcessorArchitecture
 		{
 			Inter,
 			Mips,	//MIPS 科技公司处理器
-			Alpha,	//DEC Alpha | Alpha AXP 
+			Alpha,	//DEC Alpha | Alpha AXP
 			Ppc,	//PowerPC
 			Shx,	//
 			Arm,
@@ -70,7 +69,7 @@ namespace vl
 			Neutral,
 			PAUnknown,
 		};
-
+		
 		enum eProcessorType
 		{
 			Intel386,
@@ -98,18 +97,18 @@ namespace vl
 			Optil,
 			PTUnknown,
 		};
-
+		
 		struct GlobalMemory
 		{
 			GlobalMemory()
-				:dwMemoryLoad(0),
-			ullTotalPhys(0),
-			ullAvailPhys(0),
-			ullTotalPageFile(0),
-			ullAvailPageFile(0),
-			ullTotalVirtual(0),
-			ullAvailVirtual(0),
-			ullAvailExtendedVirtual(0)
+				: dwMemoryLoad(0),
+				  ullTotalPhys(0),
+				  ullAvailPhys(0),
+				  ullTotalPageFile(0),
+				  ullAvailPageFile(0),
+				  ullTotalVirtual(0),
+				  ullAvailVirtual(0),
+				  ullAvailExtendedVirtual(0)
 			{
 			}
 			vuint		dwMemoryLoad;
@@ -121,41 +120,41 @@ namespace vl
 			vuint64_t	ullAvailVirtual;
 			vuint64_t	ullAvailExtendedVirtual;
 		};
-
+		
 		class System
 		{
-		public:
-			System();
-			~System();
-		public:
-			static DateTime Time();
-			static WString ComputerName();
-			static WString UserName();
-			static WString DnsHotsNameToComputer(WString dnsHost);
-			//************************************
-			// Method:    SystemWindowsDirectory
-			// FullName:  vl::system::System::SystemWindowsDirectory
-			// Access:    public static 
-			// Returns:   vl::WString
-			// Qualifier:On a system that is running Terminal Services, each user has a unique Windows directory. 
-			//************************************
-			static WString WindowsDirectory();
-			//************************************
-			// Method:    SystemWindowsDirectory
-			// FullName:  vl::system::System::SystemWindowsDirectory
-			// Access:    public static 
-			// Returns:   vl::WString
-			// Qualifier: The system Windows directory is shared by all users, 
-			//			  so it is the directory where an application should store initialization and help files that apply to all users.
-			//************************************
-			static WString SystemWindowsDirectory();
-			static void Version();
-			static void SystemInfo();
-			static bool GetGlobalMemory(GlobalMemory& memory);
-
-		protected:
-			static eProcessorArchitecture ProcessorArchitecture(vuint architecture);
-			static eProcessorType ProcessorType(vuint type);
+			public:
+				System();
+				~System();
+			public:
+				static DateTime Time();
+				static WString ComputerName();
+				static WString UserName();
+				// 			static WString DnsHotsNameToComputer(WString dnsHost);
+				//************************************
+				// Method:    SystemWindowsDirectory
+				// FullName:  vl::system::System::SystemWindowsDirectory
+				// Access:    public static
+				// Returns:   vl::WString
+				// Qualifier:On a system that is running Terminal Services, each user has a unique Windows directory.
+				//************************************
+				static WString WindowsDirectory();
+				//************************************
+				// Method:    SystemWindowsDirectory
+				// FullName:  vl::system::System::SystemWindowsDirectory
+				// Access:    public static
+				// Returns:   vl::WString
+				// Qualifier: The system Windows directory is shared by all users,
+				//			  so it is the directory where an application should store initialization and help files that apply to all users.
+				//************************************
+				static WString SystemWindowsDirectory();
+				static void Version();
+				static void SystemInfo();
+				static bool GetGlobalMemory(GlobalMemory& memory);
+				
+			protected:
+				static eProcessorArchitecture ProcessorArchitecture(vuint architecture);
+				static eProcessorType ProcessorType(vuint type);
 		};
 	}
 }
