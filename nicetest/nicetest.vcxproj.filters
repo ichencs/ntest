@@ -13,8 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="UnitTest">
-      <UniqueIdentifier>{cd0de60d-84e4-4b69-ac58-44da183bdf5b}</UniqueIdentifier>
+    <Filter Include="vlpp">
+      <UniqueIdentifier>{c4727d1c-2e3e-4061-ae98-ef2cd6be4f7d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,8 +45,8 @@
     <ClInclude Include="TestUsing.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="UnitTest.h">
-      <Filter>UnitTest</Filter>
+    <ClInclude Include="vlpp\Vlpp.h">
+      <Filter>vlpp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,8 +74,14 @@
     <ClCompile Include="TestUsing.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="UnitTest.cpp">
-      <Filter>UnitTest</Filter>
+    <ClCompile Include="vlpp\Vlpp.cpp">
+      <Filter>vlpp</Filter>
+    </ClCompile>
+    <ClCompile Include="TestRegex808Info.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestShareMemory.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

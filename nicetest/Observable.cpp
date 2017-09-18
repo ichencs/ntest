@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Observable.h"
-#include "UnitTest.h"
 
 
 /////////////////////抽象模式实现

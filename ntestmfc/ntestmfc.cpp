@@ -9,7 +9,15 @@
 
 int main()
 {
-
+	using namespace vl::unittest;
+	UnitTest::RunAndDisposeTests();
+	HWND hwnd = ::FindWindow(NULL, L"TemplateWindow");
+	
+	if (hwnd)
+	{
+		::PostMessage(hwnd, WM_DESTROY, 0, 0);
+	}
+	
 	CString str, str2;
 	int num = 3;
 	str.Format(_T("%%.%d"), num);

@@ -2,23 +2,17 @@
 //
 
 #include "stdafx.h"
-// #include <boost/lambda/lambda.hpp>
+#include <stdlib.h>
 
-#include "test_calculate.h"
-// #include "boost_asio.h"
-#include <memory>
-#include <iostream>
-#include "Bloger.h"
-#include "testNice.h"
-#include <cmath>
-#include "testAes.h"
-#include "TestUsing.h"
-#include "UnitTest.h"
+// #undef DEBUG
+#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+// #endif
 
 using namespace std;
+using namespace vl::unittest;
 
 
-int main()
+int main(int, char*)
 {
 	UnitTest::RunAndDisposeTests();
 	

@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="vlpp">
+      <UniqueIdentifier>{00f8d1dd-1088-4176-aa04-8a424bfb9b38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -27,6 +30,9 @@
     <ClInclude Include="testString.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="vlpp\Vlpp.h">
+      <Filter>vlpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -37,6 +43,9 @@
     </ClCompile>
     <ClCompile Include="nteststd.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vlpp\Vlpp.cpp">
+      <Filter>vlpp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
