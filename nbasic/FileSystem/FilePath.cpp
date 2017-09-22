@@ -128,10 +128,11 @@ namespace vl
 			return &buffer[0];
 		}
 		
-		FilePath FilePath::TheAppPath()
+		FilePath FilePath::ModulePath()
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
-			::GetModuleFileName(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
+			HMODULE hmodule = GetModuleHandle(NULL);
+			::GetModuleFileName(hmodule, buffer, sizeof(buffer) / sizeof(*buffer));
 			return buffer;
 		}
 		
