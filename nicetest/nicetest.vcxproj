@@ -343,6 +343,7 @@
     </ClCompile>
     <ClCompile Include="testAes.cpp" />
     <ClCompile Include="testNice.cpp" />
+    <ClCompile Include="TestPtrDelete.cpp" />
     <ClCompile Include="TestRegex808Info.cpp" />
     <ClCompile Include="TestShareMemory.cpp" />
     <ClCompile Include="TestUsing.cpp" />
