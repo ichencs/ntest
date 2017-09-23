@@ -41,11 +41,8 @@
     <ClCompile Include="TestCString.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="TestNet.cpp">
-=======
     <ClCompile Include="TestWnd.cpp">
->>>>>>> c8b8783e93202ba49c6a1a192938fa8f7059c9a3
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
