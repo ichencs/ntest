@@ -128,10 +128,16 @@ namespace vl
 			return &buffer[0];
 		}
 		
-		FilePath FilePath::ModulePath()
+		HMODULE GetSelfModuleHandle()
+		{
+			MEMORY_BASIC_INFORMATION mbi;
+			return ((::VirtualQuery(GetSelfModuleHandle, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
+		}
+		
+		FilePath FilePath::ModulePath(bool isDll)
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
-			HMODULE hmodule = GetModuleHandle(NULL);
+			HMODULE hmodule = isDll ? GetSelfModuleHandle() : NULL;
 			::GetModuleFileName(hmodule, buffer, sizeof(buffer) / sizeof(*buffer));
 			return buffer;
 		}

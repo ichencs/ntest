@@ -467,7 +467,7 @@ TEST_CASE(TestFileInfo)
 	TEST_ASSERT(!info.IsWritable());
 	TEST_ASSERT(!info.IsHidden());
 	
-	path = FilePath::TheAppPath();
+	path = FilePath::ModulePath();
 	info.SetPath(path);
 	TEST_ASSERT(info.IsFile());
 	TEST_ASSERT(info.Exists());

@@ -31,7 +31,7 @@ namespace vl
 			vuint64_t	pagefileUsage;						// 使用分页文件
 			vuint64_t	peakPagefileUsage;					// 使用分页文件高峰
 		};
-		
+		struct ProcessData;
 		class Process;
 		class Process
 		{

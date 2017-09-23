@@ -9,7 +9,7 @@
 WString GetExePath()
 {
 	using namespace filesystem;
-	FilePath path = FilePath::TheAppPath().GetFolder();
+	FilePath path = FilePath::ModulePath().GetFolder();
 	return path.GetFullPath();
 }
 
