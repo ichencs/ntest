@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 // #undef DEBUG
-#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+// #pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 // #endif
 
 using namespace std;

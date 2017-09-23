@@ -16,20 +16,20 @@
 
 class CAboutDlg : public CDialogEx
 {
- public:
-	CAboutDlg();
-	
-	// 对话框数据
+	public:
+		CAboutDlg();
+		
+		// 对话框数据
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_ABOUTBOX };
+		enum { IDD = IDD_ABOUTBOX };
 #endif
-	
- protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	
-	// 实现
- protected:
-	DECLARE_MESSAGE_MAP()
+		
+	protected:
+		virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+		
+		// 实现
+	protected:
+		DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -60,6 +60,7 @@ void Cntestdlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, TestDlgListBox, m_listBox);
 	DDX_Control(pDX, TestDlgCheckCombboxEx, m_ckcb);
+	DDX_Control(pDX, IDC_EDIT_TEST1, m_edt);
 }
 
 BEGIN_MESSAGE_MAP(Cntestdlg, CDialogEx)
@@ -77,6 +78,7 @@ BEGIN_MESSAGE_MAP(Cntestdlg, CDialogEx)
 	ON_LBN_SETFOCUS(TestDlgListBox, &Cntestdlg::OnLbnSetfocusTestdlglistbox)
 	ON_EN_SETFOCUS(IDC_EDIT_TEST1, &Cntestdlg::OnEnSetfocusEditTest1)
 	ON_MESSAGE(WM_USER_MSG_READ, Cntestdlg::ReadSharedMemory)
+	ON_BN_CLICKED(IDC_BTN_GET_STYLE, &Cntestdlg::OnBnClickedBtnGetStyle)
 END_MESSAGE_MAP()
 
 
@@ -371,4 +373,13 @@ afx_msg LRESULT  Cntestdlg::ReadSharedMemory(WPARAM wParam, LPARAM lParam)
 	}
 	
 	return 0;
+}
+
+
+void Cntestdlg::OnBnClickedBtnGetStyle()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	DWORD style1 = m_edt.GetStyle();
+	DWORD style2 = m_edt.GetExStyle();
+	DWORD style = style1 | style2;
 }

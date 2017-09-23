@@ -44,7 +44,7 @@ int main()
 	gethostname(hostname, sizeof(hostname) / sizeof(*hostname));
 	phost = gethostbyname(hostname);
 	
-	system("pause");
+	// 	system("pause");
 	return 0;
 }
 
