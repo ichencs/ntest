@@ -130,7 +130,7 @@ namespace vl
 		
 		HMODULE GetSelfModuleHandle()
 		{
-			MEMORY_BASIC_INFORMATION mbi;
+			MEMORY_BASIC_INFORMATION mbi = {0};
 			return ((::VirtualQuery(GetSelfModuleHandle, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
 		}
 		

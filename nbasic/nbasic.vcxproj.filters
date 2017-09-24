@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="Regex\Regex.cpp">
       <Filter>Regex</Filter>
@@ -73,13 +72,6 @@
       <Filter>FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="HttpUtility.cpp" />
-    <ClCompile Include="Variant.cpp">
-      <Filter>NewType</Filter>
-    </ClCompile>
-    <ClCompile Include="nchar.cpp">
-      <Filter>NewType</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="UnitTest\UnitTest.cpp">
       <Filter>UnitTest</Filter>
@@ -87,9 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="String.h" />
-    <ClInclude Include="targetver.h" />
     <ClInclude Include="Regex\Regex.h">
       <Filter>Regex</Filter>
     </ClInclude>
@@ -201,13 +191,6 @@
     <ClInclude Include="Collections\OperationSet.h">
       <Filter>collection</Filter>
     </ClInclude>
-    <ClInclude Include="Variant.h">
-      <Filter>NewType</Filter>
-    </ClInclude>
-    <ClInclude Include="nchar.h">
-      <Filter>NewType</Filter>
-    </ClInclude>
-    <ClInclude Include="Color.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="UnitTest\UnitTest.h">
       <Filter>UnitTest</Filter>

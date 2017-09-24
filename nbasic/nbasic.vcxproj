@@ -277,7 +277,6 @@
     <ClInclude Include="Collections\OperationForEach.h" />
     <ClInclude Include="Collections\OperationSequence.h" />
     <ClInclude Include="Collections\OperationString.h" />
-    <ClInclude Include="Color.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="Exception.h" />
@@ -288,10 +287,8 @@
     <ClInclude Include="GlobalStorage.h" />
     <ClInclude Include="HttpUtility.h" />
     <ClInclude Include="nbasicInc.h" />
-    <ClInclude Include="nchar.h" />
     <ClInclude Include="Locale.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
-    <ClInclude Include="Variant.h" />
     <ClInclude Include="Pointer.h" />
     <ClInclude Include="Regex\Regex.h" />
     <ClInclude Include="Regex\RegexAutomaton.h" />
@@ -300,7 +297,6 @@
     <ClInclude Include="Regex\RegexPure.h" />
     <ClInclude Include="Regex\RegexRich.h" />
     <ClInclude Include="Regex\RegexWriter.h" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Stream\Accessor.h" />
     <ClInclude Include="Stream\BroadcastStream.h" />
     <ClInclude Include="Stream\CacheStream.h" />
@@ -312,13 +308,11 @@
     <ClInclude Include="Stream\memorywrapperstream.h" />
     <ClInclude Include="Stream\RecorderStream.h" />
     <ClInclude Include="String.h" />
-    <ClInclude Include="targetver.h" />
     <ClInclude Include="Threading.h" />
     <ClInclude Include="Tuple.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Basic.cpp" />
-    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="Exception.cpp" />
@@ -328,10 +322,8 @@
     <ClCompile Include="FileSystem\Folder.cpp" />
     <ClCompile Include="GlobalStorage.cpp" />
     <ClCompile Include="HttpUtility.cpp" />
-    <ClCompile Include="nchar.cpp" />
     <ClCompile Include="Locale.cpp" />
     <ClCompile Include="UnitTest\UnitTest.cpp" />
-    <ClCompile Include="Variant.cpp" />
     <ClCompile Include="Regex\Regex.cpp" />
     <ClCompile Include="Regex\RegexAutomaton.cpp" />
     <ClCompile Include="Regex\RegexData.cpp" />
@@ -340,16 +332,6 @@
     <ClCompile Include="Regex\RegexPure.cpp" />
     <ClCompile Include="Regex\RegexRich.cpp" />
     <ClCompile Include="Regex\RegexWriter.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DbgVC9|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DbgVC9|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='RelVC9|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='RelVC9|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="Stream\Accessor.cpp" />
     <ClCompile Include="Stream\BroadcastStream.cpp" />
     <ClCompile Include="Stream\CacheStream.cpp" />

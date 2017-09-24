@@ -5,10 +5,11 @@
 #include <iostream>
 #include <vector>
 #include <windows.h>
+#include <vld.h>
 
 WString GetExePath()
 {
-	using namespace filesystem;
+	using namespace vl::filesystem;
 	FilePath path = FilePath::ModulePath().GetFolder();
 	return path.GetFullPath();
 }
@@ -34,7 +35,6 @@ WString GetTestOutputPath()
 
 int main()
 {
-
 	{
 		using namespace filesystem;
 		Folder folder(GetTestOutputPath());
@@ -46,7 +46,8 @@ int main()
 	}
 	UnitTest::RunAndDisposeTests();
 	FinalizeGlobalStorage();
-	// 	system("pause");
+
+//  	_CrtDumpMemoryLeaks();
 	return 0;
 }
 

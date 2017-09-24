@@ -340,6 +340,38 @@ AString wtoa(const WString& string)
 	return s;
 }
 
+vint _wtoUtf8(const wchar_t* w, char* u, vint chars)
+{
+	return WideCharToMultiByte(CP_UTF8, 0, w, -1, u, (int)(u ? chars : 0), 0, 0);
+}
+
+UString wtoUtf8(const WString& string)
+{
+	vint len = _wtoUtf8(string.Buffer(), 0, 0);
+	char* buffer = new char[len];
+	memset(buffer, 0, len * sizeof(*buffer));
+	_wtoUtf8(string.Buffer(), buffer, (int)len);
+	AString s = buffer;
+	delete[] buffer;
+	return s;
+}
+
+vint _utf8tow(const char* u, wchar_t* w, vint chars)
+{
+	return MultiByteToWideChar(CP_UTF8, 0, u, -1, w, (int)(w ? chars : 0));
+}
+
+WString utf8tow(const UString& string)
+{
+	vint len = _utf8tow(string.Buffer(), 0, 0);
+	wchar_t* buffer = new wchar_t[len];
+	memset(buffer, 0, len * sizeof(*buffer));
+	_utf8tow(string.Buffer(), buffer, (int)len);
+	WString s = buffer;
+	delete[] buffer;
+	return s;
+}
+
 vint _atow(const char* a, wchar_t* w, vint chars)
 {
 #if defined VCZH_MSVC

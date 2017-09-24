@@ -1,63 +1,85 @@
 #include "UnitTest.h"
-#include "..\Console.h"
-using namespace vl::console;
+#include "../Console.h"
+#if defined VCZH_MSVC
+#include "../Threading.h"
+#endif
 
-
-void UnitTest::PrintMessage(const WString& string)
+namespace vl
 {
-	Console::SetColor(false, true, false, true);
-	Console::WriteLine(string);
-	Console::SetColor(true, true, true, false);
-}
-
-void UnitTest::PrintInfo(const WString& string)
-{
-	Console::SetColor(true, true, true, true);
-	Console::WriteLine(string);
-	Console::SetColor(true, true, true, false);
-}
-
-void UnitTest::PrintError(const WString& string)
-{
-	Console::SetColor(true, false, false, true);
-	Console::WriteLine(string);
-	Console::SetColor(true, true, true, false);
-}
-
-struct UnitTestLink
-{
-	UnitTestLink(): testProc(NULL), next(NULL)
-	{};
-	UnitTest::TestProc			testProc /*= nullptr*/;
-	UnitTestLink*				next/* = nullptr*/;
-};
-UnitTestLink*					testHead = NULL;
-UnitTestLink**					testTail = &testHead;
-
-/// <summary>
-/// 编译的过程中通过宏来自动生成链表（初始化时在内存生成链表）！
-/// </summary>
-/// <param name="testProc"></param>
-/// <returns></returns>
-void UnitTest::PushTest(UnitTest::TestProc testProc)
-{
-	UnitTestLink* link = new UnitTestLink;
-	link->testProc = testProc;
-	*testTail = link;
-	testTail = &link->next;
-}
-
-void UnitTest::RunAndDisposeTests()
-{
-	UnitTestLink* current = testHead;
-	testHead = NULL;
-	testTail = NULL;
-	
-	while (current)
+	namespace unittest
 	{
-		current->testProc();
-		UnitTestLink* temp = current;
-		current = current->next;
-		delete temp;
+		using namespace vl::console;
+
+/***********************************************************************
+UnitTest
+***********************************************************************/
+
+#if defined VCZH_MSVC
+		SpinLock spinLockUnitTest;
+#endif
+
+		void UnitTest::PrintMessage(const WString& string)
+		{
+#if defined VCZH_MSVC
+			SpinLock::Scope scope(spinLockUnitTest);
+#endif
+			Console::SetColor(false, true, false, true);
+			Console::WriteLine(string);
+			Console::SetColor(true, true, true, false);
+		}
+
+		void UnitTest::PrintInfo(const WString& string)
+		{
+#if defined VCZH_MSVC
+			SpinLock::Scope scope(spinLockUnitTest);
+#endif
+			Console::SetColor(true, true, true, true);
+			Console::WriteLine(string);
+			Console::SetColor(true, true, true, false);
+		}
+
+		void UnitTest::PrintError(const WString& string)
+		{
+#if defined VCZH_MSVC
+			SpinLock::Scope scope(spinLockUnitTest);
+#endif
+			Console::SetColor(true, false, false, true);
+			Console::WriteLine(string);
+			Console::SetColor(true, true, true, false);
+		}
+
+		struct UnitTestLink
+		{
+			UnitTestLink()
+				:testProc(NULL),next(NULL)
+			{}
+			UnitTest::TestProc			testProc;
+			UnitTestLink*				next;
+		};
+		UnitTestLink*					testHead = NULL;
+		UnitTestLink**					testTail = &testHead;
+
+		void UnitTest::PushTest(TestProc testProc)
+		{
+			UnitTestLink* link = new UnitTestLink;
+			link->testProc = testProc;
+			*testTail = link;
+			testTail = &link->next;
+		}
+
+		void UnitTest::RunAndDisposeTests()
+		{
+			UnitTestLink* current = testHead;
+			testHead = NULL;
+			testTail = NULL;
+
+			while (current)
+			{
+				current->testProc();
+				UnitTestLink* temp = current;
+				current = current->next;
+				delete temp;
+			}
+		}
 	}
 }

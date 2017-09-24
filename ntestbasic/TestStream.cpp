@@ -780,7 +780,11 @@ TEST_CASE(TestLzwSpeed)
 	MemoryStream compressedStream(BufferSize), decompressedStream(BufferSize);
 	UnitTest::PrintInfo(L"    Reading UnitTest.pdb ...");
 	{
-		FileStream fileStream(GetTestOutputPath() + L"../UnitTest/Release/UnitTest.pdb", FileStream::ReadOnly);
+		using namespace vl::filesystem;
+		FilePath fpath = FilePath::ModulePath(true);
+		FilePath folder = fpath.GetFolder();
+		fpath = folder / L"ntestbasic.pdb";
+		FileStream fileStream(	fpath.GetFullPath(), FileStream::ReadOnly);
 		Copy(decompressedStream, fileStream, buffer, (vint)fileStream.Size());
 	}
 	

@@ -197,7 +197,7 @@ Utilities
 			WString value=request.extraHeaders.Values().Get(i);
 			WinHttpAddRequestHeaders(requestInternet, (key+L":"+value).Buffer(), -1, WINHTTP_ADDREQ_FLAG_REPLACE|WINHTTP_ADDREQ_FLAG_ADD);
 		}
-
+		//(2) ·¢ËÍÇëÇó
 		if(request.body.Count()>0)
 		{
 			httpResult=WinHttpSendRequest(requestInternet, WINHTTP_NO_ADDITIONAL_HEADERS, 0, (LPVOID)&request.body.Get(0), (int)request.body.Count(), (int)request.body.Count(), NULL);

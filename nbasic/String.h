@@ -629,6 +629,8 @@ const T ObjectString<T>::zero = 0;
 typedef ObjectString<char>		AString;
 /// <summary>Unicode string.</summary>
 typedef ObjectString<wchar_t>	WString;
+/// <summary>Utf8 string.</summary>
+typedef ObjectString<char>	UString;
 
 /// <summary>Convert a string to an signed integer.</summary>
 /// <returns>The converted number. If the convert failed, the result is undefined.</returns>
@@ -768,6 +770,13 @@ extern vint					_wtoa(const wchar_t* w, char* a, vint chars);
 /// <returns>The converted string.</returns>
 /// <param name="string">The string to convert.</param>
 extern AString				wtoa(const WString& string);
+extern vint					_wtoUtf8(const wchar_t* w,char* u,vint chars);
+extern UString				wtoUtf8(const WString& string);
+
+extern vint					_utf8tow(const char* u, wchar_t* w, vint chars);
+extern WString				utf8tow(const UString& string);
+
+
 extern vint					_atow(const char* a, wchar_t* w, vint chars);
 /// <summary>Convert an Ansi string to an Unicode string.</summary>
 /// <returns>The converted string.</returns>

@@ -13,3 +13,6 @@
 
 // TODO:  在此处引用程序需要的其他头文件
 #include "..\nbasic\nbasicInc.h"
+
+using namespace vl;
+using namespace vl::unittest;

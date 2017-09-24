@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include <string.h>
 
-
 using namespace vl;
 
 void CheckString(const WString& string, const wchar_t* buffer)
