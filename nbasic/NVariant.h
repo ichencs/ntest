@@ -91,7 +91,7 @@ class NVariant
 			float f;
 			double d;
 			void* ptr;
-			unsigned long dw;	//DWORD
+			// 			unsigned long dw;	//DWORD
 			
 			PrivateShared* shared;
 		} data;
