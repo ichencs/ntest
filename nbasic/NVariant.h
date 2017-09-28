@@ -80,10 +80,8 @@ class NVariant
 			bool b;
 			char c;
 			nschar sc;
-			
 			wchar_t uc;
 			short s;
-			nschar us;
 			int i;
 			vuint ui;
 			long l;
@@ -91,14 +89,11 @@ class NVariant
 			float f;
 			double d;
 			void* ptr;
-			// 			unsigned long dw;	//DWORD
-			
-			PrivateShared* shared;
+			PrivateShared* shared = nullptr;
 		} data;
 		vuint type : 30;
 		bool is_null : 1;
 		bool is_shared : 1;
-		
 	};
 	
  public:
