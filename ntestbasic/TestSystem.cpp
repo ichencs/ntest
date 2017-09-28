@@ -22,3 +22,12 @@ TEST_CASE(TestEnvironment)
 	proc.GetMemoryInfo(memo);
 	
 }
+
+TEST_CASE(TestDiskInfo)
+{
+	DiskSpaceInfo info;
+	info.disk = L"c:/";
+	System::GetDiskSpaceInfo(info);
+
+
+}

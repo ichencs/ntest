@@ -30,28 +30,19 @@ namespace vl
 		};
 		
 		Process::Process()
-			: process(NULL)
 		{
 			InitializeCurrent();
 		}
 		
 		Process::~Process()
 		{
-			if (process)
-			{
-				CloseHandle(process->hProcess);
-				delete process;
-			}
+			
 		}
 		
 		
 		void Process::InitializeCurrent()
 		{
-			if (!process)
-			{
-				HANDLE handle = ::GetCurrentProcess();
-				process = new ProcessData(handle);
-			}
+			
 		}
 		
 		vl::vuint Process::CurrentID()
@@ -74,11 +65,11 @@ namespace vl
 		
 		bool Process::GetMemoryInfo(ProcessMemory& memory)
 		{
-			// 		HANDLE handle = ::GetCurrentProcess();
+			HANDLE handle = ::GetCurrentProcess();
 			PROCESS_MEMORY_COUNTERS info;
 			memset(&info, 0, sizeof(PROCESS_MEMORY_COUNTERS));
 			info.cb = sizeof(PROCESS_MEMORY_COUNTERS);
-			BOOL bres = ::GetProcessMemoryInfo(process->hProcess, &info, sizeof(info));
+			BOOL bres = ::GetProcessMemoryInfo(handle, &info, sizeof(info));
 			
 			if (bres)
 			{
@@ -92,8 +83,7 @@ namespace vl
 				memory.pagefileUsage = info.PagefileUsage;
 				memory.peakPagefileUsage = info.PeakPagefileUsage;
 			}
-			
-			// 		CloseHandle(handle);
+			CloseHandle(handle);
 			return bres == TRUE;
 		}
 		
@@ -255,6 +245,19 @@ namespace vl
 			return bres == TRUE;
 		}
 		
+		bool System::GetDiskSpaceInfo(DiskSpaceInfo& disk)
+		{
+			ULARGE_INTEGER liFreeBytesAvailable, liTotalBytes, liTotalFreeBytes;
+			BOOL bRes = GetDiskFreeSpaceEx(disk.disk.Buffer(),&liFreeBytesAvailable,&liTotalBytes,&liTotalFreeBytes);
+			if (bRes)
+			{
+				disk.available = liFreeBytesAvailable.QuadPart;
+				disk.total = liTotalBytes.QuadPart;
+				disk.free = liTotalFreeBytes.QuadPart;
+			}
+			return bRes == TRUE;
+		}
+
 		eProcessorArchitecture System::ProcessorArchitecture(vuint architecture)
 		{
 			eProcessorArchitecture pa;

@@ -31,7 +31,7 @@ namespace vl
 			vuint64_t	pagefileUsage;						// 使用分页文件
 			vuint64_t	peakPagefileUsage;					// 使用分页文件高峰
 		};
-		struct ProcessData;
+
 		class Process;
 		class Process
 		{
@@ -42,10 +42,9 @@ namespace vl
 				void InitializeCurrent();
 			public:
 				static vuint CurrentID();
-				bool GetMemoryInfo(ProcessMemory& memory);
+				static bool GetMemoryInfo(ProcessMemory& memory);
 				
 			private:
-				ProcessData* process;
 				
 		};
 		
@@ -120,6 +119,21 @@ namespace vl
 			vuint64_t	ullAvailVirtual;
 			vuint64_t	ullAvailExtendedVirtual;
 		};
+
+		struct DiskSpaceInfo
+		{
+			DiskSpaceInfo():
+				available(0),
+				total(0),
+				free(0)
+			{
+			}
+			WString disk;		//盘符
+			vuint64_t available;	//可用(字节)
+			vuint64_t total;
+			vuint64_t free;
+
+		};
 		
 		class System
 		{
@@ -151,7 +165,7 @@ namespace vl
 				static void Version();
 				static void SystemInfo();
 				static bool GetGlobalMemory(GlobalMemory& memory);
-				
+				static bool GetDiskSpaceInfo(DiskSpaceInfo& disk);
 			protected:
 				static eProcessorArchitecture ProcessorArchitecture(vuint architecture);
 				static eProcessorType ProcessorType(vuint type);
