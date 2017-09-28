@@ -13,6 +13,7 @@
 #include "Threading.h"
 #include "HttpUtility.h"
 #include "system.h"
+#include "NVariant.h"
 
 #include ".\FileSystem\Folder.h"
 #include ".\FileSystem\file.h"

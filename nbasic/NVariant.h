@@ -89,7 +89,7 @@ class NVariant
 			float f;
 			double d;
 			void* ptr;
-			PrivateShared* shared = nullptr;
+			PrivateShared* shared;
 		} data;
 		vuint type : 30;
 		bool is_null : 1;

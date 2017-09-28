@@ -80,6 +80,9 @@
     <ClCompile Include="TestThread.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TestVariant.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="POD.md">
