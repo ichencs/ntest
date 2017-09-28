@@ -12,7 +12,7 @@ TEST_CASE(TestSharedMemory)
 	HANDLE lhShareMemory;
 	char* lpBuffer = NULL;
 	
-	lhShareMemory = CreateFileMapping(HANDLE(0xFFFFFFFF), NULL, PAGE_READWRITE,
+	lhShareMemory = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE,
 	    0, 10, L"mySharedMemory");
 	    
 	if (NULL == lhShareMemory)
@@ -79,7 +79,7 @@ void WaitingMessage()
 }
 
 
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT WINAPI WndProc2(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 
 	switch (msg)
@@ -111,7 +111,7 @@ TEST_CASE(TestCreateWindow)
 	HCURSOR hCursor = LoadCursor(NULL, IDC_ARROW);
 	WString className = L"Template";
 	WString windowName = L"TemplateWindow";
-	WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, hModule, NULL, hCursor, NULL, NULL, className.Buffer(), NULL };
+	WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc2, 0L, 0L, hModule, NULL, hCursor, NULL, NULL, className.Buffer(), NULL };
 	RegisterClassEx(&wc);
 	HWND hwnd = CreateWindow(className.Buffer(), windowName.Buffer(), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
 	
@@ -120,6 +120,6 @@ TEST_CASE(TestCreateWindow)
 		ShowWindow(hwnd, SW_HIDE);
 	}
 	
-	WaitingMessage();
+// 	WaitingMessage();
 	UnregisterClass(className.Buffer(), wc.hInstance);
 }

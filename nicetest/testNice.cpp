@@ -25,7 +25,7 @@ void testNice::test()
 
 	testSizeof();
 	testDomain();
-	testIP();
+// 	testIP();
 // 	testObserve();
 // 	testMd5();
 }
@@ -67,26 +67,26 @@ void testNice::testObserve()
 }
 
 
-void testNice::testIP()
-{
-	WSADATA wsaData;
-	char name[155] = {0};
-	char *ip;
-	PHOSTENT hostinfo;
-	if (WSAStartup(MAKEWORD(2, 0), &wsaData) == 0)
-	{
-		if (gethostname(name, sizeof(name)) == 0)
-		{
-			printf("hostname=%s\n", name);
-			if ((hostinfo = gethostbyname(name)) != NULL)
-			{
-				ip = inet_ntoa(*(struct in_addr *)*hostinfo->h_addr_list); //得到地址字符串
-				printf("local host ip: %s\n", ip);
-			}
-		}
-		WSACleanup();
-	}
-}
+// void testNice::testIP()
+// {
+// 	WSADATA wsaData;
+// 	char name[155] = {0};
+// 	char *ip;
+// 	PHOSTENT hostinfo;
+// 	if (WSAStartup(MAKEWORD(2, 0), &wsaData) == 0)
+// 	{
+// 		if (gethostname(name, sizeof(name)) == 0)
+// 		{
+// 			printf("hostname=%s\n", name);
+// 			if ((hostinfo = gethostbyname(name)) != NULL)
+// 			{
+// 				ip = inet_ntoa(*(struct in_addr *)*hostinfo->h_addr_list); //得到地址字符串
+// 				printf("local host ip: %s\n", ip);
+// 			}
+// 		}
+// 		WSACleanup();
+// 	}
+// }
 
 void testNice::testDomain()
 {

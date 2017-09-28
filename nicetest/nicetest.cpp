@@ -16,7 +16,7 @@ int main(int, char*)
 {
 	UnitTest::RunAndDisposeTests();
 	
-	system("pause");
+// 	system("pause");
 	return 0;
 }
 

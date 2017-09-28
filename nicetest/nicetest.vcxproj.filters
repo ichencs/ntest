@@ -86,5 +86,8 @@
     <ClCompile Include="TestPtrDelete.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TestHook.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
