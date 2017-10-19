@@ -342,6 +342,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='RelVC9|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="testAes.cpp" />
+    <ClCompile Include="TestFloatNumber.cpp" />
     <ClCompile Include="TestHook.cpp" />
     <ClCompile Include="testNice.cpp" />
     <ClCompile Include="TestPtrDelete.cpp" />

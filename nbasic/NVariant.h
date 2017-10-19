@@ -99,8 +99,6 @@ class NVariant
  public:
 	Private d;
 	
-	
-	
 };
 
 #endif

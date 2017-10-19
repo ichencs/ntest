@@ -89,5 +89,8 @@
     <ClCompile Include="TestHook.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TestFloatNumber.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

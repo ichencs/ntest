@@ -447,6 +447,8 @@ TEST_CASE(TestFileSystemOthers)
 	Console::WriteLine(strExtension);
 }
 
+
+
 TEST_CASE(TestFileInfo)
 {
 	FilePath path = L"C:\\Windows";
@@ -467,7 +469,7 @@ TEST_CASE(TestFileInfo)
 	TEST_ASSERT(!info.IsWritable());
 	TEST_ASSERT(!info.IsHidden());
 	
-	path = FilePath::ModulePath();
+	path = FilePath::ModulePath(ClearTestFolders);
 	info.SetPath(path);
 	TEST_ASSERT(info.IsFile());
 	TEST_ASSERT(info.Exists());

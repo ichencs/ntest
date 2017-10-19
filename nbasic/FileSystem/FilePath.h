@@ -43,7 +43,14 @@ namespace vl
 				
 			public:
 				static FilePath CurrentPath();
-				static FilePath ModulePath(bool isDll = true);
+				static FilePath ModulePath();		//app(exe) path
+				/// <summary>
+				/// 通过当前模块（dll）的基地址获取dll路径
+				/// </summary>
+				/// <param name="pAddress">当前模块中的地址</param>
+				/// <param name="isDll"></param>
+				/// <returns></returns>
+				static FilePath ModulePath(void* pAddress, bool isDll = true);			//
 				static FilePath TempPath();
 			public:
 				static vint					Compare(const FilePath& a, const FilePath& b);
