@@ -136,19 +136,21 @@ namespace vl
 		
 		FilePath FilePath::ModulePath()
 		{
-			wchar_t buffer[NICE_MAX_PATH] = { 0 };
-			::GetModuleFileName(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
-			return buffer;
+			return ModulePath(NULL);
 		}
 		
-		FilePath FilePath::ModulePath(void* pAddress, bool isDll /*= true*/)
+		FilePath FilePath::ModulePath(void* pAddress)
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
-			
-			MEMORY_BASIC_INFORMATION mbi = { 0 };			//通过函数指针地址，获取dll基地址（HMODULE）
-			HMODULE hBaseAddress = (::VirtualQuery(pAddress, &mbi, sizeof(mbi)) != 0) ?
-			  (HMODULE)mbi.AllocationBase : NULL;
-			HMODULE hmodule = isDll ? hBaseAddress : NULL;
+			HMODULE hmodule = NULL;
+			if (pAddress)
+			{
+				MEMORY_BASIC_INFORMATION mbi = { 0 };			//通过函数指针地址，获取dll基地址（HMODULE）
+				HMODULE hBaseAddress = (::VirtualQuery(pAddress, &mbi, sizeof(mbi)) != 0) ?
+				  (HMODULE)mbi.AllocationBase : NULL;
+				hmodule = hBaseAddress;
+				
+			}
 			::GetModuleFileName(hmodule, buffer, sizeof(buffer) / sizeof(*buffer));
 			return buffer;
 		}

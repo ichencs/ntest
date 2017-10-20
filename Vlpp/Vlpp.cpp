@@ -217,7 +217,6 @@ namespace vl
 #if defined VCZH_MSVC
 #elif defined VCZH_GCC
 #include <iostream>
-#include <string>
 using namespace std;
 #endif
 
@@ -3544,16 +3543,27 @@ namespace vl
 			return &buffer[0];
 		}
 		
-		HMODULE GetSelfModuleHandle()
+		HMODULE GetSafeModuleHandle()
 		{
-			MEMORY_BASIC_INFORMATION mbi = {0};
-			return ((::VirtualQuery(GetSelfModuleHandle, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
+			MEMORY_BASIC_INFORMATION mbi = {0};			//通过函数指针地址，获取dll基地址（HMODULE）
+			return ((::VirtualQuery(GetSafeModuleHandle, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
 		}
 		
-		FilePath FilePath::ModulePath(bool isDll)
+		FilePath FilePath::ModulePath()
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
-			HMODULE hmodule = isDll ? GetSelfModuleHandle() : NULL;
+			::GetModuleFileName(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
+			return buffer;
+		}
+		
+		FilePath FilePath::ModulePath(void* pAddress, bool isDll /*= true*/)
+		{
+			wchar_t buffer[NICE_MAX_PATH] = { 0 };
+			
+			MEMORY_BASIC_INFORMATION mbi = { 0 };			//通过函数指针地址，获取dll基地址（HMODULE）
+			HMODULE hBaseAddress = (::VirtualQuery(pAddress, &mbi, sizeof(mbi)) != 0) ?
+			  (HMODULE)mbi.AllocationBase : NULL;
+			HMODULE hmodule = isDll ? hBaseAddress : NULL;
 			::GetModuleFileName(hmodule, buffer, sizeof(buffer) / sizeof(*buffer));
 			return buffer;
 		}
@@ -5548,6 +5558,37 @@ Utilities
 	}
 }
 #endif
+
+
+/***********************************************************************
+.\NVARIANT.CPP
+***********************************************************************/
+#include <xtr1common>
+
+
+// template <class T>
+// inline void v_construct_helper(NVariant::Private* x, const T& t, std::false_type)
+// {
+// 	// 	x->data.shared = new QVariantPrivateSharedEx<T>(t);
+// 	x->is_shared = true;
+// }
+//
+// template <class T>
+// inline void v_construct_helper(NVariant::Private* x, const T& t, std::true_type)
+// {
+// 	new (&x->data) T(t);
+// 	x->is_shared = false;
+// }
+
+NVariant::NVariant()
+{
+
+}
+
+
+NVariant::~NVariant()
+{
+}
 
 
 /***********************************************************************
@@ -11505,28 +11546,19 @@ namespace vl
 		};
 		
 		Process::Process()
-			: process(NULL)
 		{
 			InitializeCurrent();
 		}
 		
 		Process::~Process()
 		{
-			if (process)
-			{
-				CloseHandle(process->hProcess);
-				delete process;
-			}
+			
 		}
 		
 		
 		void Process::InitializeCurrent()
 		{
-			if (!process)
-			{
-				HANDLE handle = ::GetCurrentProcess();
-				process = new ProcessData(handle);
-			}
+			
 		}
 		
 		vl::vuint Process::CurrentID()
@@ -11549,11 +11581,11 @@ namespace vl
 		
 		bool Process::GetMemoryInfo(ProcessMemory& memory)
 		{
-			// 		HANDLE handle = ::GetCurrentProcess();
+			HANDLE handle = ::GetCurrentProcess();
 			PROCESS_MEMORY_COUNTERS info;
 			memset(&info, 0, sizeof(PROCESS_MEMORY_COUNTERS));
 			info.cb = sizeof(PROCESS_MEMORY_COUNTERS);
-			BOOL bres = ::GetProcessMemoryInfo(process->hProcess, &info, sizeof(info));
+			BOOL bres = ::GetProcessMemoryInfo(handle, &info, sizeof(info));
 			
 			if (bres)
 			{
@@ -11567,8 +11599,7 @@ namespace vl
 				memory.pagefileUsage = info.PagefileUsage;
 				memory.peakPagefileUsage = info.PeakPagefileUsage;
 			}
-			
-			// 		CloseHandle(handle);
+			CloseHandle(handle);
 			return bres == TRUE;
 		}
 		
@@ -11730,6 +11761,19 @@ namespace vl
 			return bres == TRUE;
 		}
 		
+		bool System::GetDiskSpaceInfo(DiskSpaceInfo& disk)
+		{
+			ULARGE_INTEGER liFreeBytesAvailable, liTotalBytes, liTotalFreeBytes;
+			BOOL bRes = GetDiskFreeSpaceEx(disk.disk.Buffer(),&liFreeBytesAvailable,&liTotalBytes,&liTotalFreeBytes);
+			if (bRes)
+			{
+				disk.available = liFreeBytesAvailable.QuadPart;
+				disk.total = liTotalBytes.QuadPart;
+				disk.free = liTotalFreeBytes.QuadPart;
+			}
+			return bRes == TRUE;
+		}
+
 		eProcessorArchitecture System::ProcessorArchitecture(vuint architecture)
 		{
 			eProcessorArchitecture pa;
