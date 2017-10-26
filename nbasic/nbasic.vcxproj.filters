@@ -77,6 +77,7 @@
       <Filter>UnitTest</Filter>
     </ClCompile>
     <ClCompile Include="NVariant.cpp" />
+    <ClCompile Include="nAtomicInt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
@@ -197,6 +198,7 @@
       <Filter>UnitTest</Filter>
     </ClInclude>
     <ClInclude Include="NVariant.h" />
+    <ClInclude Include="nAtomicInt.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

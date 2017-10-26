@@ -32,9 +32,33 @@ WString GetTestOutputPath()
 #endif
 }
 
+class testClass
+{
+public:
+	testClass();
+	~testClass();
+
+private:
+
+};
+
+testClass::testClass()
+{
+}
+
+testClass::~testClass()
+{
+}
 
 int main()
 {
+// 	vint num = 3;
+// 	num = sizeof(nAtomicInt);
+// 	int size1 = sizeof(int);
+// 	int size2 = sizeof(Object);
+// 
+// 	new(&num)vint(12);
+
 	{
 		using namespace filesystem;
 		Folder folder(GetTestOutputPath());
