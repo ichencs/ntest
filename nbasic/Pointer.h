@@ -28,8 +28,9 @@ namespace vl
 		/// <summary>Create a pointer to the reference counter from an object.</summary>
 		/// <returns>The pointer to the reference counter.</returns>
 		/// <param name="reference">The object.</param>
-		static __forceinline volatile vint* CreateCounter(T* reference)
+		static __forceinline volatile vint* CreateCounter(/*T* reference*/)
 		{
+			// 			reference;
 			return new vint(0);
 		}
 		
@@ -123,7 +124,7 @@ namespace vl
 			{
 				if (pointer)
 				{
-					counter = ReferenceCounterOperator<T>::CreateCounter(pointer);
+					counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
 					reference = pointer;
 					originalReference = pointer;
 					originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
@@ -211,7 +212,7 @@ namespace vl
 				
 				if (pointer)
 				{
-					counter = ReferenceCounterOperator<T>::CreateCounter(pointer);
+					counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
 					reference = pointer;
 					originalReference = pointer;
 					originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;

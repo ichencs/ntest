@@ -161,5 +161,5 @@ TEST_CASE(TestDateTime)
 	TEST_ASSERT(dt.minute == 0);
 	TEST_ASSERT(dt.second == 0);
 	TEST_ASSERT(dt.milliseconds == 0);
-	TEST_ASSERT(false);
+	// 	TEST_ASSERT(false);
 }
