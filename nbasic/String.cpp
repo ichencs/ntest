@@ -11,99 +11,12 @@
 // #define _wcstoi64 wcstoll
 // #define _wcstoui64 wcstoull
 #endif
-
+#include <stdio.h>
+#include <stdarg.h>
 namespace vl
 {
-	// #if defined VCZH_GCC
-	// 	void _itoa_s(vint32_t value, char* buffer, size_t size, vint radix)
-	// 	{
-	// 		sprintf(buffer, "%d", value);
-	// 	}
-	//
-	// 	void _itow_s(vint32_t value, wchar_t* buffer, size_t size, vint radix)
-	// 	{
-	// 		swprintf(buffer, size - 1, L"%d", value);
-	// 	}
-	//
-	// 	void _i64toa_s(vint64_t value, char* buffer, size_t size, vint radix)
-	// 	{
-	// 		sprintf(buffer, "%ld", value);
-	// 	}
-	//
-	// 	void _i64tow_s(vint64_t value, wchar_t* buffer, size_t size, vint radix)
-	// 	{
-	// 		swprintf(buffer, size - 1, L"%ld", value);
-	// 	}
-	//
-	// 	void _uitoa_s(vuint32_t value, char* buffer, size_t size, vint radix)
-	// 	{
-	// 		sprintf(buffer, "%u", value);
-	// 	}
-	//
-	// 	void _uitow_s(vuint32_t value, wchar_t* buffer, size_t size, vint radix)
-	// 	{
-	// 		swprintf(buffer, size - 1, L"%u", value);
-	// 	}
-	//
-	// 	void _ui64toa_s(vuint64_t value, char* buffer, size_t size, vint radix)
-	// 	{
-	// 		sprintf(buffer, "%lu", value);
-	// 	}
-	//
-	// 	void _ui64tow_s(vuint64_t value, wchar_t* buffer, size_t size, vint radix)
-	// 	{
-	// 		swprintf(buffer, size - 1, L"%lu", value);
-	// 	}
-	//
-	// 	void _gcvt_s(char* buffer, size_t size, double value, vint numberOfDigits)
-	// 	{
-	// 		sprintf(buffer, "%f", value);
-	// 		char* point = strchr(buffer, '.');
-	// 		if(!point) return;
-	// 		char* zero = buffer + strlen(buffer);
-	// 		while(zero[-1] == '0')
-	// 		{
-	// 			*--zero = '\0';
-	// 		}
-	// 		if(zero[-1] == '.') *--zero = '\0';
-	// 	}
-	//
-	// 	void _strlwr_s(char* buffer, size_t size)
-	// 	{
-	// 		while(*buffer)
-	// 		{
-	// 			*buffer=(char)tolower(*buffer);
-	// 			buffer++;
-	// 		}
-	// 	}
-	//
-	// 	void _strupr_s(char* buffer, size_t size)
-	// 	{
-	// 		while(*buffer)
-	// 		{
-	// 			*buffer=(char)toupper(*buffer);
-	// 			buffer++;
-	// 		}
-	// 	}
-	//
-	// 	void _wcslwr_s(wchar_t* buffer, size_t size)
-	// 	{
-	// 		while(*buffer)
-	// 		{
-	// 			*buffer=(char)towlower(*buffer);
-	// 			buffer++;
-	// 		}
-	// 	}
-	//
-	// 	void _wcsupr_s(wchar_t* buffer, size_t size)
-	// 	{
-	// 		while(*buffer)
-	// 		{
-	// 			*buffer=(char)towupper(*buffer);
-	// 			buffer++;
-	// 		}
-	// 	}
-	// #endif
+	__pragma(warning(disable: 4996))
+	
 	
 	vint atoi_test(const AString& string, bool& success)
 	{
@@ -419,4 +332,51 @@ namespace vl
 		_wcsupr_s((wchar_t*)result.Buffer(), result.Length() + 1);
 		return result;
 	}
+	
+	extern WString wformat(wchar_t* pszFormat, ...)
+	{
+		WString string;
+		va_list argList;
+		va_start(argList, pszFormat);
+		{
+			wchar_t* pszBuffer = NULL;
+			int nlen = -1;
+			{
+				nlen = _vscwprintf(pszFormat, argList);
+				pszBuffer = (wchar_t*)malloc((nlen + 1) * sizeof(wchar_t));
+				vswprintf(pszBuffer, pszFormat, argList);
+			}
+			if (nlen > 0 && pszBuffer)
+			{
+				string = pszBuffer;
+				free(pszBuffer);
+			}
+		}
+		va_end(argList);
+		return string;
+	}
+	
+	extern AString aformat(char* pszFormat, ...)
+	{
+		AString string;
+		va_list argList;
+		va_start(argList, pszFormat);
+		{
+			char* pszBuffer = NULL;
+			int nlen = -1;
+			{
+				nlen = _vscprintf(pszFormat, argList);
+				pszBuffer = (char*)malloc((nlen + 1) * sizeof(char));
+				vsprintf(pszBuffer, pszFormat, argList);
+			}
+			if (nlen > 0 && pszBuffer)
+			{
+				string = pszBuffer;
+				free(pszBuffer);
+			}
+		}
+		va_end(argList);
+		return string;
+	}
+	
 }

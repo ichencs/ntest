@@ -269,3 +269,14 @@ TEST_CASE(TestStringTrim)
 	TEST_ASSERT(string.TrimRight(L"ed").TrimRight(L"bc") == L"a");
 	
 }
+
+TEST_CASE(TestFormat)
+{
+	WString wstr;
+	wstr = wformat(L"%02d, %.2f, %s", 1, 0.2, L"nice");
+	TEST_ASSERT(wstr == L"01, 0.20, nice");
+	
+	AString astr;
+	astr = aformat("%02d, %.2f, %s", 1, 0.2, "nice");
+	TEST_ASSERT(astr == "01, 0.20, nice");
+}

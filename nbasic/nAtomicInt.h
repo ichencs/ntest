@@ -4,12 +4,12 @@ using namespace vl;
 
 
 
-class nAtomicInt :public Object
+class nAtomicInt : public Object
 {
-protected:
+ protected:
 	volatile vint*		counter;
-
-
+	
+	
 	void Inc()
 	{
 		if (counter)
@@ -17,7 +17,7 @@ protected:
 			INCRC(counter);
 		}
 	};
-
+	
 	void Dec(bool deleteIfZero = true)
 	{
 		if (counter)
@@ -28,50 +28,50 @@ protected:
 				{
 					delete counter;
 				}
- 				this->counter = nullptr;
+				this->counter = NULL;
 			}
 		}
 	}
-public:
+ public:
 	nAtomicInt()
-		:counter(new vint(1))
+		: counter(new vint(1))
 	{
-
+	
 	}
-
+	
 	nAtomicInt(const nAtomicInt& other)
 	{
 		this->counter = other.counter;
 		Inc();
 	}
-
-	nAtomicInt& operator=(const nAtomicInt& other )
+	
+	nAtomicInt& operator=(const nAtomicInt& other)
 	{
 		Dec();
 		this->counter = other.counter;
 		Inc();
 	}
-
+	
 	bool ref()
 	{
-		return counter != nullptr;
+		return counter != NULL;
 	};
 	bool deref()
 	{
-		return counter == nullptr;
+		return counter == NULL;
 	}
-
+	
 	volatile vint* Count()
 	{
 		return counter;
 	}
-
-
-	~nAtomicInt() 
+	
+	
+	~nAtomicInt()
 	{
 		Dec();
 	}
-
-
+	
+	
 };
 

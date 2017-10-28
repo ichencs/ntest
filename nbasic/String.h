@@ -800,6 +800,10 @@ namespace vl
 	/// <param name="string">The string to convert.</param>
 	extern WString				wupper(const WString& string);
 	
+	
+	extern WString				wformat(wchar_t* pszFormat, ...);
+	extern AString				aformat(char* pszFormat, ...);
+	
 	// #if defined VCZH_GCC
 	// 	extern void					_itoa_s(vint32_t value, char* buffer, size_t size, vint radix);
 	// 	extern void					_itow_s(vint32_t value, wchar_t* buffer, size_t size, vint radix);
