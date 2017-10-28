@@ -78,6 +78,7 @@
     </ClCompile>
     <ClCompile Include="NVariant.cpp" />
     <ClCompile Include="nAtomicInt.cpp" />
+    <ClCompile Include="Path.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
@@ -199,6 +200,7 @@
     </ClInclude>
     <ClInclude Include="NVariant.h" />
     <ClInclude Include="nAtomicInt.h" />
+    <ClInclude Include="Path.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

@@ -280,6 +280,7 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="nAtomicInt.h" />
     <ClInclude Include="NVariant.h" />
+    <ClInclude Include="Path.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="FileSystem\File.h" />
@@ -318,6 +319,7 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="nAtomicInt.cpp" />
     <ClCompile Include="NVariant.cpp" />
+    <ClCompile Include="Path.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="FileSystem\File.cpp" />
