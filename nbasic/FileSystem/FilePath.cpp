@@ -191,20 +191,6 @@ namespace vl
 			}
 			
 			return (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
-#elif defined VCZH_GCC
-			struct stat info;
-			AString path = wtoa(fullPath);
-			int result = stat(path.Buffer(), &info);
-			
-			if (result != 0)
-			{
-				return false;
-			}
-			else
-			{
-				return S_ISREG(info.st_mode);
-			}
-			
 #endif
 		}
 		
@@ -220,20 +206,6 @@ namespace vl
 			}
 			
 			return (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
-#elif defined VCZH_GCC
-			struct stat info;
-			AString path = wtoa(fullPath);
-			int result = stat(path.Buffer(), &info);
-			
-			if (result != 0)
-			{
-				return false;
-			}
-			else
-			{
-				return S_ISDIR(info.st_mode);
-			}
-			
 #endif
 		}
 		
@@ -241,8 +213,6 @@ namespace vl
 		{
 #if defined VCZH_MSVC
 			return fullPath == L"";
-#elif defined VCZH_GCC
-			return fullPath == L"/";
 #endif
 		}
 		
@@ -294,37 +264,6 @@ namespace vl
 			  (_filePath.IsFolder() ? FILE_ATTRIBUTE_DIRECTORY : 0)
 			);
 			return buffer;
-#elif defined VCZH_GCC
-			collections::List<WString> srcComponents, tgtComponents, resultComponents;
-			GetPathComponents(IsFolder() ? fullPath : GetFolder().GetFullPath(), srcComponents);
-			GetPathComponents(_filePath.fullPath, tgtComponents);
-			
-			int minLength = srcComponents.Count() <= tgtComponents.Count() ? srcComponents.Count() : tgtComponents.Count();
-			int lastCommonComponent = 0;
-			
-			for (int i = 0; i < minLength; i++)
-			{
-				if (srcComponents[i] == tgtComponents[i])
-				{
-					lastCommonComponent = i;
-				}
-				else
-				{
-					break;
-				}
-			}
-			
-			for (int i = lastCommonComponent + 1; i < srcComponents.Count(); i++)
-			{
-				resultComponents.Add(L"..");
-			}
-			
-			for (int i = lastCommonComponent + 1; i < tgtComponents.Count(); i++)
-			{
-				resultComponents.Add(tgtComponents[i]);
-			}
-			
-			return ComponentsToPath(resultComponents);
 #endif
 		}
 		
