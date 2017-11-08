@@ -70,6 +70,7 @@ namespace vl
 				/// <returns>Returns true if this operation succeeded.</returns>
 				/// <param name="newName">The new file name.</param>
 				bool						Rename(const WString& newName)const;
+				WString						GetName();
 		};
 		
 	}

@@ -130,6 +130,12 @@ namespace vl
 			return bRes == TRUE;
 		}
 
+		vl::WString Path::FindFileName()
+		{
+			WString name = PathFindFileName(fullPath.Buffer());
+			return name;
+		}
+
 		bool Path::FileExists()
 		{
 			return PathFileExists(fullPath.Buffer()) == TRUE;

@@ -36,8 +36,6 @@ namespace vl
 				Array<wchar_t> buffer(fullPath.Length() + 1);
 #if defined VCZH_MSVC
 				wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
-#elif defined VCZH_GCC
-				wcscpy(&buffer[0], fullPath.Buffer());
 #endif
 				
 				for (vint i = 0; i < buffer.Count(); i++)
@@ -133,12 +131,7 @@ namespace vl
 			MEMORY_BASIC_INFORMATION mbi = {0};			//通过函数指针地址，获取dll基地址（HMODULE）
 			return ((::VirtualQuery(GetSafeModuleHandle, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
 		}
-		
-		FilePath FilePath::ModulePath()
-		{
-			return ModulePath(NULL);
-		}
-		
+				
 		FilePath FilePath::ModulePath(void* pAddress)
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
@@ -155,6 +148,11 @@ namespace vl
 			return buffer;
 		}
 		
+		FilePath FilePath::ModuleFolder()
+		{
+			return ModulePath().GetFolder();
+		}
+
 		FilePath FilePath::TempPath()
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };

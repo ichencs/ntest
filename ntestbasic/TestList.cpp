@@ -1072,3 +1072,12 @@ TEST_CASE(TestByteObjectMap)
 		TEST_ASSERT(map.Get((vuint8_t)i) == ints.Get(i));
 	}
 }
+
+TEST_CASE(ArrayZero)
+{
+	Array<wchar_t> buffer(100);
+	WString str = &buffer[0];
+	buffer.Zero();
+	WString str2 = &buffer[0];
+
+}

@@ -325,6 +325,14 @@ namespace vl
 					this->ReleaseItems(this->buffer, this->count);
 					this->DeallocateBuffer(this->buffer);
 				}
+
+				void Zero()
+				{
+					if (this->count >0)
+					{
+						memset(this->buffer, 0, sizeof(T)*this->count);
+					}
+				}
 				
 				/// <summary>Test does the array contain an item or not.</summary>
 				/// <returns>Returns true if the array contains the specified item.</returns>

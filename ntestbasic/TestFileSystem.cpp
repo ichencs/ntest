@@ -484,3 +484,81 @@ TEST_CASE(TestFileInfo)
 	path = FilePath::TempPath();
 	
 }
+extern void OutPutHead(FilePath headPath,FilePath libPath);
+// extern void OutPutLib(FilePath libPath);
+TEST_CASE(TestOutPutFileName)
+{
+	FilePath hpath = L"D:\\Creo4_Api\\cpp_inc";
+	FilePath lpath = L"D:\\Creo4_Api\\cpp_lib";
+	OutPutHead(hpath,lpath);
+	OutPutHead(L"D:\\Creo4_Api\\toolkit_inc",L"D:\\Creo4_Api\\toolkit_lib");
+}
+
+
+WString FormatHead(WString strHead)
+{
+	return wformat(L"#include \"%s\"", strHead.Buffer());
+}
+
+WString FormatLib(WString strLib)
+{
+	return wformat(L"#pragma comment(lib, \"%s\")", strLib.Buffer());
+}
+
+
+WString BeginDefine(WString str)
+{
+	str = wupper(str);
+	WString str_temp = wformat(L"#ifndef CREO4_X64_%s \r\n#define CREO4_X64_%s", str.Buffer(),str.Buffer());
+	return str_temp;
+}
+
+WString EndDefine()
+{
+	return L"#endif";
+}
+
+
+void OutPutHead(FilePath headPath,FilePath libPath)
+{
+	List<File> files;
+	Folder folder = headPath;
+	folder.GetFiles(files);
+
+	WString wfname =  folder.GetName() + L".hpp";
+	FilePath fphpp = FilePath::ModuleFolder() / wfname;
+
+	FileStream fileStream(fphpp.GetFullPath(), FileStream::WriteOnly);
+	BomEncoder encoder(BomEncoder::Utf16);
+	EncoderStream encoderStream(fileStream, encoder);
+	StreamWriter writer(encoderStream);
+
+	WString strDef = BeginDefine(folder.GetName());
+	writer.WriteLine(strDef);
+	writer.WriteLine(L"");
+
+	FilePath tpath = headPath.GetFolder();
+
+	for (vint i = 0; i < files.Count(); i++)
+	{
+		File file = files.Get(i);
+		WString wstr1 = tpath.GetRelativePathFor(file.GetFilePath());
+		writer.WriteLine(FormatHead(wstr1));
+	}
+	writer.WriteLine(L"");
+
+	files.Clear();
+	Folder flib = libPath;
+	flib.GetFiles(files);
+
+	for (vint i = 0; i < files.Count(); i++)
+	{
+		File file = files.Get(i);
+		WString wstr1 = file.GetName();
+		writer.WriteLine(FormatLib(wstr1));
+	}
+
+	writer.WriteLine(EndDefine());
+}
+
+

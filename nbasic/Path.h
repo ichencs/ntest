@@ -15,6 +15,13 @@ namespace vl
 			Path(const wchar_t* _filePath);
 			Path(const Path& _filePath);
 		public:
+			//************************************
+			// Method:    UnquoteSpaces
+			// FullName:  vl::path::Path::UnquoteSpaces
+			// Access:    public 
+			// Returns:   vl::WString
+			// Qualifier: 从带引号的路径中取出路径
+			//************************************
 			WString UnquoteSpaces();
 			bool IsDirectory();
 			//************************************

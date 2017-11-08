@@ -25,6 +25,18 @@ namespace vl
 		{
 		}
 		
+		Folder::Folder(const WString& _filePath)
+			:filePath(_filePath)
+		{
+
+		}
+
+		Folder::Folder(const wchar_t* _filePath)
+			: filePath(_filePath)
+		{
+
+		}
+
 		Folder::~Folder()
 		{
 		}
@@ -315,5 +327,11 @@ namespace vl
 			return rename(oldFileName.Buffer(), newFileName.Buffer()) == 0;
 #endif
 		}
+
+		vl::WString Folder::GetName()
+		{
+			return filePath.GetName();
+		}
+
 	}
 }

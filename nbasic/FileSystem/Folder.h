@@ -25,7 +25,10 @@ namespace vl
 				Folder();
 				/// <summary>Create a reference to a specified folder.</summary>
 				/// <param name="_filePath">The specified folder.</param>
+				Folder(const WString& _filePath);
 				Folder(const FilePath& _filePath);
+				Folder(const wchar_t* _filePath);
+
 				~Folder();
 				
 				/// <summary>Get the file path of the folder.</summary>
@@ -55,6 +58,8 @@ namespace vl
 				/// <returns>Returns true if this operation succeeded.</returns>
 				/// <param name="newName">The new folder name.</param>
 				bool						Rename(const WString& newName)const;
+
+				WString						GetName();
 		};
 	}
 	
