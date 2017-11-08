@@ -5,6 +5,7 @@
 #include "../String.h"
 #include "../Collections/List.h"
 #include "../Stream/CharFormat.h"
+#include "../Path.h"
 
 namespace vl
 {
@@ -12,12 +13,12 @@ namespace vl
 	namespace filesystem
 	{
 		/// <summary>A type representing a file path.</summary>
-		class FilePath : public Object
+		class FilePath : public vl::path::Path
 		{
 		 protected:
-			WString						fullPath;
+			// 			WString						fullPath;
 			
-			void						Initialize();
+			void						Initialize()override;
 			
 			static void					GetPathComponents(WString path, collections::List<WString>& components);
 			static WString				ComponentsToPath(const collections::List<WString>& components);
@@ -30,6 +31,7 @@ namespace vl
 			
 			/// <summary>Create a root path.</summary>
 			FilePath();
+			FilePath(const Path& _path);
 			/// <summary>Create a file path.</summary>
 			/// <param name="_filePath">Content of the file path. If it is a relative path, it will be converted to an absolute path.</param>
 			FilePath(const WString& _filePath);
@@ -47,7 +49,7 @@ namespace vl
 			/// <summary>
 			/// 通过当前模块（dll）的基地址获取dll路径
 			/// </summary>
-			/// <param name="pAddress">当前模块中的地址</param>
+			/// <param name="pAddress">当前模块中的函数或变量地址</param>
 			/// <param name="isDll"></param>
 			/// <returns></returns>\
 			/// VirtualQuery: 查询进程地址信息

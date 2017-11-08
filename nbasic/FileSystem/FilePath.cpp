@@ -98,22 +98,29 @@ namespace vl
 		}
 		
 		FilePath::FilePath(const WString& _filePath)
-			: fullPath(_filePath)
+			: Path(_filePath)
 		{
 			Initialize();
 		}
 		
 		FilePath::FilePath(const wchar_t* _filePath)
-			: fullPath(_filePath)
+			: Path(_filePath)
 		{
 			Initialize();
 		}
 		
 		FilePath::FilePath(const FilePath& _filePath)
-			: fullPath(_filePath.fullPath)
+			: Path(_filePath.fullPath)
 		{
 			Initialize();
 		}
+		
+		FilePath::FilePath(const Path& _path)
+			: Path(_path)
+		{
+			Initialize();
+		}
+		
 		
 		FilePath::~FilePath()
 		{

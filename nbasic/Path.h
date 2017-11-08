@@ -3,17 +3,18 @@
 #include "String.h"
 namespace vl
 {
-	
+
 	namespace path
 	{
-		class Path :public Object
+		class Path : public Object
 		{
-		public:
+		 public:
 			Path();
 			~Path();
 			Path(const WString& _filePath);
 			Path(const wchar_t* _filePath);
 			Path(const Path& _filePath);
+<<<<<<< HEAD
 		public:
 			//************************************
 			// Method:    UnquoteSpaces
@@ -22,12 +23,15 @@ namespace vl
 			// Returns:   vl::WString
 			// Qualifier: 从带引号的路径中取出路径
 			//************************************
+=======
+		 public:
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
 			WString UnquoteSpaces();
 			bool IsDirectory();
 			//************************************
 			// Method:    IsFileSpec
 			// FullName:  vl::path::Path::IsFileSpec
-			// Access:    public 
+			// Access:    public
 			// Returns:   bool
 			// Qualifier:
 			// 功能：检查路径中是否带有 ‘:’ 和 ‘\’ 分隔符
@@ -42,7 +46,7 @@ namespace vl
 			//************************************
 			// Method:    MatchSpec
 			// FullName:  vl::path::Path::MatchSpec
-			// Access:    public 
+			// Access:    public
 			// Returns:   bool
 			// Qualifier:
 			// Parameter: WString strSpec
@@ -50,11 +54,11 @@ namespace vl
 			// PathMatchSpec( “http://news.sina.com.cn” , “*sina.com*” ) 返回TRUE
 			//************************************
 			bool MatchSpec(WString strSpec);
-		public:
+		 public:
 			//************************************
 			// Method:    RemoveBackslash
 			// FullName:  vl::path::Path::RemoveBackslash
-			// Access:    public 
+			// Access:    public
 			// Returns:   void
 			// Qualifier:
 			// 去除路径最后的反斜杠“\”
@@ -62,14 +66,13 @@ namespace vl
 			void RemoveBackslash();
 			void RemoveExtension();
 			bool RemoveFileSpec();
-		public:
-			WString FindFileName();
+		 public:
 			bool FileExists();
-		protected:
+		 protected:
 			WString						fullPath;
 			virtual void				Initialize();
-		
-		
+			
+			
 		};
 	}
 }

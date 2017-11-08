@@ -448,6 +448,7 @@ TEST_CASE(TestFileSystemOthers)
 }
 
 
+<<<<<<< HEAD
 
 TEST_CASE(TestFileInfo)
 {
@@ -562,3 +563,5 @@ void OutPutHead(FilePath headPath,FilePath libPath)
 }
 
 
+=======
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f

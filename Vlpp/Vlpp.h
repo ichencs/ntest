@@ -6650,6 +6650,7 @@ namespace vl
 			Path(const wchar_t* _filePath);
 			Path(const Path& _filePath);
 		public:
+<<<<<<< HEAD
 			//************************************
 			// Method:    UnquoteSpaces
 			// FullName:  vl::path::Path::UnquoteSpaces
@@ -6657,6 +6658,8 @@ namespace vl
 			// Returns:   vl::WString
 			// Qualifier: 从带引号的路径中取出路径
 			//************************************
+=======
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
 			WString UnquoteSpaces();
 			bool IsDirectory();
 			//************************************
@@ -9353,7 +9356,10 @@ namespace vl
 		 public:
 			static FilePath CurrentPath();
 			static FilePath ModulePath();		//app(exe) path
+<<<<<<< HEAD
 			static FilePath ModuleFolder();		//app(exe) path
+=======
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
 			/// <summary>
 			/// 通过当前模块（dll）的基地址获取dll路径
 			/// </summary>

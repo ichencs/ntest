@@ -17,29 +17,29 @@ namespace vl
 {
 	namespace filesystem
 	{
-	
-
 		class FileInfo
 		{
 			struct FileAttrbutes
 			{
 				FileAttrbutes()
-					:attrbutes(0),
-					size(0) {}
+					: nattrbutes(0),
+					  nsize(0) {}
 				DateTime creation;
 				DateTime lastAccess;
 				DateTime lastWrite;
-
+				
 				FilePath filePath;
-				vuint64_t attrbutes;
-				vuint64_t size;
-			};	
-		public:
+				vuint64_t nattrbutes;
+				vuint64_t nsize;
+			};
+		 public:
 			FileInfo();
 			FileInfo(const FilePath& path);
 			FileInfo(const WString& path);
 			~FileInfo();
 		 public:
+			void SetFile(const WString& path);
+			void SetFile(const FilePath& path);
 			void SetPath(const WString& path);
 			void SetPath(const FilePath& path);
 		 public:
@@ -49,17 +49,19 @@ namespace vl
 			bool IsReadable()const;
 			bool IsWritable()const;
 			bool IsHidden()const;
-			WString FileName();
-			WString Extemsion();
+			WString FileName()const;
+			WString Extemsion()const;
+			WString Path()const;
 			
-			DateTime Created();
-			DateTime LastModified();
-			DateTime LastRead();
-			vuint64_t Size();
+			DateTime Created()const;
+			DateTime CreatedTime()const;
+			DateTime LastModified()const;
+			DateTime LastRead()const;
+			vuint64_t Size()const;
 		 protected:
-			bool getProperty();
-		 private:
-			 FileAttrbutes attrbute;
+			virtual bool Initialize();
+		 protected:
+			FileAttrbutes attrbute;
 		};
 		
 		

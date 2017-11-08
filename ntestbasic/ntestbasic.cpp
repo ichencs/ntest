@@ -34,12 +34,12 @@ WString GetTestOutputPath()
 
 class testClass
 {
-public:
+ public:
 	testClass();
 	~testClass();
-
-private:
-
+	
+ private:
+ 
 };
 
 testClass::testClass()
@@ -52,13 +52,6 @@ testClass::~testClass()
 
 int main()
 {
-// 	vint num = 3;
-// 	num = sizeof(nAtomicInt);
-// 	int size1 = sizeof(int);
-// 	int size2 = sizeof(Object);
-// 
-// 	new(&num)vint(12);
-
 	{
 		using namespace filesystem;
 		Folder folder(GetTestOutputPath());
@@ -70,8 +63,8 @@ int main()
 	}
 	UnitTest::RunAndDisposeTests();
 	FinalizeGlobalStorage();
-
-//  	_CrtDumpMemoryLeaks();
+	
+	// 	_CrtDumpMemoryLeaks();
 	return 0;
 }
 

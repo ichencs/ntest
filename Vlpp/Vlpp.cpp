@@ -348,8 +348,13 @@ Console
 namespace vl
 {
 	__pragma(warning(disable: 4996))
+<<<<<<< HEAD
 	
 	
+=======
+	
+	
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
 	vint atoi_test(const AString& string, bool& success)
 	{
 		char* endptr = 0;
@@ -5654,12 +5659,15 @@ namespace vl
 			return bRes == TRUE;
 		}
 
+<<<<<<< HEAD
 		vl::WString Path::FindFileName()
 		{
 			WString name = PathFindFileName(fullPath.Buffer());
 			return name;
 		}
 
+=======
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
 		bool Path::FileExists()
 		{
 			return PathFileExists(fullPath.Buffer()) == TRUE;
