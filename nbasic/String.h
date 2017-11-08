@@ -801,8 +801,8 @@ namespace vl
 	extern WString				wupper(const WString& string);
 	
 	
-	extern WString				wformat(wchar_t* pszFormat, ...);
-	extern AString				aformat(char* pszFormat, ...);
+	extern WString				wformat(const wchar_t* pszFormat, ...);
+	extern AString				aformat(const char* pszFormat, ...);
 	
 	// #if defined VCZH_GCC
 	// 	extern void					_itoa_s(vint32_t value, char* buffer, size_t size, vint radix);

@@ -855,8 +855,9 @@ namespace vl
 		/// <summary>Create a pointer to the reference counter from an object.</summary>
 		/// <returns>The pointer to the reference counter.</returns>
 		/// <param name="reference">The object.</param>
-		static __forceinline volatile vint* CreateCounter(T* reference)
+		static __forceinline volatile vint* CreateCounter(/*T* reference*/)
 		{
+			// 			reference;
 			return new vint(0);
 		}
 		
@@ -950,7 +951,7 @@ namespace vl
 			{
 				if (pointer)
 				{
-					counter = ReferenceCounterOperator<T>::CreateCounter(pointer);
+					counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
 					reference = pointer;
 					originalReference = pointer;
 					originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
@@ -1038,7 +1039,7 @@ namespace vl
 				
 				if (pointer)
 				{
-					counter = ReferenceCounterOperator<T>::CreateCounter(pointer);
+					counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
 					reference = pointer;
 					originalReference = pointer;
 					originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
@@ -3537,9 +3538,9 @@ namespace vl
 		};
 
 		template<typename T>
-		struct SortedListOperations<Ptr<T>>
+		struct SortedListOperations<Ptr<T> >
 		{
-			static bool Contains(const SortedList<Ptr<T>>& items, const Ptr<T>& item)
+			static bool Contains(const SortedList<Ptr<T> >& items, const Ptr<T>& item)
 			{
 				return items.Contains(item.Obj());
 			}
@@ -5392,6 +5393,10 @@ namespace vl
 	/// <param name="string">The string to convert.</param>
 	extern WString				wupper(const WString& string);
 	
+	
+	extern WString				wformat(wchar_t* pszFormat, ...);
+	extern AString				aformat(char* pszFormat, ...);
+	
 	// #if defined VCZH_GCC
 	// 	extern void					_itoa_s(vint32_t value, char* buffer, size_t size, vint radix);
 	// 	extern void					_itow_s(vint32_t value, wchar_t* buffer, size_t size, vint radix);
@@ -6614,6 +6619,79 @@ namespace vl
 	};
 
 #define INVLOC vl::Locale::Invariant()
+}
+
+#endif
+
+/***********************************************************************
+.\PATH.H
+***********************************************************************/
+#ifndef NICE_PATH
+#define NICE_PATH
+namespace vl
+{
+	
+	namespace path
+	{
+		class Path :public Object
+		{
+		public:
+			Path();
+			~Path();
+			Path(const WString& _filePath);
+			Path(const wchar_t* _filePath);
+			Path(const Path& _filePath);
+		public:
+			WString UnquoteSpaces();
+			bool IsDirectory();
+			//************************************
+			// Method:    IsFileSpec
+			// FullName:  vl::path::Path::IsFileSpec
+			// Access:    public 
+			// Returns:   bool
+			// Qualifier:
+			// 功能：检查路径中是否带有 ‘:’ 和 ‘\’ 分隔符
+			//************************************
+			bool IsFileSpec();
+			bool IsUNC();
+			bool IsUNCServer();
+			bool IsUNCServerShare();
+			bool IsURL();
+			bool IsNetworkPath();
+			bool IsPrefix(WString strPrefix);
+			//************************************
+			// Method:    MatchSpec
+			// FullName:  vl::path::Path::MatchSpec
+			// Access:    public 
+			// Returns:   bool
+			// Qualifier:
+			// Parameter: WString strSpec
+			// 用带有通配符（*号和?号）的字符串去比较另一个字符串
+			// PathMatchSpec( “http://news.sina.com.cn” , “*sina.com*” ) 返回TRUE
+			//************************************
+			bool MatchSpec(WString strSpec);
+		public:
+			//************************************
+			// Method:    RemoveBackslash
+			// FullName:  vl::path::Path::RemoveBackslash
+			// Access:    public 
+			// Returns:   void
+			// Qualifier:
+			// 去除路径最后的反斜杠“\”
+			//************************************
+			void RemoveBackslash();
+			void RemoveExtension();
+			bool RemoveFileSpec();
+		public:
+			WString FindFileName();
+			bool FileExists();
+		protected:
+			WString						fullPath;
+			virtual void				Initialize();
+		
+		
+		};
+	}
 }
 
 #endif
@@ -9230,100 +9308,100 @@ namespace vl
 		/// <summary>A type representing a file path.</summary>
 		class FilePath : public Object
 		{
-			protected:
-				WString						fullPath;
-				
-				void						Initialize();
-				
-				static void					GetPathComponents(WString path, collections::List<WString>& components);
-				static WString				ComponentsToPath(const collections::List<WString>& components);
-			public:
+		 protected:
+			WString						fullPath;
+			
+			void						Initialize();
+			
+			static void					GetPathComponents(WString path, collections::List<WString>& components);
+			static WString				ComponentsToPath(const collections::List<WString>& components);
+		 public:
 #if defined VCZH_MSVC
-				static const wchar_t		Delimiter = L'\\';
+			static const wchar_t		Delimiter = L'\\';
 #elif defined VCZH_GCC
-				static const wchar_t		Delimiter = L'/';
+			static const wchar_t		Delimiter = L'/';
 #endif
-				
-				/// <summary>Create a root path.</summary>
-				FilePath();
-				/// <summary>Create a file path.</summary>
-				/// <param name="_filePath">Content of the file path. If it is a relative path, it will be converted to an absolute path.</param>
-				FilePath(const WString& _filePath);
-				/// <summary>Create a file path.</summary>
-				/// <param name="_filePath">Content of the file path. If it is a relative path, it will be converted to an absolute path.</param>
-				FilePath(const wchar_t* _filePath);
-				/// <summary>Copy a file path.</summary>
-				/// <param name="_filePath">The file path to copy.</param>
-				FilePath(const FilePath& _filePath);
-				~FilePath();
-				
-			public:
-				static FilePath CurrentPath();
-				static FilePath ModulePath();		//app(exe) path
-				/// <summary>
-				/// 通过当前模块（dll）的基地址获取dll路径
-				/// </summary>
-				/// <param name="pAddress">当前模块中的地址</param>
-				/// <param name="isDll"></param>
-				/// <returns></returns>
-				static FilePath ModulePath(void* pAddress, bool isDll = true);			//
-				static FilePath TempPath();
-			public:
-				static vint					Compare(const FilePath& a, const FilePath& b);
-				bool						operator==(const FilePath& filePath)const
-				{
-					return Compare(*this, filePath) == 0;
-				}
-				bool						operator!=(const FilePath& filePath)const
-				{
-					return Compare(*this, filePath) != 0;
-				}
-				bool						operator< (const FilePath& filePath)const
-				{
-					return Compare(*this, filePath) < 0;
-				}
-				bool						operator<=(const FilePath& filePath)const
-				{
-					return Compare(*this, filePath) <= 0;
-				}
-				bool						operator> (const FilePath& filePath)const
-				{
-					return Compare(*this, filePath) > 0;
-				}
-				bool						operator>=(const FilePath& filePath)const
-				{
-					return Compare(*this, filePath) >= 0;
-				}
-				
-				/// <summary>Concat an absolute path and a relative path.</summary>
-				/// <returns>The result absolute path.</returns>
-				/// <param name="relativePath">The relative path to concat.</param>
-				FilePath					operator/(const WString& relativePath)const;
-				
-				/// <summary>Test if the file path is a file.</summary>
-				/// <returns>Returns true if the file path is a file.</returns>
-				bool						IsFile()const;
-				/// <summary>Test if the file path is a folder.</summary>
-				/// <returns>Returns true if the file path is a folder.</returns>
-				bool						IsFolder()const;
-				/// <summary>Test if the file path is a the root of all file system objects.</summary>
-				/// <returns>Returns true if the file path is the root of all file system objects.</returns>
-				bool						IsRoot()const;
-				
-				/// <summary>Get the last piece of names in the file path.</summary>
-				/// <returns>The last piece of names in the file path.</returns>
-				WString						GetName()const;
-				/// <summary>Get the containing folder of this file path.</summary>
-				/// <returns>The containing folder.</returns>
-				FilePath					GetFolder()const;
-				/// <summary>Get the content of the file path.</summary>
-				/// <returns>The content of the file path.</returns>
-				WString						GetFullPath()const;
-				/// <summary>Calculate the relative path using a referencing folder.</summary>
-				/// <returns>The relative path.</returns>
-				/// <param name="_filePath">The referencing folder.</param>
-				WString						GetRelativePathFor(const FilePath& _filePath);
-				
+			
+			/// <summary>Create a root path.</summary>
+			FilePath();
+			/// <summary>Create a file path.</summary>
+			/// <param name="_filePath">Content of the file path. If it is a relative path, it will be converted to an absolute path.</param>
+			FilePath(const WString& _filePath);
+			/// <summary>Create a file path.</summary>
+			/// <param name="_filePath">Content of the file path. If it is a relative path, it will be converted to an absolute path.</param>
+			FilePath(const wchar_t* _filePath);
+			/// <summary>Copy a file path.</summary>
+			/// <param name="_filePath">The file path to copy.</param>
+			FilePath(const FilePath& _filePath);
+			~FilePath();
+			
+		 public:
+			static FilePath CurrentPath();
+			static FilePath ModulePath();		//app(exe) path
+			/// <summary>
+			/// 通过当前模块（dll）的基地址获取dll路径
+			/// </summary>
+			/// <param name="pAddress">当前模块中的地址</param>
+			/// <param name="isDll"></param>
+			/// <returns></returns>
+			static FilePath ModulePath(void* pAddress);			//
+			static FilePath TempPath();
+		 public:
+			static vint					Compare(const FilePath& a, const FilePath& b);
+			bool						operator==(const FilePath& filePath)const
+			{
+				return Compare(*this, filePath) == 0;
+			}
+			bool						operator!=(const FilePath& filePath)const
+			{
+				return Compare(*this, filePath) != 0;
+			}
+			bool						operator< (const FilePath& filePath)const
+			{
+				return Compare(*this, filePath) < 0;
+			}
+			bool						operator<=(const FilePath& filePath)const
+			{
+				return Compare(*this, filePath) <= 0;
+			}
+			bool						operator> (const FilePath& filePath)const
+			{
+				return Compare(*this, filePath) > 0;
+			}
+			bool						operator>=(const FilePath& filePath)const
+			{
+				return Compare(*this, filePath) >= 0;
+			}
+			
+			/// <summary>Concat an absolute path and a relative path.</summary>
+			/// <returns>The result absolute path.</returns>
+			/// <param name="relativePath">The relative path to concat.</param>
+			FilePath					operator/(const WString& relativePath)const;
+			
+			/// <summary>Test if the file path is a file.</summary>
+			/// <returns>Returns true if the file path is a file.</returns>
+			bool						IsFile()const;
+			/// <summary>Test if the file path is a folder.</summary>
+			/// <returns>Returns true if the file path is a folder.</returns>
+			bool						IsFolder()const;
+			/// <summary>Test if the file path is a the root of all file system objects.</summary>
+			/// <returns>Returns true if the file path is the root of all file system objects.</returns>
+			bool						IsRoot()const;
+			
+			/// <summary>Get the last piece of names in the file path.</summary>
+			/// <returns>The last piece of names in the file path.</returns>
+			WString						GetName()const;
+			/// <summary>Get the containing folder of this file path.</summary>
+			/// <returns>The containing folder.</returns>
+			FilePath					GetFolder()const;
+			/// <summary>Get the content of the file path.</summary>
+			/// <returns>The content of the file path.</returns>
+			WString						GetFullPath()const;
+			/// <summary>Calculate the relative path using a referencing folder.</summary>
+			/// <returns>The relative path.</returns>
+			/// <param name="_filePath">The referencing folder.</param>
+			WString						GetRelativePathFor(const FilePath& _filePath);
+			
 		};
 		
 	}
@@ -10977,6 +11055,87 @@ namespace vl
 }
 
 #endif
+
+
+/***********************************************************************
+.\NATOMICINT.H
+***********************************************************************/
+#pragma once
+using namespace vl;
+
+
+
+class nAtomicInt : public Object
+{
+ protected:
+	volatile vint*		counter;
+	
+	
+	void Inc()
+	{
+		if (counter)
+		{
+			INCRC(counter);
+		}
+	};
+	
+	void Dec(bool deleteIfZero = true)
+	{
+		if (counter)
+		{
+			if (DECRC(counter) == 0)
+			{
+				if (deleteIfZero)
+				{
+					delete counter;
+				}
+				this->counter = NULL;
+			}
+		}
+	}
+ public:
+	nAtomicInt()
+		: counter(new vint(1))
+	{
+	
+	}
+	
+	nAtomicInt(const nAtomicInt& other)
+	{
+		this->counter = other.counter;
+		Inc();
+	}
+	
+	nAtomicInt& operator=(const nAtomicInt& other)
+	{
+		Dec();
+		this->counter = other.counter;
+		Inc();
+	}
+	
+	bool ref()
+	{
+		return counter != NULL;
+	};
+	bool deref()
+	{
+		return counter == NULL;
+	}
+	
+	volatile vint* Count()
+	{
+		return counter;
+	}
+	
+	
+	~nAtomicInt()
+	{
+		Dec();
+	}
+	
+	
+};
+
 
 
 /***********************************************************************

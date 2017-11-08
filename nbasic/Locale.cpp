@@ -225,146 +225,146 @@ namespace vl
 		Array<wchar_t> buffer(length);
 		GetDateFormatEx(localeName.Buffer(), 0, &st, format.Buffer(), &buffer[0], (int)buffer.Count(), NULL);
 		return &buffer[0];
-#elif defined VCZH_GCC
-		/*
-		auto df = L"yyyy,MM,MMM,MMMM,dd,ddd,dddd";
-		auto ds = L"2000,01,Jan,January,02,Sun,Sunday";
-		auto tf = L"hh,HH,mm,ss,tt";
-		auto ts = L"01,13,02,03,PM";
-		*/
-		WString result;
-		const wchar_t* reading = format.Buffer();
-		
-		while (*reading)
-		{
-			if (wcsncmp(reading, L"yyyy", 4) == 0)
-			{
-				WString fragment = itow(date.year);
-		
-				while (fragment.Length() < 4)
-				{
-					fragment = L"0" + fragment;
-				}
-		
-				result += fragment;
-				reading += 4;
-			}
-			else
-				if (wcsncmp(reading, L"MMMM", 4) == 0)
-				{
-					result += GetLongMonthName(date.month);
-					reading += 4;
-				}
-				else
-					if (wcsncmp(reading, L"MMM", 3) == 0)
-					{
-						result += GetShortMonthName(date.month);
-						reading += 3;
-					}
-					else
-						if (wcsncmp(reading, L"MM", 2) == 0)
-						{
-							WString fragment = itow(date.month);
-		
-							while (fragment.Length() < 2)
-							{
-								fragment = L"0" + fragment;
-							}
-		
-							result += fragment;
-							reading += 2;
-						}
-						else
-							if (wcsncmp(reading, L"dddd", 4) == 0)
-							{
-								result += GetLongDayOfWeekName(date.dayOfWeek);
-								reading += 4;
-							}
-							else
-								if (wcsncmp(reading, L"ddd", 3) == 0)
-								{
-									result += GetShortDayOfWeekName(date.dayOfWeek);
-									reading += 3;
-								}
-								else
-									if (wcsncmp(reading, L"dd", 2) == 0)
-									{
-										WString fragment = itow(date.day);
-		
-										while (fragment.Length() < 2)
-										{
-											fragment = L"0" + fragment;
-										}
-		
-										result += fragment;
-										reading += 2;
-									}
-									else
-										if (wcsncmp(reading, L"hh", 2) == 0)
-										{
-											WString fragment = itow(date.hour > 12 ? date.hour - 12 : date.hour);
-		
-											while (fragment.Length() < 2)
-											{
-												fragment = L"0" + fragment;
-											}
-		
-											result += fragment;
-											reading += 2;
-										}
-										else
-											if (wcsncmp(reading, L"HH", 2) == 0)
-											{
-												WString fragment = itow(date.hour);
-		
-												while (fragment.Length() < 2)
-												{
-													fragment = L"0" + fragment;
-												}
-		
-												result += fragment;
-												reading += 2;
-											}
-											else
-												if (wcsncmp(reading, L"mm", 2) == 0)
-												{
-													WString fragment = itow(date.minute);
-		
-													while (fragment.Length() < 2)
-													{
-														fragment = L"0" + fragment;
-													}
-		
-													result += fragment;
-													reading += 2;
-												}
-												else
-													if (wcsncmp(reading, L"ss", 2) == 0)
-													{
-														WString fragment = itow(date.second);
-		
-														while (fragment.Length() < 2)
-														{
-															fragment = L"0" + fragment;
-														}
-		
-														result += fragment;
-														reading += 2;
-													}
-													else
-														if (wcsncmp(reading, L"tt", 2) == 0)
-														{
-															result += date.hour > 12 ? L"PM" : L"AM";
-															reading += 2;
-														}
-														else
-														{
-															result += *reading;
-															reading++;
-														}
-		}
-		
-		return result;
+		// #elif defined VCZH_GCC
+		// 		/*
+		// 		auto df = L"yyyy,MM,MMM,MMMM,dd,ddd,dddd";
+		// 		auto ds = L"2000,01,Jan,January,02,Sun,Sunday";
+		// 		auto tf = L"hh,HH,mm,ss,tt";
+		// 		auto ts = L"01,13,02,03,PM";
+		// 		*/
+		// 		WString result;
+		// 		const wchar_t* reading = format.Buffer();
+		//
+		// 		while (*reading)
+		// 		{
+		// 			if (wcsncmp(reading, L"yyyy", 4) == 0)
+		// 			{
+		// 				WString fragment = itow(date.year);
+		//
+		// 				while (fragment.Length() < 4)
+		// 				{
+		// 					fragment = L"0" + fragment;
+		// 				}
+		//
+		// 				result += fragment;
+		// 				reading += 4;
+		// 			}
+		// 			else
+		// 				if (wcsncmp(reading, L"MMMM", 4) == 0)
+		// 				{
+		// 					result += GetLongMonthName(date.month);
+		// 					reading += 4;
+		// 				}
+		// 				else
+		// 					if (wcsncmp(reading, L"MMM", 3) == 0)
+		// 					{
+		// 						result += GetShortMonthName(date.month);
+		// 						reading += 3;
+		// 					}
+		// 					else
+		// 						if (wcsncmp(reading, L"MM", 2) == 0)
+		// 						{
+		// 							WString fragment = itow(date.month);
+		//
+		// 							while (fragment.Length() < 2)
+		// 							{
+		// 								fragment = L"0" + fragment;
+		// 							}
+		//
+		// 							result += fragment;
+		// 							reading += 2;
+		// 						}
+		// 						else
+		// 							if (wcsncmp(reading, L"dddd", 4) == 0)
+		// 							{
+		// 								result += GetLongDayOfWeekName(date.dayOfWeek);
+		// 								reading += 4;
+		// 							}
+		// 							else
+		// 								if (wcsncmp(reading, L"ddd", 3) == 0)
+		// 								{
+		// 									result += GetShortDayOfWeekName(date.dayOfWeek);
+		// 									reading += 3;
+		// 								}
+		// 								else
+		// 									if (wcsncmp(reading, L"dd", 2) == 0)
+		// 									{
+		// 										WString fragment = itow(date.day);
+		//
+		// 										while (fragment.Length() < 2)
+		// 										{
+		// 											fragment = L"0" + fragment;
+		// 										}
+		//
+		// 										result += fragment;
+		// 										reading += 2;
+		// 									}
+		// 									else
+		// 										if (wcsncmp(reading, L"hh", 2) == 0)
+		// 										{
+		// 											WString fragment = itow(date.hour > 12 ? date.hour - 12 : date.hour);
+		//
+		// 											while (fragment.Length() < 2)
+		// 											{
+		// 												fragment = L"0" + fragment;
+		// 											}
+		//
+		// 											result += fragment;
+		// 											reading += 2;
+		// 										}
+		// 										else
+		// 											if (wcsncmp(reading, L"HH", 2) == 0)
+		// 											{
+		// 												WString fragment = itow(date.hour);
+		//
+		// 												while (fragment.Length() < 2)
+		// 												{
+		// 													fragment = L"0" + fragment;
+		// 												}
+		//
+		// 												result += fragment;
+		// 												reading += 2;
+		// 											}
+		// 											else
+		// 												if (wcsncmp(reading, L"mm", 2) == 0)
+		// 												{
+		// 													WString fragment = itow(date.minute);
+		//
+		// 													while (fragment.Length() < 2)
+		// 													{
+		// 														fragment = L"0" + fragment;
+		// 													}
+		//
+		// 													result += fragment;
+		// 													reading += 2;
+		// 												}
+		// 												else
+		// 													if (wcsncmp(reading, L"ss", 2) == 0)
+		// 													{
+		// 														WString fragment = itow(date.second);
+		//
+		// 														while (fragment.Length() < 2)
+		// 														{
+		// 															fragment = L"0" + fragment;
+		// 														}
+		//
+		// 														result += fragment;
+		// 														reading += 2;
+		// 													}
+		// 													else
+		// 														if (wcsncmp(reading, L"tt", 2) == 0)
+		// 														{
+		// 															result += date.hour > 12 ? L"PM" : L"AM";
+		// 															reading += 2;
+		// 														}
+		// 														else
+		// 														{
+		// 															result += *reading;
+		// 															reading++;
+		// 														}
+		// 		}
+		//
+		// 		return result;
 #endif
 	}
 	
@@ -382,8 +382,8 @@ namespace vl
 		Array<wchar_t> buffer(length);
 		GetTimeFormatEx(localeName.Buffer(), 0, &st, format.Buffer(), &buffer[0], (int)buffer.Count());
 		return &buffer[0];
-#elif defined VCZH_GCC
-		return FormatDate(format, time);
+		// #elif defined VCZH_GCC
+		// 		return FormatDate(format, time);
 #endif
 	}
 	
@@ -421,26 +421,26 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FormatDate(L"ddd", DateTime::FromDateTime(2000, 1, 2 + dayOfWeek));
-#elif defined VCZH_GCC
-		
-		switch (dayOfWeek)
-		{
-			case 0: return L"Sun";
-		
-			case 1: return L"Mon";
-		
-			case 2:	return L"Tue";
-		
-			case 3:	return L"Wed";
-		
-			case 4:	return L"Thu";
-		
-			case 5:	return L"Fri";
-		
-			case 6:	return L"Sat";
-		}
-		
-		return L"";
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (dayOfWeek)
+		// 		{
+		// 			case 0: return L"Sun";
+		//
+		// 			case 1: return L"Mon";
+		//
+		// 			case 2:	return L"Tue";
+		//
+		// 			case 3:	return L"Wed";
+		//
+		// 			case 4:	return L"Thu";
+		//
+		// 			case 5:	return L"Fri";
+		//
+		// 			case 6:	return L"Sat";
+		// 		}
+		//
+		// 		return L"";
 #endif
 	}
 	
@@ -448,26 +448,26 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FormatDate(L"dddd", DateTime::FromDateTime(2000, 1, 2 + dayOfWeek));
-#elif defined VCZH_GCC
-		
-		switch (dayOfWeek)
-		{
-			case 0: return L"Sunday";
-		
-			case 1: return L"Monday";
-		
-			case 2:	return L"Tuesday";
-		
-			case 3:	return L"Wednesday";
-		
-			case 4:	return L"Thursday";
-		
-			case 5:	return L"Friday";
-		
-			case 6:	return L"Saturday";
-		}
-		
-		return L"";
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (dayOfWeek)
+		// 		{
+		// 			case 0: return L"Sunday";
+		//
+		// 			case 1: return L"Monday";
+		//
+		// 			case 2:	return L"Tuesday";
+		//
+		// 			case 3:	return L"Wednesday";
+		//
+		// 			case 4:	return L"Thursday";
+		//
+		// 			case 5:	return L"Friday";
+		//
+		// 			case 6:	return L"Saturday";
+		// 		}
+		//
+		// 		return L"";
 #endif
 	}
 	
@@ -475,36 +475,36 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FormatDate(L"MMM", DateTime::FromDateTime(2000, month, 1));
-#elif defined VCZH_GCC
-		
-		switch (month)
-		{
-			case 1: return L"Jan";
-		
-			case 2: return L"Feb";
-		
-			case 3: return L"Mar";
-		
-			case 4: return L"Apr";
-		
-			case 5: return L"May";
-		
-			case 6: return L"Jun";
-		
-			case 7: return L"Jul";
-		
-			case 8: return L"Aug";
-		
-			case 9: return L"Sep";
-		
-			case 10: return L"Oct";
-		
-			case 11: return L"Nov";
-		
-			case 12: return L"Dec";
-		}
-		
-		return L"";
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (month)
+		// 		{
+		// 			case 1: return L"Jan";
+		//
+		// 			case 2: return L"Feb";
+		//
+		// 			case 3: return L"Mar";
+		//
+		// 			case 4: return L"Apr";
+		//
+		// 			case 5: return L"May";
+		//
+		// 			case 6: return L"Jun";
+		//
+		// 			case 7: return L"Jul";
+		//
+		// 			case 8: return L"Aug";
+		//
+		// 			case 9: return L"Sep";
+		//
+		// 			case 10: return L"Oct";
+		//
+		// 			case 11: return L"Nov";
+		//
+		// 			case 12: return L"Dec";
+		// 		}
+		//
+		// 		return L"";
 #endif
 	}
 	
@@ -512,36 +512,36 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FormatDate(L"MMMM", DateTime::FromDateTime(2000, month, 1));
-#elif defined VCZH_GCC
-		
-		switch (month)
-		{
-			case 1: return L"January";
-		
-			case 2: return L"February";
-		
-			case 3: return L"March";
-		
-			case 4: return L"April";
-		
-			case 5: return L"May";
-		
-			case 6: return L"June";
-		
-			case 7: return L"July";
-		
-			case 8: return L"August";
-		
-			case 9: return L"September";
-		
-			case 10: return L"October";
-		
-			case 11: return L"November";
-		
-			case 12: return L"December";
-		}
-		
-		return L"";
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (month)
+		// 		{
+		// 			case 1: return L"January";
+		//
+		// 			case 2: return L"February";
+		//
+		// 			case 3: return L"March";
+		//
+		// 			case 4: return L"April";
+		//
+		// 			case 5: return L"May";
+		//
+		// 			case 6: return L"June";
+		//
+		// 			case 7: return L"July";
+		//
+		// 			case 8: return L"August";
+		//
+		// 			case 9: return L"September";
+		//
+		// 			case 10: return L"October";
+		//
+		// 			case 11: return L"November";
+		//
+		// 			case 12: return L"December";
+		// 		}
+		//
+		// 		return L"";
 #endif
 	}
 	
@@ -638,17 +638,17 @@ namespace vl
 			default: return 0;
 		}
 		
-#elif defined VCZH_GCC
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				return wcscmp(s1.Buffer(), s2.Buffer());
-		
-			case Normalization::IgnoreCase:
-				return wcscasecmp(s1.Buffer(), s2.Buffer());
-		}
-		
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				return wcscmp(s1.Buffer(), s2.Buffer());
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				return wcscasecmp(s1.Buffer(), s2.Buffer());
+		// 		}
+		//
 #endif
 	}
 	
@@ -694,53 +694,53 @@ namespace vl
 		int length = 0;
 		int result = FindNLSStringEx(localeName.Buffer(), FIND_FROMSTART | TranslateNormalization(normalization), text.Buffer(), (int)text.Length(), find.Buffer(), (int)find.Length(), &length, NULL, NULL, NULL);
 		return result == -1 ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result, length);
-#elif defined VCZH_GCC
-		
-		if (text.Length() < find.Length() || find.Length() == 0)
-		{
-			return Pair<vint, vint>(-1, 0);
-		}
-		
-		const wchar_t* result = 0;
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				{
-					const wchar_t* reading = text.Buffer();
-		
-					while (*reading)
-					{
-						if (wcsncmp(reading, find.Buffer(), find.Length()) == 0)
-						{
-							result = reading;
-							break;
-						}
-		
-						reading++;
-					}
-				}
-				break;
-		
-			case Normalization::IgnoreCase:
-				{
-					const wchar_t* reading = text.Buffer();
-		
-					while (*reading)
-					{
-						if (wcsncasecmp(reading, find.Buffer(), find.Length()) == 0)
-						{
-							result = reading;
-							break;
-						}
-		
-						reading++;
-					}
-				}
-				break;
-		}
-		
-		return result == NULL ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result - text.Buffer(), find.Length());
+		// #elif defined VCZH_GCC
+		//
+		// 		if (text.Length() < find.Length() || find.Length() == 0)
+		// 		{
+		// 			return Pair<vint, vint>(-1, 0);
+		// 		}
+		//
+		// 		const wchar_t* result = 0;
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				{
+		// 					const wchar_t* reading = text.Buffer();
+		//
+		// 					while (*reading)
+		// 					{
+		// 						if (wcsncmp(reading, find.Buffer(), find.Length()) == 0)
+		// 						{
+		// 							result = reading;
+		// 							break;
+		// 						}
+		//
+		// 						reading++;
+		// 					}
+		// 				}
+		// 				break;
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				{
+		// 					const wchar_t* reading = text.Buffer();
+		//
+		// 					while (*reading)
+		// 					{
+		// 						if (wcsncasecmp(reading, find.Buffer(), find.Length()) == 0)
+		// 						{
+		// 							result = reading;
+		// 							break;
+		// 						}
+		//
+		// 						reading++;
+		// 					}
+		// 				}
+		// 				break;
+		// 		}
+		//
+		// 		return result == NULL ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result - text.Buffer(), find.Length());
 #endif
 	}
 	
@@ -750,51 +750,51 @@ namespace vl
 		int length = 0;
 		int result = FindNLSStringEx(localeName.Buffer(), FIND_FROMEND | TranslateNormalization(normalization), text.Buffer(), (int)text.Length(), find.Buffer(), (int)find.Length(), &length, NULL, NULL, NULL);
 		return result == -1 ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result, length);
-#elif defined VCZH_GCC
-		
-		if (text.Length() < find.Length() || find.Length() == 0)
-		{
-			return Pair<vint, vint>(-1, 0);
-		}
-		
-		const wchar_t* result = 0;
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				{
-					const wchar_t* reading = text.Buffer();
-		
-					while (*reading)
-					{
-						if (wcsncmp(reading, find.Buffer(), find.Length()) == 0)
-						{
-							result = reading;
-						}
-		
-						reading++;
-					}
-				}
-				break;
-		
-			case Normalization::IgnoreCase:
-				{
-					const wchar_t* reading = text.Buffer();
-		
-					while (*reading)
-					{
-						if (wcsncasecmp(reading, find.Buffer(), find.Length()) == 0)
-						{
-							result = reading;
-						}
-		
-						reading++;
-					}
-				}
-				break;
-		}
-		
-		return result == NULL ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result - text.Buffer(), find.Length());
+		// #elif defined VCZH_GCC
+		//
+		// 		if (text.Length() < find.Length() || find.Length() == 0)
+		// 		{
+		// 			return Pair<vint, vint>(-1, 0);
+		// 		}
+		//
+		// 		const wchar_t* result = 0;
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				{
+		// 					const wchar_t* reading = text.Buffer();
+		//
+		// 					while (*reading)
+		// 					{
+		// 						if (wcsncmp(reading, find.Buffer(), find.Length()) == 0)
+		// 						{
+		// 							result = reading;
+		// 						}
+		//
+		// 						reading++;
+		// 					}
+		// 				}
+		// 				break;
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				{
+		// 					const wchar_t* reading = text.Buffer();
+		//
+		// 					while (*reading)
+		// 					{
+		// 						if (wcsncasecmp(reading, find.Buffer(), find.Length()) == 0)
+		// 						{
+		// 							result = reading;
+		// 						}
+		//
+		// 						reading++;
+		// 					}
+		// 				}
+		// 				break;
+		// 		}
+		//
+		// 		return result == NULL ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result - text.Buffer(), find.Length());
 #endif
 	}
 	
@@ -803,22 +803,22 @@ namespace vl
 #if defined VCZH_MSVC
 		int result = FindNLSStringEx(localeName.Buffer(), FIND_STARTSWITH | TranslateNormalization(normalization), text.Buffer(), (int)text.Length(), find.Buffer(), (int)find.Length(), NULL, NULL, NULL, NULL);
 		return result != -1;
-#elif defined VCZH_GCC
-		
-		if (text.Length() < find.Length() || find.Length() == 0)
-		{
-			return false;
-		}
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				return wcsncmp(text.Buffer(), find.Buffer(), find.Length()) == 0;
-		
-			case Normalization::IgnoreCase:
-				return wcsncasecmp(text.Buffer(), find.Buffer(), find.Length()) == 0;
-		}
-		
+		// #elif defined VCZH_GCC
+		//
+		// 		if (text.Length() < find.Length() || find.Length() == 0)
+		// 		{
+		// 			return false;
+		// 		}
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				return wcsncmp(text.Buffer(), find.Buffer(), find.Length()) == 0;
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				return wcsncasecmp(text.Buffer(), find.Buffer(), find.Length()) == 0;
+		// 		}
+		//
 #endif
 	}
 	
@@ -827,22 +827,22 @@ namespace vl
 #if defined VCZH_MSVC
 		int result = FindNLSStringEx(localeName.Buffer(), FIND_ENDSWITH | TranslateNormalization(normalization), text.Buffer(), (int)text.Length(), find.Buffer(), (int)find.Length(), NULL, NULL, NULL, NULL);
 		return result != -1;
-#elif defined VCZH_GCC
-		
-		if (text.Length() < find.Length() || find.Length() == 0)
-		{
-			return false;
-		}
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				return wcsncmp(text.Buffer() + text.Length() - find.Length(), find.Buffer(), find.Length()) == 0;
-		
-			case Normalization::IgnoreCase:
-				return wcsncasecmp(text.Buffer() + text.Length() - find.Length(), find.Buffer(), find.Length()) == 0;
-		}
-		
+		// #elif defined VCZH_GCC
+		//
+		// 		if (text.Length() < find.Length() || find.Length() == 0)
+		// 		{
+		// 			return false;
+		// 		}
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				return wcsncmp(text.Buffer() + text.Length() - find.Length(), find.Buffer(), find.Length()) == 0;
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				return wcsncasecmp(text.Buffer() + text.Length() - find.Length(), find.Buffer(), find.Length()) == 0;
+		// 		}
+		//
 #endif
 	}
 }

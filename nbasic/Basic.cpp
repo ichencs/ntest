@@ -122,7 +122,7 @@ namespace vl
 		systemTime.wSecond = (WORD)_second;
 		systemTime.wMilliseconds = (WORD)_milliseconds;
 		
-		FILETIME fileTime;
+		FILETIME fileTime = {0};
 		SystemTimeToFileTime(&systemTime, &fileTime);
 		FileTimeToSystemTime(&fileTime, &systemTime);
 		return SystemTimeToDateTime(systemTime);

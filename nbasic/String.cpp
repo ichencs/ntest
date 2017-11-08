@@ -333,7 +333,7 @@ namespace vl
 		return result;
 	}
 	
-	extern WString wformat(wchar_t* pszFormat, ...)
+	WString wformat(const wchar_t* pszFormat, ...)
 	{
 		WString string;
 		va_list argList;
@@ -356,7 +356,7 @@ namespace vl
 		return string;
 	}
 	
-	extern AString aformat(char* pszFormat, ...)
+	AString aformat(const char* pszFormat, ...)
 	{
 		AString string;
 		va_list argList;

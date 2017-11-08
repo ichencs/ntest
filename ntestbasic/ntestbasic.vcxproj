@@ -294,6 +294,7 @@
     </ClCompile>
     <ClCompile Include="TestAtomicInt.cpp" />
     <ClCompile Include="TestBasic.cpp" />
+    <ClCompile Include="TestFileInfo.cpp" />
     <ClCompile Include="TestHttpUtility.cpp" />
     <ClCompile Include="TestPath.cpp" />
     <ClCompile Include="TestSystem.cpp" />

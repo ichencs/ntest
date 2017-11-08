@@ -335,422 +335,382 @@ Console
 ***********************************************************************/
 #include <stdlib.h>
 #if defined VCZH_MSVC
-#elif defined VCZH_GCC
-#include <ctype.h>
-#include <wctype.h>
-#define _strtoi64 strtoll
-#define _strtoui64 strtoull
-#define _wcstoi64 wcstoll
-#define _wcstoui64 wcstoull
+// #elif defined VCZH_GCC
+// #include <stdio.h>
+// #include <ctype.h>
+// #include <wctype.h>
+// #define _strtoi64 strtoll
+// #define _strtoui64 strtoull
+// #define _wcstoi64 wcstoll
+// #define _wcstoui64 wcstoull
 #endif
-
+#include <stdarg.h>
 namespace vl
 {
-// #if defined VCZH_GCC
-// 	void _itoa_s(vint32_t value, char* buffer, size_t size, vint radix)
-// 	{
-// 		sprintf(buffer, "%d", value);
-// 	}
-//
-// 	void _itow_s(vint32_t value, wchar_t* buffer, size_t size, vint radix)
-// 	{
-// 		swprintf(buffer, size - 1, L"%d", value);
-// 	}
-//
-// 	void _i64toa_s(vint64_t value, char* buffer, size_t size, vint radix)
-// 	{
-// 		sprintf(buffer, "%ld", value);
-// 	}
-//
-// 	void _i64tow_s(vint64_t value, wchar_t* buffer, size_t size, vint radix)
-// 	{
-// 		swprintf(buffer, size - 1, L"%ld", value);
-// 	}
-//
-// 	void _uitoa_s(vuint32_t value, char* buffer, size_t size, vint radix)
-// 	{
-// 		sprintf(buffer, "%u", value);
-// 	}
-//
-// 	void _uitow_s(vuint32_t value, wchar_t* buffer, size_t size, vint radix)
-// 	{
-// 		swprintf(buffer, size - 1, L"%u", value);
-// 	}
-//
-// 	void _ui64toa_s(vuint64_t value, char* buffer, size_t size, vint radix)
-// 	{
-// 		sprintf(buffer, "%lu", value);
-// 	}
-//
-// 	void _ui64tow_s(vuint64_t value, wchar_t* buffer, size_t size, vint radix)
-// 	{
-// 		swprintf(buffer, size - 1, L"%lu", value);
-// 	}
-//
-// 	void _gcvt_s(char* buffer, size_t size, double value, vint numberOfDigits)
-// 	{
-// 		sprintf(buffer, "%f", value);
-// 		char* point = strchr(buffer, '.');
-// 		if(!point) return;
-// 		char* zero = buffer + strlen(buffer);
-// 		while(zero[-1] == '0')
-// 		{
-// 			*--zero = '\0';
-// 		}
-// 		if(zero[-1] == '.') *--zero = '\0';
-// 	}
-//
-// 	void _strlwr_s(char* buffer, size_t size)
-// 	{
-// 		while(*buffer)
-// 		{
-// 			*buffer=(char)tolower(*buffer);
-// 			buffer++;
-// 		}
-// 	}
-//
-// 	void _strupr_s(char* buffer, size_t size)
-// 	{
-// 		while(*buffer)
-// 		{
-// 			*buffer=(char)toupper(*buffer);
-// 			buffer++;
-// 		}
-// 	}
-//
-// 	void _wcslwr_s(wchar_t* buffer, size_t size)
-// 	{
-// 		while(*buffer)
-// 		{
-// 			*buffer=(char)towlower(*buffer);
-// 			buffer++;
-// 		}
-// 	}
-//
-// 	void _wcsupr_s(wchar_t* buffer, size_t size)
-// 	{
-// 		while(*buffer)
-// 		{
-// 			*buffer=(char)towupper(*buffer);
-// 			buffer++;
-// 		}
-// 	}
-// #endif
-
-vint atoi_test(const AString& string, bool& success)
-{
-	char* endptr = 0;
-	vint result = strtol(string.Buffer(), &endptr, 10);
-	success = endptr == string.Buffer() + string.Length() && itoa(result) == string;
-	return result;
-}
-
-vint wtoi_test(const WString& string, bool& success)
-{
-	wchar_t* endptr = 0;
-	vint result = wcstol(string.Buffer(), &endptr, 10);
-	success = endptr == string.Buffer() + string.Length() && itow(result) == string;
-	return result;
-}
-
-vint64_t atoi64_test(const AString& string, bool& success)
-{
-	char* endptr = 0;
-	vint64_t result = _strtoi64(string.Buffer(), &endptr, 10);
-	success = endptr == string.Buffer() + string.Length() && i64toa(result) == string;
-	return result;
-}
-
-vint64_t wtoi64_test(const WString& string, bool& success)
-{
-	wchar_t* endptr = 0;
-	vint64_t result = _wcstoi64(string.Buffer(), &endptr, 10);
-	success = endptr == string.Buffer() + string.Length() && i64tow(result) == string;
-	return result;
-}
-
-vuint atou_test(const AString& string, bool& success)
-{
-	char* endptr = 0;
-	vuint result = strtoul(string.Buffer(), &endptr, 10);
-	success = endptr == string.Buffer() + string.Length() && utoa(result) == string;
-	return result;
-}
-
-vuint wtou_test(const WString& string, bool& success)
-{
-	wchar_t* endptr = 0;
-	vuint result = wcstoul(string.Buffer(), &endptr, 10);
-	success = endptr == string.Buffer() + string.Length() && utow(result) == string;
-	return result;
-}
-
-vuint64_t atou64_test(const AString& string, bool& success)
-{
-	char* endptr = 0;
-	vuint64_t result = _strtoui64(string.Buffer(), &endptr, 10);
-	success = endptr == string.Buffer() + string.Length() && u64toa(result) == string;
-	return result;
-}
-
-vuint64_t wtou64_test(const WString& string, bool& success)
-{
-	wchar_t* endptr = 0;
-	vuint64_t result = _wcstoui64(string.Buffer(), &endptr, 10);
-	success = endptr == string.Buffer() + string.Length() && u64tow(result) == string;
-	return result;
-}
-
-double atof_test(const AString& string, bool& success)
-{
-	char* endptr = 0;
-	double result = strtod(string.Buffer(), &endptr);
-	success = endptr == string.Buffer() + string.Length();
-	return result;
-}
-
-double wtof_test(const WString& string, bool& success)
-{
-	wchar_t* endptr = 0;
-	double result = wcstod(string.Buffer(), &endptr);
-	success = endptr == string.Buffer() + string.Length();
-	return result;
-}
-
-vint atoi(const AString& string)
-{
-	bool success = false;
-	return atoi_test(string, success);
-}
-
-vint wtoi(const WString& string)
-{
-	bool success = false;
-	return wtoi_test(string, success);
-}
-
-vint64_t atoi64(const AString& string)
-{
-	bool success = false;
-	return atoi64_test(string, success);
-}
-
-vint64_t wtoi64(const WString& string)
-{
-	bool success = false;
-	return wtoi64_test(string, success);
-}
-
-vuint atou(const AString& string)
-{
-	bool success = false;
-	return atou_test(string, success);
-}
-
-vuint wtou(const WString& string)
-{
-	bool success = false;
-	return wtou_test(string, success);
-}
-
-vuint64_t atou64(const AString& string)
-{
-	bool success = false;
-	return atou64_test(string, success);
-}
-
-vuint64_t wtou64(const WString& string)
-{
-	bool success = false;
-	return wtou64_test(string, success);
-}
-
-double atof(const AString& string)
-{
-	bool success = false;
-	return atof_test(string, success);
-}
-
-double wtof(const WString& string)
-{
-	bool success = false;
-	return wtof_test(string, success);
-}
-
-AString itoa(vint number)
-{
-	char buffer[100];
-	ITOA_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
-	return buffer;
-}
-
-WString itow(vint number)
-{
-	wchar_t buffer[100];
-	ITOW_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
-	return buffer;
-}
-
-AString i64toa(vint64_t number)
-{
-	char buffer[100];
-	I64TOA_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
-	return buffer;
-}
-
-WString i64tow(vint64_t number)
-{
-	wchar_t buffer[100];
-	I64TOW_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
-	return buffer;
-}
-
-AString utoa(vuint number)
-{
-	char buffer[100];
-	UITOA_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
-	return buffer;
-}
-
-WString utow(vuint number)
-{
-	wchar_t buffer[100];
-	UITOW_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
-	return buffer;
-}
-
-AString u64toa(vuint64_t number)
-{
-	char buffer[100];
-	UI64TOA_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
-	return buffer;
-}
-
-WString u64tow(vuint64_t number)
-{
-	wchar_t buffer[100];
-	UI64TOW_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
-	return buffer;
-}
-
-AString ftoa(double number)
-{
-	char buffer[320];
-	_gcvt_s(buffer, 320, number, 30);
-	vint len = (vint)strlen(buffer);
+	__pragma(warning(disable: 4996))
 	
-	if (buffer[len - 1] == '.')
+	
+	vint atoi_test(const AString& string, bool& success)
 	{
-		buffer[len - 1] = '\0';
+		char* endptr = 0;
+		vint result = strtol(string.Buffer(), &endptr, 10);
+		success = endptr == string.Buffer() + string.Length() && itoa(result) == string;
+		return result;
 	}
 	
-	return buffer;
-}
-
-WString ftow(double number)
-{
-	return atow(ftoa(number));
-}
-
-vint _wtoa(const wchar_t* w, char* a, vint chars)
-{
+	vint wtoi_test(const WString& string, bool& success)
+	{
+		wchar_t* endptr = 0;
+		vint result = wcstol(string.Buffer(), &endptr, 10);
+		success = endptr == string.Buffer() + string.Length() && itow(result) == string;
+		return result;
+	}
+	
+	vint64_t atoi64_test(const AString& string, bool& success)
+	{
+		char* endptr = 0;
+		vint64_t result = _strtoi64(string.Buffer(), &endptr, 10);
+		success = endptr == string.Buffer() + string.Length() && i64toa(result) == string;
+		return result;
+	}
+	
+	vint64_t wtoi64_test(const WString& string, bool& success)
+	{
+		wchar_t* endptr = 0;
+		vint64_t result = _wcstoi64(string.Buffer(), &endptr, 10);
+		success = endptr == string.Buffer() + string.Length() && i64tow(result) == string;
+		return result;
+	}
+	
+	vuint atou_test(const AString& string, bool& success)
+	{
+		char* endptr = 0;
+		vuint result = strtoul(string.Buffer(), &endptr, 10);
+		success = endptr == string.Buffer() + string.Length() && utoa(result) == string;
+		return result;
+	}
+	
+	vuint wtou_test(const WString& string, bool& success)
+	{
+		wchar_t* endptr = 0;
+		vuint result = wcstoul(string.Buffer(), &endptr, 10);
+		success = endptr == string.Buffer() + string.Length() && utow(result) == string;
+		return result;
+	}
+	
+	vuint64_t atou64_test(const AString& string, bool& success)
+	{
+		char* endptr = 0;
+		vuint64_t result = _strtoui64(string.Buffer(), &endptr, 10);
+		success = endptr == string.Buffer() + string.Length() && u64toa(result) == string;
+		return result;
+	}
+	
+	vuint64_t wtou64_test(const WString& string, bool& success)
+	{
+		wchar_t* endptr = 0;
+		vuint64_t result = _wcstoui64(string.Buffer(), &endptr, 10);
+		success = endptr == string.Buffer() + string.Length() && u64tow(result) == string;
+		return result;
+	}
+	
+	double atof_test(const AString& string, bool& success)
+	{
+		char* endptr = 0;
+		double result = strtod(string.Buffer(), &endptr);
+		success = endptr == string.Buffer() + string.Length();
+		return result;
+	}
+	
+	double wtof_test(const WString& string, bool& success)
+	{
+		wchar_t* endptr = 0;
+		double result = wcstod(string.Buffer(), &endptr);
+		success = endptr == string.Buffer() + string.Length();
+		return result;
+	}
+	
+	vint atoi(const AString& string)
+	{
+		bool success = false;
+		return atoi_test(string, success);
+	}
+	
+	vint wtoi(const WString& string)
+	{
+		bool success = false;
+		return wtoi_test(string, success);
+	}
+	
+	vint64_t atoi64(const AString& string)
+	{
+		bool success = false;
+		return atoi64_test(string, success);
+	}
+	
+	vint64_t wtoi64(const WString& string)
+	{
+		bool success = false;
+		return wtoi64_test(string, success);
+	}
+	
+	vuint atou(const AString& string)
+	{
+		bool success = false;
+		return atou_test(string, success);
+	}
+	
+	vuint wtou(const WString& string)
+	{
+		bool success = false;
+		return wtou_test(string, success);
+	}
+	
+	vuint64_t atou64(const AString& string)
+	{
+		bool success = false;
+		return atou64_test(string, success);
+	}
+	
+	vuint64_t wtou64(const WString& string)
+	{
+		bool success = false;
+		return wtou64_test(string, success);
+	}
+	
+	double atof(const AString& string)
+	{
+		bool success = false;
+		return atof_test(string, success);
+	}
+	
+	double wtof(const WString& string)
+	{
+		bool success = false;
+		return wtof_test(string, success);
+	}
+	
+	AString itoa(vint number)
+	{
+		char buffer[100];
+		ITOA_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+		return buffer;
+	}
+	
+	WString itow(vint number)
+	{
+		wchar_t buffer[100];
+		ITOW_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+		return buffer;
+	}
+	
+	AString i64toa(vint64_t number)
+	{
+		char buffer[100];
+		I64TOA_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+		return buffer;
+	}
+	
+	WString i64tow(vint64_t number)
+	{
+		wchar_t buffer[100];
+		I64TOW_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+		return buffer;
+	}
+	
+	AString utoa(vuint number)
+	{
+		char buffer[100];
+		UITOA_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+		return buffer;
+	}
+	
+	WString utow(vuint number)
+	{
+		wchar_t buffer[100];
+		UITOW_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+		return buffer;
+	}
+	
+	AString u64toa(vuint64_t number)
+	{
+		char buffer[100];
+		UI64TOA_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+		return buffer;
+	}
+	
+	WString u64tow(vuint64_t number)
+	{
+		wchar_t buffer[100];
+		UI64TOW_S(number, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+		return buffer;
+	}
+	
+	AString ftoa(double number)
+	{
+		char buffer[320];
+		_gcvt_s(buffer, 320, number, 30);
+		vint len = (vint)strlen(buffer);
+		
+		if (buffer[len - 1] == '.')
+		{
+			buffer[len - 1] = '\0';
+		}
+		
+		return buffer;
+	}
+	
+	WString ftow(double number)
+	{
+		return atow(ftoa(number));
+	}
+	
+	vint _wtoa(const wchar_t* w, char* a, vint chars)
+	{
 #if defined VCZH_MSVC
-	return WideCharToMultiByte(CP_THREAD_ACP, 0, w, -1, a, (int)(a ? chars : 0), 0, 0);
+		return WideCharToMultiByte(CP_THREAD_ACP, 0, w, -1, a, (int)(a ? chars : 0), 0, 0);
 #elif defined VCZH_GCC
-	return wcstombs(a, w, chars - 1) + 1;
+		return wcstombs(a, w, chars - 1) + 1;
 #endif
-}
-
-AString wtoa(const WString& string)
-{
-	vint len = _wtoa(string.Buffer(), 0, 0);
-	char* buffer = new char[len];
-	memset(buffer, 0, len * sizeof(*buffer));
-	_wtoa(string.Buffer(), buffer, (int)len);
-	AString s = buffer;
-	delete[] buffer;
-	return s;
-}
-
-vint _wtoUtf8(const wchar_t* w, char* u, vint chars)
-{
-	return WideCharToMultiByte(CP_UTF8, 0, w, -1, u, (int)(u ? chars : 0), 0, 0);
-}
-
-UString wtoUtf8(const WString& string)
-{
-	vint len = _wtoUtf8(string.Buffer(), 0, 0);
-	char* buffer = new char[len];
-	memset(buffer, 0, len * sizeof(*buffer));
-	_wtoUtf8(string.Buffer(), buffer, (int)len);
-	AString s = buffer;
-	delete[] buffer;
-	return s;
-}
-
-vint _utf8tow(const char* u, wchar_t* w, vint chars)
-{
-	return MultiByteToWideChar(CP_UTF8, 0, u, -1, w, (int)(w ? chars : 0));
-}
-
-WString utf8tow(const UString& string)
-{
-	vint len = _utf8tow(string.Buffer(), 0, 0);
-	wchar_t* buffer = new wchar_t[len];
-	memset(buffer, 0, len * sizeof(*buffer));
-	_utf8tow(string.Buffer(), buffer, (int)len);
-	WString s = buffer;
-	delete[] buffer;
-	return s;
-}
-
-vint _atow(const char* a, wchar_t* w, vint chars)
-{
+	}
+	
+	AString wtoa(const WString& string)
+	{
+		vint len = _wtoa(string.Buffer(), 0, 0);
+		char* buffer = new char[len];
+		memset(buffer, 0, len * sizeof(*buffer));
+		_wtoa(string.Buffer(), buffer, (int)len);
+		AString s = buffer;
+		delete[] buffer;
+		return s;
+	}
+	
+	vint _wtoUtf8(const wchar_t* w, char* u, vint chars)
+	{
+		return WideCharToMultiByte(CP_UTF8, 0, w, -1, u, (int)(u ? chars : 0), 0, 0);
+	}
+	
+	UString wtoUtf8(const WString& string)
+	{
+		vint len = _wtoUtf8(string.Buffer(), 0, 0);
+		char* buffer = new char[len];
+		memset(buffer, 0, len * sizeof(*buffer));
+		_wtoUtf8(string.Buffer(), buffer, (int)len);
+		AString s = buffer;
+		delete[] buffer;
+		return s;
+	}
+	
+	vint _utf8tow(const char* u, wchar_t* w, vint chars)
+	{
+		return MultiByteToWideChar(CP_UTF8, 0, u, -1, w, (int)(w ? chars : 0));
+	}
+	
+	WString utf8tow(const UString& string)
+	{
+		vint len = _utf8tow(string.Buffer(), 0, 0);
+		wchar_t* buffer = new wchar_t[len];
+		memset(buffer, 0, len * sizeof(*buffer));
+		_utf8tow(string.Buffer(), buffer, (int)len);
+		WString s = buffer;
+		delete[] buffer;
+		return s;
+	}
+	
+	vint _atow(const char* a, wchar_t* w, vint chars)
+	{
 #if defined VCZH_MSVC
-	return MultiByteToWideChar(CP_THREAD_ACP, 0, a, -1, w, (int)(w ? chars : 0));
+		return MultiByteToWideChar(CP_THREAD_ACP, 0, a, -1, w, (int)(w ? chars : 0));
 #elif defined VCZH_GCC
-	return mbstowcs(w, a, chars - 1) + 1;
+		return mbstowcs(w, a, chars - 1) + 1;
 #endif
-}
-
-WString atow(const AString& string)
-{
-	vint len = _atow(string.Buffer(), 0, 0);
-	wchar_t* buffer = new wchar_t[len];
-	memset(buffer, 0, len * sizeof(*buffer));
-	_atow(string.Buffer(), buffer, (int)len);
-	WString s = buffer;
-	delete[] buffer;
-	return s;
-}
-
-AString alower(const AString& string)
-{
-	AString result = string.Buffer();
-	_strlwr_s((char*)result.Buffer(), result.Length() + 1);
-	return result;
-}
-
-WString wlower(const WString& string)
-{
-	WString result = string.Buffer();
-	_wcslwr_s((wchar_t*)result.Buffer(), result.Length() + 1);
-	return result;
-}
-
-AString aupper(const AString& string)
-{
-	AString result = string.Buffer();
-	_strupr_s((char*)result.Buffer(), result.Length() + 1);
-	return result;
-}
-
-WString wupper(const WString& string)
-{
-	WString result = string.Buffer();
-	_wcsupr_s((wchar_t*)result.Buffer(), result.Length() + 1);
-	return result;
-}
+	}
+	
+	WString atow(const AString& string)
+	{
+		vint len = _atow(string.Buffer(), 0, 0);
+		wchar_t* buffer = new wchar_t[len];
+		memset(buffer, 0, len * sizeof(*buffer));
+		_atow(string.Buffer(), buffer, (int)len);
+		WString s = buffer;
+		delete[] buffer;
+		return s;
+	}
+	
+	AString alower(const AString& string)
+	{
+		AString result = string.Buffer();
+		_strlwr_s((char*)result.Buffer(), result.Length() + 1);
+		return result;
+	}
+	
+	WString wlower(const WString& string)
+	{
+		WString result = string.Buffer();
+		_wcslwr_s((wchar_t*)result.Buffer(), result.Length() + 1);
+		return result;
+	}
+	
+	AString aupper(const AString& string)
+	{
+		AString result = string.Buffer();
+		_strupr_s((char*)result.Buffer(), result.Length() + 1);
+		return result;
+	}
+	
+	WString wupper(const WString& string)
+	{
+		WString result = string.Buffer();
+		_wcsupr_s((wchar_t*)result.Buffer(), result.Length() + 1);
+		return result;
+	}
+	
+	extern WString wformat(wchar_t* pszFormat, ...)
+	{
+		WString string;
+		va_list argList;
+		va_start(argList, pszFormat);
+		{
+			wchar_t* pszBuffer = NULL;
+			int nlen = -1;
+			{
+				nlen = _vscwprintf(pszFormat, argList);
+				pszBuffer = (wchar_t*)malloc((nlen + 1) * sizeof(wchar_t));
+				vswprintf(pszBuffer, pszFormat, argList);
+			}
+			if (nlen > 0 && pszBuffer)
+			{
+				string = pszBuffer;
+				free(pszBuffer);
+			}
+		}
+		va_end(argList);
+		return string;
+	}
+	
+	extern AString aformat(char* pszFormat, ...)
+	{
+		AString string;
+		va_list argList;
+		va_start(argList, pszFormat);
+		{
+			char* pszBuffer = NULL;
+			int nlen = -1;
+			{
+				nlen = _vscprintf(pszFormat, argList);
+				pszBuffer = (char*)malloc((nlen + 1) * sizeof(char));
+				vsprintf(pszBuffer, pszFormat, argList);
+			}
+			if (nlen > 0 && pszBuffer)
+			{
+				string = pszBuffer;
+				free(pszBuffer);
+			}
+		}
+		va_end(argList);
+		return string;
+	}
+	
 }
 
 
@@ -3551,19 +3511,21 @@ namespace vl
 		
 		FilePath FilePath::ModulePath()
 		{
-			wchar_t buffer[NICE_MAX_PATH] = { 0 };
-			::GetModuleFileName(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
-			return buffer;
+			return ModulePath(NULL);
 		}
 		
-		FilePath FilePath::ModulePath(void* pAddress, bool isDll /*= true*/)
+		FilePath FilePath::ModulePath(void* pAddress)
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
-			
-			MEMORY_BASIC_INFORMATION mbi = { 0 };			//通过函数指针地址，获取dll基地址（HMODULE）
-			HMODULE hBaseAddress = (::VirtualQuery(pAddress, &mbi, sizeof(mbi)) != 0) ?
-			  (HMODULE)mbi.AllocationBase : NULL;
-			HMODULE hmodule = isDll ? hBaseAddress : NULL;
+			HMODULE hmodule = NULL;
+			if (pAddress)
+			{
+				MEMORY_BASIC_INFORMATION mbi = { 0 };			//通过函数指针地址，获取dll基地址（HMODULE）
+				HMODULE hBaseAddress = (::VirtualQuery(pAddress, &mbi, sizeof(mbi)) != 0) ?
+				  (HMODULE)mbi.AllocationBase : NULL;
+				hmodule = hBaseAddress;
+				
+			}
 			::GetModuleFileName(hmodule, buffer, sizeof(buffer) / sizeof(*buffer));
 			return buffer;
 		}
@@ -3604,20 +3566,6 @@ namespace vl
 			}
 			
 			return (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
-#elif defined VCZH_GCC
-			struct stat info;
-			AString path = wtoa(fullPath);
-			int result = stat(path.Buffer(), &info);
-			
-			if (result != 0)
-			{
-				return false;
-			}
-			else
-			{
-				return S_ISREG(info.st_mode);
-			}
-			
 #endif
 		}
 		
@@ -3633,20 +3581,6 @@ namespace vl
 			}
 			
 			return (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
-#elif defined VCZH_GCC
-			struct stat info;
-			AString path = wtoa(fullPath);
-			int result = stat(path.Buffer(), &info);
-			
-			if (result != 0)
-			{
-				return false;
-			}
-			else
-			{
-				return S_ISDIR(info.st_mode);
-			}
-			
 #endif
 		}
 		
@@ -3654,8 +3588,6 @@ namespace vl
 		{
 #if defined VCZH_MSVC
 			return fullPath == L"";
-#elif defined VCZH_GCC
-			return fullPath == L"/";
 #endif
 		}
 		
@@ -3707,37 +3639,6 @@ namespace vl
 			  (_filePath.IsFolder() ? FILE_ATTRIBUTE_DIRECTORY : 0)
 			);
 			return buffer;
-#elif defined VCZH_GCC
-			collections::List<WString> srcComponents, tgtComponents, resultComponents;
-			GetPathComponents(IsFolder() ? fullPath : GetFolder().GetFullPath(), srcComponents);
-			GetPathComponents(_filePath.fullPath, tgtComponents);
-			
-			int minLength = srcComponents.Count() <= tgtComponents.Count() ? srcComponents.Count() : tgtComponents.Count();
-			int lastCommonComponent = 0;
-			
-			for (int i = 0; i < minLength; i++)
-			{
-				if (srcComponents[i] == tgtComponents[i])
-				{
-					lastCommonComponent = i;
-				}
-				else
-				{
-					break;
-				}
-			}
-			
-			for (int i = lastCommonComponent + 1; i < srcComponents.Count(); i++)
-			{
-				resultComponents.Add(L"..");
-			}
-			
-			for (int i = lastCommonComponent + 1; i < tgtComponents.Count(); i++)
-			{
-				resultComponents.Add(tgtComponents[i]);
-			}
-			
-			return ComponentsToPath(resultComponents);
 #endif
 		}
 		
@@ -3837,6 +3738,8 @@ namespace vl
 ***********************************************************************/
 #if defined VCZH_MSVC
 #elif defined VCZH_GCC
+#include <ctype.h>
+#include <wctype.h>
 #include <wchar.h>
 #endif
 
@@ -5588,6 +5491,151 @@ NVariant::NVariant()
 
 NVariant::~NVariant()
 {
+}
+
+
+/***********************************************************************
+.\PATH.CPP
+***********************************************************************/
+
+#pragma comment(lib, "Shlwapi.lib")
+
+namespace vl
+{
+	namespace path
+	{
+		using namespace collections;
+
+		Path::Path()
+		{
+		}
+		
+		
+		Path::Path(const WString& _filePath)
+			:fullPath(_filePath)
+		{
+			Initialize();
+		}
+
+		Path::Path(const wchar_t* _filePath)
+			: fullPath(_filePath)
+		{
+			Initialize();
+		}
+
+		Path::Path(const Path& _filePath)
+			: fullPath(_filePath.fullPath)
+		{
+			Initialize();
+		}
+
+		Path::~Path()
+		{
+		}
+		
+		vl::WString Path::UnquoteSpaces()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			BOOL bRes = PathUnquoteSpaces(&buffer[0]);
+			if (bRes)
+			{
+				fullPath = &buffer[0];
+			}
+			return fullPath;
+		}
+
+		bool Path::IsDirectory()
+		{
+			return PathIsDirectory(fullPath.Buffer()) != FALSE;
+		}
+
+		bool Path::IsFileSpec()
+		{
+			return PathIsFileSpec(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsUNC()
+		{
+			return PathIsUNC(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsUNCServer()
+		{
+			return PathIsUNCServer(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsUNCServerShare()
+		{
+			return PathIsUNCServerShare(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsURL()
+		{
+			return PathIsURL(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsNetworkPath()
+		{
+			return PathIsNetworkPath(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsPrefix(WString strPrefix)
+		{
+			return PathIsPrefix(fullPath.Buffer(),strPrefix.Buffer()) == TRUE;
+		}
+
+		bool Path::MatchSpec(WString strSpec)
+		{
+			return PathMatchSpec(fullPath.Buffer(), strSpec.Buffer()) == TRUE;
+		}
+
+		void Path::RemoveBackslash()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			PathRemoveBackslash(&buffer[0]);
+			{
+				fullPath = &buffer[0];
+			}
+		}
+
+		void Path::RemoveExtension()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			PathRemoveExtension(&buffer[0]);
+			{
+				fullPath = &buffer[0];
+			}
+		}
+
+		bool Path::RemoveFileSpec()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			BOOL bRes = PathRemoveFileSpec(&buffer[0]);
+			if(bRes)
+			{
+				fullPath = &buffer[0];
+			}
+			return bRes == TRUE;
+		}
+
+		bool Path::FileExists()
+		{
+			return PathFileExists(fullPath.Buffer()) == TRUE;
+		}
+
+		void Path::Initialize()
+		{
+		
+		}
+	}
 }
 
 
@@ -11512,6 +11560,13 @@ UnitTest
 		}
 	}
 }
+
+
+/***********************************************************************
+.\NATOMICINT.CPP
+***********************************************************************/
+
+
 
 
 /***********************************************************************

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <WinBase.h>
 
 // using namespace vl::environemnt;
 using namespace vl::system;
@@ -21,6 +22,9 @@ TEST_CASE(TestEnvironment)
 	ProcessMemory memo;
 	proc.GetMemoryInfo(memo);
 	
+	BOOL bRes = GetComputerNameEx();
+	
+	
 }
 
 TEST_CASE(TestDiskInfo)
@@ -28,6 +32,8 @@ TEST_CASE(TestDiskInfo)
 	DiskSpaceInfo info;
 	info.disk = L"c:/";
 	System::GetDiskSpaceInfo(info);
-
-
+	
+	WString strCmd = System::CommandLine();
+	vl::console::Console::WriteLine(strCmd);
 }
+

@@ -448,39 +448,3 @@ TEST_CASE(TestFileSystemOthers)
 }
 
 
-
-TEST_CASE(TestFileInfo)
-{
-	FilePath path = L"C:\\Windows";
-	FileInfo info = path;
-	TEST_ASSERT(info.Exists());
-	TEST_ASSERT(info.IsFolder());
-	TEST_ASSERT(!info.IsFile());
-	
-	WString strInfo = info.FileName();
-	strInfo = info.Extemsion();
-	
-	path = L"";
-	info.SetPath(path);
-	TEST_ASSERT(!info.IsFile());
-	TEST_ASSERT(!info.Exists());
-	TEST_ASSERT(!info.IsFolder());
-	TEST_ASSERT(!info.IsReadable());
-	TEST_ASSERT(!info.IsWritable());
-	TEST_ASSERT(!info.IsHidden());
-	
-	path = FilePath::ModulePath(ClearTestFolders);
-	info.SetPath(path);
-	TEST_ASSERT(info.IsFile());
-	TEST_ASSERT(info.Exists());
-	TEST_ASSERT(!info.IsFolder());
-	TEST_ASSERT(!info.IsHidden());
-	
-	info.SetPath(path.GetFolder());
-	TEST_ASSERT(!info.IsFile());
-	TEST_ASSERT(info.Exists());
-	TEST_ASSERT(info.IsFolder());
-	TEST_ASSERT(!info.IsHidden());
-	path = FilePath::TempPath();
-	
-}

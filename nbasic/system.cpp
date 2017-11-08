@@ -11,8 +11,8 @@
 
 namespace vl
 {
-	extern DateTime DateTimeToSystemTime(const DateTime& dateTime);
-	extern DateTime SystemTimeToDateTime(const SYSTEMTIME& systemTime);
+	// 	extern DateTime DateTimeToSystemTime(const DateTime& dateTime);
+	// 	extern DateTime SystemTimeToDateTime(const SYSTEMTIME& systemTime);
 	
 	namespace system
 	{
@@ -36,13 +36,13 @@ namespace vl
 		
 		Process::~Process()
 		{
-			
+		
 		}
 		
 		
 		void Process::InitializeCurrent()
 		{
-			
+		
 		}
 		
 		vl::vuint Process::CurrentID()
@@ -98,9 +98,7 @@ namespace vl
 		
 		DateTime System::Time()
 		{
-			SYSTEMTIME time;
-			GetSystemTime(&time);
-			return SystemTimeToDateTime(time);
+			return DateTime::UtcTime();
 		}
 		
 		vl::WString System::ComputerName()
@@ -132,6 +130,12 @@ namespace vl
 			wchar_t directory[NICE_MAX_PATH] = { 0 };
 			GetSystemWindowsDirectory(directory, sizeof(directory) / sizeof(*directory));
 			return directory;
+		}
+		
+		vl::WString System::CommandLine()
+		{
+			WString string = ::GetCommandLine();
+			return string;
 		}
 		
 		void System::Version()
@@ -248,7 +252,7 @@ namespace vl
 		bool System::GetDiskSpaceInfo(DiskSpaceInfo& disk)
 		{
 			ULARGE_INTEGER liFreeBytesAvailable, liTotalBytes, liTotalFreeBytes;
-			BOOL bRes = GetDiskFreeSpaceEx(disk.disk.Buffer(),&liFreeBytesAvailable,&liTotalBytes,&liTotalFreeBytes);
+			BOOL bRes = GetDiskFreeSpaceEx(disk.disk.Buffer(), &liFreeBytesAvailable, &liTotalBytes, &liTotalFreeBytes);
 			if (bRes)
 			{
 				disk.available = liFreeBytesAvailable.QuadPart;
@@ -257,7 +261,7 @@ namespace vl
 			}
 			return bRes == TRUE;
 		}
-
+		
 		eProcessorArchitecture System::ProcessorArchitecture(vuint architecture)
 		{
 			eProcessorArchitecture pa;
