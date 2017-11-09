@@ -348,8 +348,13 @@ Console
 namespace vl
 {
 	__pragma(warning(disable: 4996))
+<<<<<<< HEAD
 	
 	
+=======
+	
+	
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
 	vint atoi_test(const AString& string, bool& success)
 	{
 		char* endptr = 0;
@@ -958,6 +963,310 @@ namespace vl
 				writer.WriteLine(L"");
 			}
 			
+<<<<<<< HEAD
+=======
+			IEncoder* encoder = NULL;
+			
+			if (bom)
+			{
+				encoder = new BomEncoder(encoding);
+			}
+			else switch (encoding)
+				{
+					case BomEncoder::Utf8:
+						encoder = new Utf8Encoder;
+						break;
+						
+					case BomEncoder::Utf16:
+						encoder = new Utf16Encoder;
+						break;
+						
+					case BomEncoder::Utf16BE:
+						encoder = new Utf16BEEncoder;
+						break;
+						
+					default:
+						encoder = new MbcsEncoder;
+						break;
+				}
+				
+			{
+				EncoderStream encoderStream(fileStream, *encoder);
+				StreamWriter writer(encoderStream);
+				writer.WriteString(text);
+			}
+			
+			delete encoder;
+			return true;
+		}
+		
+		bool File::WriteAllLines(collections::List<WString>& lines, bool bom, stream::BomEncoder::Encoding encoding)
+		{
+			FileStream fileStream(filePath.GetFullPath(), FileStream::WriteOnly);
+			
+			if (!fileStream.IsAvailable())
+			{
+				return false;
+			}
+			
+			IEncoder* encoder = NULL;
+			
+			if (bom)
+			{
+				encoder = new BomEncoder(encoding);
+			}
+			else switch (encoding)
+				{
+					case BomEncoder::Utf8:
+						encoder = new Utf8Encoder;
+						break;
+						
+					case BomEncoder::Utf16:
+						encoder = new Utf16Encoder;
+						break;
+						
+					case BomEncoder::Utf16BE:
+						encoder = new Utf16BEEncoder;
+						break;
+						
+					default:
+						encoder = new MbcsEncoder;
+						break;
+				}
+				
+			{
+				EncoderStream encoderStream(fileStream, *encoder);
+				StreamWriter writer(encoderStream);
+				FOREACH(WString, line, lines)
+				{
+					writer.WriteLine(line);
+				}
+			}
+			
+			delete encoder;
+			return true;
+		}
+		
+		bool File::Exists()const
+		{
+			return filePath.IsFile();
+		}
+		
+		bool File::Delete()const
+		{
+#if defined VCZH_MSVC
+			return DeleteFile(filePath.GetFullPath().Buffer()) != 0;
+#elif defined VCZH_GCC
+			AString path = wtoa(filePath.GetFullPath());
+			return unlink(path.Buffer()) == 0;
+#endif
+		}
+		
+		bool File::Rename(const WString& newName)const
+		{
+#if defined VCZH_MSVC
+			WString oldFileName = filePath.GetFullPath();
+			WString newFileName = (filePath.GetFolder() / newName).GetFullPath();
+			return MoveFile(oldFileName.Buffer(), newFileName.Buffer()) != 0;
+#elif defined VCZH_GCC
+			AString oldFileName = wtoa(filePath.GetFullPath());
+			AString newFileName = wtoa((filePath.GetFolder() / newName).GetFullPath());
+			return rename(oldFileName.Buffer(), newFileName.Buffer()) == 0;
+#endif
+		}
+		
+		vl::WString File::GetName()
+		{
+			return filePath.GetName();
+		}
+
+	}
+}
+
+
+
+/***********************************************************************
+.\STREAM\ACCESSOR.CPP
+***********************************************************************/
+
+namespace vl
+{
+	namespace stream
+	{
+		using namespace collections;
+		
+		/***********************************************************************
+		TextReader
+		***********************************************************************/
+		
+		WString TextReader::ReadString(vint length)
+		{
+			wchar_t* buffer = new wchar_t[length + 1];
+			vint i = 0;
+			
+			for (; i < length; i++)
+			{
+				if ((buffer[i] = ReadChar()) == L'\0')
+				{
+					break;
+				}
+			}
+			
+			buffer[i] = L'\0';
+			WString result(buffer);
+			delete[] buffer;
+			return result;
+		}
+		
+		WString TextReader::ReadLine()
+		{
+			WString result;
+			wchar_t* buffer = new wchar_t[65537];
+			buffer[0] = L'\0';
+			vint i = 0;
+			
+			while (true)
+			{
+				wchar_t c = ReadChar();
+				
+				if (c == L'\n' || c == L'\0')
+				{
+					buffer[i] = L'\0';
+					result += buffer;
+					buffer[0] = L'\0';
+					i = 0;
+					break;
+				}
+				else
+				{
+					if (i == 65536)
+					{
+						buffer[i] = L'\0';
+						result += buffer;
+						buffer[0] = L'\0';
+						i = 0;
+					}
+					
+					buffer[i++] = c;
+				}
+			}
+			
+			result += buffer;
+			delete[] buffer;
+			
+			if (result.Length() > 0 && result[result.Length() - 1] == L'\r')
+			{
+				return result.Left(result.Length() - 1);
+			}
+			else
+			{
+				return result;
+			}
+		}
+		
+		WString TextReader::ReadToEnd()
+		{
+			WString result;
+			wchar_t* buffer = new wchar_t[65537];
+			buffer[0] = L'\0';
+			vint i = 0;
+			
+			while (true)
+			{
+				wchar_t c = ReadChar();
+				
+				if (c == L'\0')
+				{
+					buffer[i] = L'\0';
+					result += buffer;
+					buffer[0] = L'\0';
+					i = 0;
+					break;
+				}
+				else
+				{
+					if (i == 65536)
+					{
+						buffer[i] = L'\0';
+						result += buffer;
+						buffer[0] = L'\0';
+						i = 0;
+					}
+					
+					buffer[i++] = c;
+				}
+			}
+			
+			result += buffer;
+			delete[] buffer;
+			return result;
+		}
+		
+		/***********************************************************************
+		TextWriter
+		***********************************************************************/
+		
+		void TextWriter::WriteString(const wchar_t* string, vint charCount)
+		{
+			while (*string)
+			{
+				WriteChar(*string++);
+			}
+		}
+		
+		void TextWriter::WriteString(const wchar_t* string)
+		{
+			WriteString(string, (vint)wcslen(string));
+		}
+		
+		void TextWriter::WriteString(const WString& string)
+		{
+			if (string.Length())
+			{
+				WriteString(string.Buffer(), string.Length());
+			}
+		}
+		
+		void TextWriter::WriteLine(const wchar_t* string, vint charCount)
+		{
+			WriteString(string, charCount);
+			WriteString(L"\r\n", 2);
+		}
+		
+		void TextWriter::WriteLine(const wchar_t* string)
+		{
+			WriteString(string);
+			WriteString(L"\r\n", 2);
+		}
+		
+		void TextWriter::WriteLine(const WString& string)
+		{
+			WriteString(string);
+			WriteString(L"\r\n", 2);
+		}
+		
+		namespace monospace_tabling
+		{
+			void WriteBorderLine(TextWriter& writer, Array<vint>& columnWidths, vint columns)
+			{
+				writer.WriteChar(L'+');
+				
+				for (vint i = 0; i < columns; i++)
+				{
+					vint c = columnWidths[i];
+					
+					for (vint j = 0; j < c; j++)
+					{
+						writer.WriteChar(L'-');
+					}
+					
+					writer.WriteChar(L'+');
+				}
+				
+				writer.WriteLine(L"");
+			}
+			
+>>>>>>> 3acb50405f278c9ae3f366e9bab0e7c17f0a431f
 			void WriteContentLine(TextWriter& writer, Array<vint>& columnWidths, vint rowHeight, vint columns, Array<WString>& tableByRow, vint startRow)
 			{
 				vint cellStart = startRow * columns;
@@ -3682,6 +3991,11 @@ namespace vl
 			return buffer;
 		}
 		
+		FilePath FilePath::ModuleFolder()
+		{
+			return ModulePath().GetFolder();
+		}
+
 		FilePath FilePath::TempPath()
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
@@ -4917,6 +5231,18 @@ namespace vl
 		{
 		}
 		
+		Folder::Folder(const WString& _filePath)
+			:filePath(_filePath)
+		{
+
+		}
+
+		Folder::Folder(const wchar_t* _filePath)
+			: filePath(_filePath)
+		{
+
+		}
+
 		Folder::~Folder()
 		{
 		}
@@ -5207,6 +5533,12 @@ namespace vl
 			return rename(oldFileName.Buffer(), newFileName.Buffer()) == 0;
 #endif
 		}
+
+		vl::WString Folder::GetName()
+		{
+			return filePath.GetName();
+		}
+
 	}
 }
 
@@ -5666,6 +5998,163 @@ NVariant::~NVariant()
 
 
 /***********************************************************************
+<<<<<<< HEAD
+=======
+.\PATH.CPP
+***********************************************************************/
+
+#pragma comment(lib, "Shlwapi.lib")
+
+namespace vl
+{
+	namespace path
+	{
+		using namespace collections;
+
+		Path::Path()
+		{
+		}
+		
+		
+		Path::Path(const WString& _filePath)
+			:fullPath(_filePath)
+		{
+			Initialize();
+		}
+
+		Path::Path(const wchar_t* _filePath)
+			: fullPath(_filePath)
+		{
+			Initialize();
+		}
+
+		Path::Path(const Path& _filePath)
+			: fullPath(_filePath.fullPath)
+		{
+			Initialize();
+		}
+
+		Path::~Path()
+		{
+		}
+		
+		vl::WString Path::UnquoteSpaces()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			BOOL bRes = PathUnquoteSpaces(&buffer[0]);
+			if (bRes)
+			{
+				fullPath = &buffer[0];
+			}
+			return fullPath;
+		}
+
+		bool Path::IsDirectory()
+		{
+			return PathIsDirectory(fullPath.Buffer()) != FALSE;
+		}
+
+		bool Path::IsFileSpec()
+		{
+			return PathIsFileSpec(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsUNC()
+		{
+			return PathIsUNC(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsUNCServer()
+		{
+			return PathIsUNCServer(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsUNCServerShare()
+		{
+			return PathIsUNCServerShare(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsURL()
+		{
+			return PathIsURL(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsNetworkPath()
+		{
+			return PathIsNetworkPath(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsPrefix(WString strPrefix)
+		{
+			return PathIsPrefix(fullPath.Buffer(),strPrefix.Buffer()) == TRUE;
+		}
+
+		bool Path::MatchSpec(WString strSpec)
+		{
+			return PathMatchSpec(fullPath.Buffer(), strSpec.Buffer()) == TRUE;
+		}
+
+		void Path::RemoveBackslash()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			PathRemoveBackslash(&buffer[0]);
+			{
+				fullPath = &buffer[0];
+			}
+		}
+
+		void Path::RemoveExtension()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			PathRemoveExtension(&buffer[0]);
+			{
+				fullPath = &buffer[0];
+			}
+		}
+
+		bool Path::RemoveFileSpec()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			BOOL bRes = PathRemoveFileSpec(&buffer[0]);
+			if(bRes)
+			{
+				fullPath = &buffer[0];
+			}
+			return bRes == TRUE;
+		}
+
+<<<<<<< HEAD
+		vl::WString Path::FindFileName()
+		{
+			WString name = PathFindFileName(fullPath.Buffer());
+			return name;
+		}
+
+=======
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
+		bool Path::FileExists()
+		{
+			return PathFileExists(fullPath.Buffer()) == TRUE;
+		}
+
+		void Path::Initialize()
+		{
+		
+		}
+	}
+}
+
+
+/***********************************************************************
+>>>>>>> 3acb50405f278c9ae3f366e9bab0e7c17f0a431f
 .\REGEX\REGEXDATA.CPP
 ***********************************************************************/
 

@@ -276,6 +276,11 @@ namespace vl
 #endif
 		}
 		
+		vl::WString File::GetName()
+		{
+			return filePath.GetName();
+		}
+
 	}
 }
 

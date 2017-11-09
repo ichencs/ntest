@@ -43,14 +43,15 @@ namespace vl
 			
 		 public:
 			static FilePath CurrentPath();
-			static FilePath ModulePath();		//app(exe) path
+			static FilePath ModuleFolder();		//app(exe) path
 			/// <summary>
 			/// 通过当前模块（dll）的基地址获取dll路径
 			/// </summary>
 			/// <param name="pAddress">当前模块中的函数或变量地址</param>
 			/// <param name="isDll"></param>
-			/// <returns></returns>
-			static FilePath ModulePath(void* pAddress);			//
+			/// <returns></returns>\
+			/// VirtualQuery: 查询进程地址信息
+			static FilePath ModulePath(void* pAddress = NULL);			//	NULL:EXE root  not null: dll root
 			static FilePath TempPath();
 		 public:
 			static vint					Compare(const FilePath& a, const FilePath& b);

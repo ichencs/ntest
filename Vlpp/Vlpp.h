@@ -1909,6 +1909,14 @@ namespace vl
 					this->ReleaseItems(this->buffer, this->count);
 					this->DeallocateBuffer(this->buffer);
 				}
+
+				void Zero()
+				{
+					if (this->count >0)
+					{
+						memset(this->buffer, 0, sizeof(T)*this->count);
+					}
+				}
 				
 				/// <summary>Test does the array contain an item or not.</summary>
 				/// <returns>Returns true if the array contains the specified item.</returns>
@@ -6645,7 +6653,21 @@ namespace vl
 			Path(const WString& _filePath);
 			Path(const wchar_t* _filePath);
 			Path(const Path& _filePath);
+<<<<<<< HEAD
 		 public:
+=======
+		public:
+<<<<<<< HEAD
+			//************************************
+			// Method:    UnquoteSpaces
+			// FullName:  vl::path::Path::UnquoteSpaces
+			// Access:    public 
+			// Returns:   vl::WString
+			// Qualifier: 从带引号的路径中取出路径
+			//************************************
+=======
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
+>>>>>>> 3acb50405f278c9ae3f366e9bab0e7c17f0a431f
 			WString UnquoteSpaces();
 			bool IsDirectory();
 			//************************************
@@ -9342,6 +9364,10 @@ namespace vl
 		 public:
 			static FilePath CurrentPath();
 			static FilePath ModulePath();		//app(exe) path
+<<<<<<< HEAD
+			static FilePath ModuleFolder();		//app(exe) path
+=======
+>>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
 			/// <summary>
 			/// 通过当前模块（dll）的基地址获取dll路径
 			/// </summary>
@@ -9485,6 +9511,7 @@ namespace vl
 				/// <returns>Returns true if this operation succeeded.</returns>
 				/// <param name="newName">The new file name.</param>
 				bool						Rename(const WString& newName)const;
+				WString						GetName();
 		};
 		
 	}
@@ -9592,7 +9619,10 @@ namespace vl
 				Folder();
 				/// <summary>Create a reference to a specified folder.</summary>
 				/// <param name="_filePath">The specified folder.</param>
+				Folder(const WString& _filePath);
 				Folder(const FilePath& _filePath);
+				Folder(const wchar_t* _filePath);
+
 				~Folder();
 				
 				/// <summary>Get the file path of the folder.</summary>
@@ -9622,6 +9652,8 @@ namespace vl
 				/// <returns>Returns true if this operation succeeded.</returns>
 				/// <param name="newName">The new folder name.</param>
 				bool						Rename(const WString& newName)const;
+
+				WString						GetName();
 		};
 	}
 	
@@ -9699,6 +9731,7 @@ namespace vl
 				/// <returns>Returns true if this operation succeeded.</returns>
 				/// <param name="newName">The new file name.</param>
 				bool						Rename(const WString& newName)const;
+				WString						GetName();
 		};
 		
 	}
