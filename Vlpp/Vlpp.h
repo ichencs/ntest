@@ -4,6 +4,10 @@ DEVELOPER: Zihan Chen(vczh)
 ***********************************************************************/
 
 /***********************************************************************
+.\NATOMICINT.H
+***********************************************************************/
+
+/***********************************************************************
 .\BASIC.H
 ***********************************************************************/
 /***********************************************************************
@@ -5394,8 +5398,8 @@ namespace vl
 	extern WString				wupper(const WString& string);
 	
 	
-	extern WString				wformat(wchar_t* pszFormat, ...);
-	extern AString				aformat(char* pszFormat, ...);
+	extern WString				wformat(const wchar_t* pszFormat, ...);
+	extern AString				aformat(const char* pszFormat, ...);
 	
 	// #if defined VCZH_GCC
 	// 	extern void					_itoa_s(vint32_t value, char* buffer, size_t size, vint radix);
@@ -6630,24 +6634,24 @@ namespace vl
 #define NICE_PATH
 namespace vl
 {
-	
+
 	namespace path
 	{
-		class Path :public Object
+		class Path : public Object
 		{
-		public:
+		 public:
 			Path();
 			~Path();
 			Path(const WString& _filePath);
 			Path(const wchar_t* _filePath);
 			Path(const Path& _filePath);
-		public:
+		 public:
 			WString UnquoteSpaces();
 			bool IsDirectory();
 			//************************************
 			// Method:    IsFileSpec
 			// FullName:  vl::path::Path::IsFileSpec
-			// Access:    public 
+			// Access:    public
 			// Returns:   bool
 			// Qualifier:
 			// 功能：检查路径中是否带有 ‘:’ 和 ‘\’ 分隔符
@@ -6662,7 +6666,7 @@ namespace vl
 			//************************************
 			// Method:    MatchSpec
 			// FullName:  vl::path::Path::MatchSpec
-			// Access:    public 
+			// Access:    public
 			// Returns:   bool
 			// Qualifier:
 			// Parameter: WString strSpec
@@ -6670,11 +6674,11 @@ namespace vl
 			// PathMatchSpec( “http://news.sina.com.cn” , “*sina.com*” ) 返回TRUE
 			//************************************
 			bool MatchSpec(WString strSpec);
-		public:
+		 public:
 			//************************************
 			// Method:    RemoveBackslash
 			// FullName:  vl::path::Path::RemoveBackslash
-			// Access:    public 
+			// Access:    public
 			// Returns:   void
 			// Qualifier:
 			// 去除路径最后的反斜杠“\”
@@ -6682,14 +6686,13 @@ namespace vl
 			void RemoveBackslash();
 			void RemoveExtension();
 			bool RemoveFileSpec();
-		public:
-			WString FindFileName();
+		 public:
 			bool FileExists();
-		protected:
+		 protected:
 			WString						fullPath;
 			virtual void				Initialize();
-		
-		
+			
+			
 		};
 	}
 }
@@ -9306,12 +9309,12 @@ namespace vl
 	namespace filesystem
 	{
 		/// <summary>A type representing a file path.</summary>
-		class FilePath : public Object
+		class FilePath : public vl::path::Path
 		{
 		 protected:
-			WString						fullPath;
+			// 			WString						fullPath;
 			
-			void						Initialize();
+			void						Initialize()override;
 			
 			static void					GetPathComponents(WString path, collections::List<WString>& components);
 			static WString				ComponentsToPath(const collections::List<WString>& components);
@@ -9324,6 +9327,7 @@ namespace vl
 			
 			/// <summary>Create a root path.</summary>
 			FilePath();
+			FilePath(const Path& _path);
 			/// <summary>Create a file path.</summary>
 			/// <param name="_filePath">Content of the file path. If it is a relative path, it will be converted to an absolute path.</param>
 			FilePath(const WString& _filePath);
@@ -9341,7 +9345,7 @@ namespace vl
 			/// <summary>
 			/// 通过当前模块（dll）的基地址获取dll路径
 			/// </summary>
-			/// <param name="pAddress">当前模块中的地址</param>
+			/// <param name="pAddress">当前模块中的函数或变量地址</param>
 			/// <param name="isDll"></param>
 			/// <returns></returns>
 			static FilePath ModulePath(void* pAddress);			//
@@ -9507,29 +9511,29 @@ namespace vl
 {
 	namespace filesystem
 	{
-	
-
 		class FileInfo
 		{
 			struct FileAttrbutes
 			{
 				FileAttrbutes()
-					:attrbutes(0),
-					size(0) {}
+					: nattrbutes(0),
+					  nsize(0) {}
 				DateTime creation;
 				DateTime lastAccess;
 				DateTime lastWrite;
-
+				
 				FilePath filePath;
-				vuint64_t attrbutes;
-				vuint64_t size;
-			};	
-		public:
+				vuint64_t nattrbutes;
+				vuint64_t nsize;
+			};
+		 public:
 			FileInfo();
 			FileInfo(const FilePath& path);
 			FileInfo(const WString& path);
 			~FileInfo();
 		 public:
+			void SetFile(const WString& path);
+			void SetFile(const FilePath& path);
 			void SetPath(const WString& path);
 			void SetPath(const FilePath& path);
 		 public:
@@ -9539,17 +9543,19 @@ namespace vl
 			bool IsReadable()const;
 			bool IsWritable()const;
 			bool IsHidden()const;
-			WString FileName();
-			WString Extemsion();
+			WString FileName()const;
+			WString Extemsion()const;
+			WString Path()const;
 			
-			DateTime Created();
-			DateTime LastModified();
-			DateTime LastRead();
-			vuint64_t Size();
+			DateTime Created()const;
+			DateTime CreatedTime()const;
+			DateTime LastModified()const;
+			DateTime LastRead()const;
+			vuint64_t Size()const;
 		 protected:
-			bool getProperty();
-		 private:
-			 FileAttrbutes attrbute;
+			virtual bool Initialize();
+		 protected:
+			FileAttrbutes attrbute;
 		};
 		
 		
@@ -11058,7 +11064,7 @@ namespace vl
 
 
 /***********************************************************************
-.\NATOMICINT.H
+.\NATOMICINT-.H
 ***********************************************************************/
 #pragma once
 using namespace vl;
@@ -11173,21 +11179,21 @@ namespace vl
 			vuint64_t	pagefileUsage;						// 使用分页文件
 			vuint64_t	peakPagefileUsage;					// 使用分页文件高峰
 		};
-
+		
 		class Process;
 		class Process
 		{
-			public:
-				Process();
-				~Process();
-			protected:
-				void InitializeCurrent();
-			public:
-				static vuint CurrentID();
-				static bool GetMemoryInfo(ProcessMemory& memory);
-				
-			private:
-				
+		 public:
+			Process();
+			~Process();
+		 protected:
+			void InitializeCurrent();
+		 public:
+			static vuint CurrentID();
+			static bool GetMemoryInfo(ProcessMemory& memory);
+			
+		 private:
+		 
 		};
 		
 		
@@ -11261,7 +11267,7 @@ namespace vl
 			vuint64_t	ullAvailVirtual;
 			vuint64_t	ullAvailExtendedVirtual;
 		};
-
+		
 		struct DiskSpaceInfo
 		{
 			DiskSpaceInfo():
@@ -11274,43 +11280,44 @@ namespace vl
 			vuint64_t available;	//可用(字节)
 			vuint64_t total;
 			vuint64_t free;
-
+			
 		};
 		
 		class System
 		{
-			public:
-				System();
-				~System();
-			public:
-				static DateTime Time();
-				static WString ComputerName();
-				static WString UserName();
-				// 			static WString DnsHotsNameToComputer(WString dnsHost);
-				//************************************
-				// Method:    SystemWindowsDirectory
-				// FullName:  vl::system::System::SystemWindowsDirectory
-				// Access:    public static
-				// Returns:   vl::WString
-				// Qualifier:On a system that is running Terminal Services, each user has a unique Windows directory.
-				//************************************
-				static WString WindowsDirectory();
-				//************************************
-				// Method:    SystemWindowsDirectory
-				// FullName:  vl::system::System::SystemWindowsDirectory
-				// Access:    public static
-				// Returns:   vl::WString
-				// Qualifier: The system Windows directory is shared by all users,
-				//			  so it is the directory where an application should store initialization and help files that apply to all users.
-				//************************************
-				static WString SystemWindowsDirectory();
-				static void Version();
-				static void SystemInfo();
-				static bool GetGlobalMemory(GlobalMemory& memory);
-				static bool GetDiskSpaceInfo(DiskSpaceInfo& disk);
-			protected:
-				static eProcessorArchitecture ProcessorArchitecture(vuint architecture);
-				static eProcessorType ProcessorType(vuint type);
+		 public:
+			System();
+			~System();
+		 public:
+			static DateTime Time();
+			static WString ComputerName();
+			static WString UserName();
+			// 			static WString DnsHotsNameToComputer(WString dnsHost);
+			//************************************
+			// Method:    SystemWindowsDirectory
+			// FullName:  vl::system::System::SystemWindowsDirectory
+			// Access:    public static
+			// Returns:   vl::WString
+			// Qualifier:On a system that is running Terminal Services, each user has a unique Windows directory.
+			//************************************
+			static WString WindowsDirectory();
+			//************************************
+			// Method:    SystemWindowsDirectory
+			// FullName:  vl::system::System::SystemWindowsDirectory
+			// Access:    public static
+			// Returns:   vl::WString
+			// Qualifier: The system Windows directory is shared by all users,
+			//			  so it is the directory where an application should store initialization and help files that apply to all users.
+			//************************************
+			static WString SystemWindowsDirectory();
+			static WString CommandLine();
+			static void Version();
+			static void SystemInfo();
+			static bool GetGlobalMemory(GlobalMemory& memory);
+			static bool GetDiskSpaceInfo(DiskSpaceInfo& disk);
+		 protected:
+			static eProcessorArchitecture ProcessorArchitecture(vuint architecture);
+			static eProcessorType ProcessorType(vuint type);
 		};
 	}
 }

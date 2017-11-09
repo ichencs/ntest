@@ -129,7 +129,7 @@ namespace vl
 		systemTime.wSecond = (WORD)_second;
 		systemTime.wMilliseconds = (WORD)_milliseconds;
 		
-		FILETIME fileTime;
+		FILETIME fileTime = {0};
 		SystemTimeToFileTime(&systemTime, &fileTime);
 		FileTimeToSystemTime(&fileTime, &systemTime);
 		return SystemTimeToDateTime(systemTime);
@@ -665,7 +665,7 @@ namespace vl
 		return result;
 	}
 	
-	extern WString wformat(wchar_t* pszFormat, ...)
+	WString wformat(const wchar_t* pszFormat, ...)
 	{
 		WString string;
 		va_list argList;
@@ -688,7 +688,7 @@ namespace vl
 		return string;
 	}
 	
-	extern AString aformat(char* pszFormat, ...)
+	AString aformat(const char* pszFormat, ...)
 	{
 		AString string;
 		va_list argList;
@@ -776,287 +776,6 @@ ParsingException
 		return position;
 	}
 }
-
-/***********************************************************************
-.\FILESYSTEM\FILE.CPP
-***********************************************************************/
-// #include <Shlwapi.h>
-// #pragma comment(lib, "Shlwapi.lib")
-
-namespace vl
-{
-	namespace filesystem
-	{
-		using namespace collections;
-		using namespace stream;
-		
-		/***********************************************************************
-		File
-		***********************************************************************/
-		
-		File::File()
-		{
-		}
-		
-		File::File(const FilePath& _filePath)
-			: filePath(_filePath)
-		{
-		}
-		
-		File::~File()
-		{
-		}
-		
-		const FilePath& File::GetFilePath()const
-		{
-			return filePath;
-		}
-		
-		bool File::ReadAllTextWithEncodingTesting(WString& text, stream::BomEncoder::Encoding& encoding, bool& containsBom)
-		{
-			Array<unsigned char> buffer;
-			{
-				FileStream fileStream(filePath.GetFullPath(), FileStream::ReadOnly);
-				
-				if (!fileStream.IsAvailable())
-				{
-					return false;
-				}
-				
-				if (fileStream.Size() == 0)
-				{
-					text = L"";
-					encoding = BomEncoder::Mbcs;
-					containsBom = false;
-					return true;
-				}
-				
-				buffer.Resize((vint)fileStream.Size());
-				vint count = fileStream.Read(&buffer[0], buffer.Count());
-				CHECK_ERROR(count == buffer.Count(), L"vl::filesystem::File::ReadAllTextWithEncodingTesting(WString&, BomEncoder::Encoding&, bool&)#Failed to read the whole file.");
-			}
-			TestEncoding(&buffer[0], buffer.Count(), encoding, containsBom);
-			
-			MemoryWrapperStream memoryStream(&buffer[0], buffer.Count());
-			
-			if (containsBom)
-			{
-				BomDecoder decoder;
-				DecoderStream decoderStream(memoryStream, decoder);
-				StreamReader reader(decoderStream);
-				text = reader.ReadToEnd();
-			}
-			else
-			{
-				switch (encoding)
-				{
-					case BomEncoder::Utf8:
-						{
-							Utf8Decoder decoder;
-							DecoderStream decoderStream(memoryStream, decoder);
-							StreamReader reader(decoderStream);
-							text = reader.ReadToEnd();
-						}
-						break;
-						
-					case BomEncoder::Utf16:
-						{
-							Utf16Decoder decoder;
-							DecoderStream decoderStream(memoryStream, decoder);
-							StreamReader reader(decoderStream);
-							text = reader.ReadToEnd();
-						}
-						break;
-						
-					case BomEncoder::Utf16BE:
-						{
-							Utf16BEDecoder decoder;
-							DecoderStream decoderStream(memoryStream, decoder);
-							StreamReader reader(decoderStream);
-							text = reader.ReadToEnd();
-						}
-						break;
-						
-					default:
-						{
-							MbcsDecoder decoder;
-							DecoderStream decoderStream(memoryStream, decoder);
-							StreamReader reader(decoderStream);
-							text = reader.ReadToEnd();
-						}
-				}
-			}
-			
-			return true;
-		}
-		
-		WString File::ReadAllTextByBom()const
-		{
-			WString text;
-			ReadAllTextByBom(text);
-			return text;
-		}
-		
-		bool File::ReadAllTextByBom(WString& text)const
-		{
-			FileStream fileStream(filePath.GetFullPath(), FileStream::ReadOnly);
-			
-			if (!fileStream.IsAvailable())
-			{
-				return false;
-			}
-			
-			BomDecoder decoder;
-			DecoderStream decoderStream(fileStream, decoder);
-			StreamReader reader(decoderStream);
-			text = reader.ReadToEnd();
-			return true;
-		}
-		
-		bool File::ReadAllLinesByBom(collections::List<WString>& lines)const
-		{
-			FileStream fileStream(filePath.GetFullPath(), FileStream::ReadOnly);
-			
-			if (!fileStream.IsAvailable())
-			{
-				return false;
-			}
-			
-			BomDecoder decoder;
-			DecoderStream decoderStream(fileStream, decoder);
-			StreamReader reader(decoderStream);
-			
-			while (!reader.IsEnd())
-			{
-				lines.Add(reader.ReadLine());
-			}
-			
-			return true;
-		}
-		
-		bool File::WriteAllText(const WString& text, bool bom, stream::BomEncoder::Encoding encoding)
-		{
-			FileStream fileStream(filePath.GetFullPath(), FileStream::WriteOnly);
-			
-			if (!fileStream.IsAvailable())
-			{
-				return false;
-			}
-			
-			IEncoder* encoder = NULL;
-			
-			if (bom)
-			{
-				encoder = new BomEncoder(encoding);
-			}
-			else switch (encoding)
-				{
-					case BomEncoder::Utf8:
-						encoder = new Utf8Encoder;
-						break;
-						
-					case BomEncoder::Utf16:
-						encoder = new Utf16Encoder;
-						break;
-						
-					case BomEncoder::Utf16BE:
-						encoder = new Utf16BEEncoder;
-						break;
-						
-					default:
-						encoder = new MbcsEncoder;
-						break;
-				}
-				
-			{
-				EncoderStream encoderStream(fileStream, *encoder);
-				StreamWriter writer(encoderStream);
-				writer.WriteString(text);
-			}
-			
-			delete encoder;
-			return true;
-		}
-		
-		bool File::WriteAllLines(collections::List<WString>& lines, bool bom, stream::BomEncoder::Encoding encoding)
-		{
-			FileStream fileStream(filePath.GetFullPath(), FileStream::WriteOnly);
-			
-			if (!fileStream.IsAvailable())
-			{
-				return false;
-			}
-			
-			IEncoder* encoder = NULL;
-			
-			if (bom)
-			{
-				encoder = new BomEncoder(encoding);
-			}
-			else switch (encoding)
-				{
-					case BomEncoder::Utf8:
-						encoder = new Utf8Encoder;
-						break;
-						
-					case BomEncoder::Utf16:
-						encoder = new Utf16Encoder;
-						break;
-						
-					case BomEncoder::Utf16BE:
-						encoder = new Utf16BEEncoder;
-						break;
-						
-					default:
-						encoder = new MbcsEncoder;
-						break;
-				}
-				
-			{
-				EncoderStream encoderStream(fileStream, *encoder);
-				StreamWriter writer(encoderStream);
-				FOREACH(WString, line, lines)
-				{
-					writer.WriteLine(line);
-				}
-			}
-			
-			delete encoder;
-			return true;
-		}
-		
-		bool File::Exists()const
-		{
-			return filePath.IsFile();
-		}
-		
-		bool File::Delete()const
-		{
-#if defined VCZH_MSVC
-			return DeleteFile(filePath.GetFullPath().Buffer()) != 0;
-#elif defined VCZH_GCC
-			AString path = wtoa(filePath.GetFullPath());
-			return unlink(path.Buffer()) == 0;
-#endif
-		}
-		
-		bool File::Rename(const WString& newName)const
-		{
-#if defined VCZH_MSVC
-			WString oldFileName = filePath.GetFullPath();
-			WString newFileName = (filePath.GetFolder() / newName).GetFullPath();
-			return MoveFile(oldFileName.Buffer(), newFileName.Buffer()) != 0;
-#elif defined VCZH_GCC
-			AString oldFileName = wtoa(filePath.GetFullPath());
-			AString newFileName = wtoa((filePath.GetFolder() / newName).GetFullPath());
-			return rename(oldFileName.Buffer(), newFileName.Buffer()) == 0;
-#endif
-		}
-		
-	}
-}
-
-
 
 /***********************************************************************
 .\STREAM\ACCESSOR.CPP
@@ -3378,10 +3097,436 @@ MemoryWrapperStream
 }
 
 /***********************************************************************
-.\FILESYSTEM\FILEPATH.CPP
+.\FILESYSTEM\FILE.CPP
+***********************************************************************/
+// #include <Shlwapi.h>
+// #pragma comment(lib, "Shlwapi.lib")
+
+namespace vl
+{
+	namespace filesystem
+	{
+		using namespace collections;
+		using namespace stream;
+		
+		/***********************************************************************
+		File
+		***********************************************************************/
+		
+		File::File()
+		{
+		}
+		
+		File::File(const FilePath& _filePath)
+			: filePath(_filePath)
+		{
+		}
+		
+		File::~File()
+		{
+		}
+		
+		const FilePath& File::GetFilePath()const
+		{
+			return filePath;
+		}
+		
+		bool File::ReadAllTextWithEncodingTesting(WString& text, stream::BomEncoder::Encoding& encoding, bool& containsBom)
+		{
+			Array<unsigned char> buffer;
+			{
+				FileStream fileStream(filePath.GetFullPath(), FileStream::ReadOnly);
+				
+				if (!fileStream.IsAvailable())
+				{
+					return false;
+				}
+				
+				if (fileStream.Size() == 0)
+				{
+					text = L"";
+					encoding = BomEncoder::Mbcs;
+					containsBom = false;
+					return true;
+				}
+				
+				buffer.Resize((vint)fileStream.Size());
+				vint count = fileStream.Read(&buffer[0], buffer.Count());
+				CHECK_ERROR(count == buffer.Count(), L"vl::filesystem::File::ReadAllTextWithEncodingTesting(WString&, BomEncoder::Encoding&, bool&)#Failed to read the whole file.");
+			}
+			TestEncoding(&buffer[0], buffer.Count(), encoding, containsBom);
+			
+			MemoryWrapperStream memoryStream(&buffer[0], buffer.Count());
+			
+			if (containsBom)
+			{
+				BomDecoder decoder;
+				DecoderStream decoderStream(memoryStream, decoder);
+				StreamReader reader(decoderStream);
+				text = reader.ReadToEnd();
+			}
+			else
+			{
+				switch (encoding)
+				{
+					case BomEncoder::Utf8:
+						{
+							Utf8Decoder decoder;
+							DecoderStream decoderStream(memoryStream, decoder);
+							StreamReader reader(decoderStream);
+							text = reader.ReadToEnd();
+						}
+						break;
+						
+					case BomEncoder::Utf16:
+						{
+							Utf16Decoder decoder;
+							DecoderStream decoderStream(memoryStream, decoder);
+							StreamReader reader(decoderStream);
+							text = reader.ReadToEnd();
+						}
+						break;
+						
+					case BomEncoder::Utf16BE:
+						{
+							Utf16BEDecoder decoder;
+							DecoderStream decoderStream(memoryStream, decoder);
+							StreamReader reader(decoderStream);
+							text = reader.ReadToEnd();
+						}
+						break;
+						
+					default:
+						{
+							MbcsDecoder decoder;
+							DecoderStream decoderStream(memoryStream, decoder);
+							StreamReader reader(decoderStream);
+							text = reader.ReadToEnd();
+						}
+				}
+			}
+			
+			return true;
+		}
+		
+		WString File::ReadAllTextByBom()const
+		{
+			WString text;
+			ReadAllTextByBom(text);
+			return text;
+		}
+		
+		bool File::ReadAllTextByBom(WString& text)const
+		{
+			FileStream fileStream(filePath.GetFullPath(), FileStream::ReadOnly);
+			
+			if (!fileStream.IsAvailable())
+			{
+				return false;
+			}
+			
+			BomDecoder decoder;
+			DecoderStream decoderStream(fileStream, decoder);
+			StreamReader reader(decoderStream);
+			text = reader.ReadToEnd();
+			return true;
+		}
+		
+		bool File::ReadAllLinesByBom(collections::List<WString>& lines)const
+		{
+			FileStream fileStream(filePath.GetFullPath(), FileStream::ReadOnly);
+			
+			if (!fileStream.IsAvailable())
+			{
+				return false;
+			}
+			
+			BomDecoder decoder;
+			DecoderStream decoderStream(fileStream, decoder);
+			StreamReader reader(decoderStream);
+			
+			while (!reader.IsEnd())
+			{
+				lines.Add(reader.ReadLine());
+			}
+			
+			return true;
+		}
+		
+		bool File::WriteAllText(const WString& text, bool bom, stream::BomEncoder::Encoding encoding)
+		{
+			FileStream fileStream(filePath.GetFullPath(), FileStream::WriteOnly);
+			
+			if (!fileStream.IsAvailable())
+			{
+				return false;
+			}
+			
+			IEncoder* encoder = NULL;
+			
+			if (bom)
+			{
+				encoder = new BomEncoder(encoding);
+			}
+			else switch (encoding)
+				{
+					case BomEncoder::Utf8:
+						encoder = new Utf8Encoder;
+						break;
+						
+					case BomEncoder::Utf16:
+						encoder = new Utf16Encoder;
+						break;
+						
+					case BomEncoder::Utf16BE:
+						encoder = new Utf16BEEncoder;
+						break;
+						
+					default:
+						encoder = new MbcsEncoder;
+						break;
+				}
+				
+			{
+				EncoderStream encoderStream(fileStream, *encoder);
+				StreamWriter writer(encoderStream);
+				writer.WriteString(text);
+			}
+			
+			delete encoder;
+			return true;
+		}
+		
+		bool File::WriteAllLines(collections::List<WString>& lines, bool bom, stream::BomEncoder::Encoding encoding)
+		{
+			FileStream fileStream(filePath.GetFullPath(), FileStream::WriteOnly);
+			
+			if (!fileStream.IsAvailable())
+			{
+				return false;
+			}
+			
+			IEncoder* encoder = NULL;
+			
+			if (bom)
+			{
+				encoder = new BomEncoder(encoding);
+			}
+			else switch (encoding)
+				{
+					case BomEncoder::Utf8:
+						encoder = new Utf8Encoder;
+						break;
+						
+					case BomEncoder::Utf16:
+						encoder = new Utf16Encoder;
+						break;
+						
+					case BomEncoder::Utf16BE:
+						encoder = new Utf16BEEncoder;
+						break;
+						
+					default:
+						encoder = new MbcsEncoder;
+						break;
+				}
+				
+			{
+				EncoderStream encoderStream(fileStream, *encoder);
+				StreamWriter writer(encoderStream);
+				FOREACH(WString, line, lines)
+				{
+					writer.WriteLine(line);
+				}
+			}
+			
+			delete encoder;
+			return true;
+		}
+		
+		bool File::Exists()const
+		{
+			return filePath.IsFile();
+		}
+		
+		bool File::Delete()const
+		{
+#if defined VCZH_MSVC
+			return DeleteFile(filePath.GetFullPath().Buffer()) != 0;
+#elif defined VCZH_GCC
+			AString path = wtoa(filePath.GetFullPath());
+			return unlink(path.Buffer()) == 0;
+#endif
+		}
+		
+		bool File::Rename(const WString& newName)const
+		{
+#if defined VCZH_MSVC
+			WString oldFileName = filePath.GetFullPath();
+			WString newFileName = (filePath.GetFolder() / newName).GetFullPath();
+			return MoveFile(oldFileName.Buffer(), newFileName.Buffer()) != 0;
+#elif defined VCZH_GCC
+			AString oldFileName = wtoa(filePath.GetFullPath());
+			AString newFileName = wtoa((filePath.GetFolder() / newName).GetFullPath());
+			return rename(oldFileName.Buffer(), newFileName.Buffer()) == 0;
+#endif
+		}
+		
+	}
+}
+
+
+
+/***********************************************************************
+.\PATH.CPP
 ***********************************************************************/
 
 #include <Shlwapi.h>
+#pragma comment(lib, "Shlwapi.lib")
+
+namespace vl
+{
+	namespace path
+	{
+		using namespace collections;
+
+		Path::Path()
+		{
+		}
+		
+		
+		Path::Path(const WString& _filePath)
+			:fullPath(_filePath)
+		{
+			Initialize();
+		}
+
+		Path::Path(const wchar_t* _filePath)
+			: fullPath(_filePath)
+		{
+			Initialize();
+		}
+
+		Path::Path(const Path& _filePath)
+			: fullPath(_filePath.fullPath)
+		{
+			Initialize();
+		}
+
+		Path::~Path()
+		{
+		}
+		
+		vl::WString Path::UnquoteSpaces()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			BOOL bRes = PathUnquoteSpaces(&buffer[0]);
+			if (bRes)
+			{
+				fullPath = &buffer[0];
+			}
+			return fullPath;
+		}
+
+		bool Path::IsDirectory()
+		{
+			return PathIsDirectory(fullPath.Buffer()) != FALSE;
+		}
+
+		bool Path::IsFileSpec()
+		{
+			return PathIsFileSpec(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsUNC()
+		{
+			return PathIsUNC(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsUNCServer()
+		{
+			return PathIsUNCServer(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsUNCServerShare()
+		{
+			return PathIsUNCServerShare(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsURL()
+		{
+			return PathIsURL(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsNetworkPath()
+		{
+			return PathIsNetworkPath(fullPath.Buffer()) == TRUE;
+		}
+
+		bool Path::IsPrefix(WString strPrefix)
+		{
+			return PathIsPrefix(fullPath.Buffer(),strPrefix.Buffer()) == TRUE;
+		}
+
+		bool Path::MatchSpec(WString strSpec)
+		{
+			return PathMatchSpec(fullPath.Buffer(), strSpec.Buffer()) == TRUE;
+		}
+
+		void Path::RemoveBackslash()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			PathRemoveBackslash(&buffer[0]);
+			{
+				fullPath = &buffer[0];
+			}
+		}
+
+		void Path::RemoveExtension()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			PathRemoveExtension(&buffer[0]);
+			{
+				fullPath = &buffer[0];
+			}
+		}
+
+		bool Path::RemoveFileSpec()
+		{
+			Array<wchar_t> buffer(fullPath.Length() + 1);
+			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
+
+			BOOL bRes = PathRemoveFileSpec(&buffer[0]);
+			if(bRes)
+			{
+				fullPath = &buffer[0];
+			}
+			return bRes == TRUE;
+		}
+
+		bool Path::FileExists()
+		{
+			return PathFileExists(fullPath.Buffer()) == TRUE;
+		}
+
+		void Path::Initialize()
+		{
+		
+		}
+	}
+}
+
+
+/***********************************************************************
+.\FILESYSTEM\FILEPATH.CPP
+***********************************************************************/
+
 #pragma comment(lib, "Shlwapi.lib")
 
 #define NICE_MAX_PATH  65536
@@ -3475,22 +3620,29 @@ namespace vl
 		}
 		
 		FilePath::FilePath(const WString& _filePath)
-			: fullPath(_filePath)
+			: Path(_filePath)
 		{
 			Initialize();
 		}
 		
 		FilePath::FilePath(const wchar_t* _filePath)
-			: fullPath(_filePath)
+			: Path(_filePath)
 		{
 			Initialize();
 		}
 		
 		FilePath::FilePath(const FilePath& _filePath)
-			: fullPath(_filePath.fullPath)
+			: Path(_filePath.fullPath)
 		{
 			Initialize();
 		}
+		
+		FilePath::FilePath(const Path& _path)
+			: Path(_path)
+		{
+			Initialize();
+		}
+		
 		
 		FilePath::~FilePath()
 		{
@@ -3960,146 +4112,146 @@ namespace vl
 		Array<wchar_t> buffer(length);
 		GetDateFormatEx(localeName.Buffer(), 0, &st, format.Buffer(), &buffer[0], (int)buffer.Count(), NULL);
 		return &buffer[0];
-#elif defined VCZH_GCC
-		/*
-		auto df = L"yyyy,MM,MMM,MMMM,dd,ddd,dddd";
-		auto ds = L"2000,01,Jan,January,02,Sun,Sunday";
-		auto tf = L"hh,HH,mm,ss,tt";
-		auto ts = L"01,13,02,03,PM";
-		*/
-		WString result;
-		const wchar_t* reading = format.Buffer();
-		
-		while (*reading)
-		{
-			if (wcsncmp(reading, L"yyyy", 4) == 0)
-			{
-				WString fragment = itow(date.year);
-		
-				while (fragment.Length() < 4)
-				{
-					fragment = L"0" + fragment;
-				}
-		
-				result += fragment;
-				reading += 4;
-			}
-			else
-				if (wcsncmp(reading, L"MMMM", 4) == 0)
-				{
-					result += GetLongMonthName(date.month);
-					reading += 4;
-				}
-				else
-					if (wcsncmp(reading, L"MMM", 3) == 0)
-					{
-						result += GetShortMonthName(date.month);
-						reading += 3;
-					}
-					else
-						if (wcsncmp(reading, L"MM", 2) == 0)
-						{
-							WString fragment = itow(date.month);
-		
-							while (fragment.Length() < 2)
-							{
-								fragment = L"0" + fragment;
-							}
-		
-							result += fragment;
-							reading += 2;
-						}
-						else
-							if (wcsncmp(reading, L"dddd", 4) == 0)
-							{
-								result += GetLongDayOfWeekName(date.dayOfWeek);
-								reading += 4;
-							}
-							else
-								if (wcsncmp(reading, L"ddd", 3) == 0)
-								{
-									result += GetShortDayOfWeekName(date.dayOfWeek);
-									reading += 3;
-								}
-								else
-									if (wcsncmp(reading, L"dd", 2) == 0)
-									{
-										WString fragment = itow(date.day);
-		
-										while (fragment.Length() < 2)
-										{
-											fragment = L"0" + fragment;
-										}
-		
-										result += fragment;
-										reading += 2;
-									}
-									else
-										if (wcsncmp(reading, L"hh", 2) == 0)
-										{
-											WString fragment = itow(date.hour > 12 ? date.hour - 12 : date.hour);
-		
-											while (fragment.Length() < 2)
-											{
-												fragment = L"0" + fragment;
-											}
-		
-											result += fragment;
-											reading += 2;
-										}
-										else
-											if (wcsncmp(reading, L"HH", 2) == 0)
-											{
-												WString fragment = itow(date.hour);
-		
-												while (fragment.Length() < 2)
-												{
-													fragment = L"0" + fragment;
-												}
-		
-												result += fragment;
-												reading += 2;
-											}
-											else
-												if (wcsncmp(reading, L"mm", 2) == 0)
-												{
-													WString fragment = itow(date.minute);
-		
-													while (fragment.Length() < 2)
-													{
-														fragment = L"0" + fragment;
-													}
-		
-													result += fragment;
-													reading += 2;
-												}
-												else
-													if (wcsncmp(reading, L"ss", 2) == 0)
-													{
-														WString fragment = itow(date.second);
-		
-														while (fragment.Length() < 2)
-														{
-															fragment = L"0" + fragment;
-														}
-		
-														result += fragment;
-														reading += 2;
-													}
-													else
-														if (wcsncmp(reading, L"tt", 2) == 0)
-														{
-															result += date.hour > 12 ? L"PM" : L"AM";
-															reading += 2;
-														}
-														else
-														{
-															result += *reading;
-															reading++;
-														}
-		}
-		
-		return result;
+		// #elif defined VCZH_GCC
+		// 		/*
+		// 		auto df = L"yyyy,MM,MMM,MMMM,dd,ddd,dddd";
+		// 		auto ds = L"2000,01,Jan,January,02,Sun,Sunday";
+		// 		auto tf = L"hh,HH,mm,ss,tt";
+		// 		auto ts = L"01,13,02,03,PM";
+		// 		*/
+		// 		WString result;
+		// 		const wchar_t* reading = format.Buffer();
+		//
+		// 		while (*reading)
+		// 		{
+		// 			if (wcsncmp(reading, L"yyyy", 4) == 0)
+		// 			{
+		// 				WString fragment = itow(date.year);
+		//
+		// 				while (fragment.Length() < 4)
+		// 				{
+		// 					fragment = L"0" + fragment;
+		// 				}
+		//
+		// 				result += fragment;
+		// 				reading += 4;
+		// 			}
+		// 			else
+		// 				if (wcsncmp(reading, L"MMMM", 4) == 0)
+		// 				{
+		// 					result += GetLongMonthName(date.month);
+		// 					reading += 4;
+		// 				}
+		// 				else
+		// 					if (wcsncmp(reading, L"MMM", 3) == 0)
+		// 					{
+		// 						result += GetShortMonthName(date.month);
+		// 						reading += 3;
+		// 					}
+		// 					else
+		// 						if (wcsncmp(reading, L"MM", 2) == 0)
+		// 						{
+		// 							WString fragment = itow(date.month);
+		//
+		// 							while (fragment.Length() < 2)
+		// 							{
+		// 								fragment = L"0" + fragment;
+		// 							}
+		//
+		// 							result += fragment;
+		// 							reading += 2;
+		// 						}
+		// 						else
+		// 							if (wcsncmp(reading, L"dddd", 4) == 0)
+		// 							{
+		// 								result += GetLongDayOfWeekName(date.dayOfWeek);
+		// 								reading += 4;
+		// 							}
+		// 							else
+		// 								if (wcsncmp(reading, L"ddd", 3) == 0)
+		// 								{
+		// 									result += GetShortDayOfWeekName(date.dayOfWeek);
+		// 									reading += 3;
+		// 								}
+		// 								else
+		// 									if (wcsncmp(reading, L"dd", 2) == 0)
+		// 									{
+		// 										WString fragment = itow(date.day);
+		//
+		// 										while (fragment.Length() < 2)
+		// 										{
+		// 											fragment = L"0" + fragment;
+		// 										}
+		//
+		// 										result += fragment;
+		// 										reading += 2;
+		// 									}
+		// 									else
+		// 										if (wcsncmp(reading, L"hh", 2) == 0)
+		// 										{
+		// 											WString fragment = itow(date.hour > 12 ? date.hour - 12 : date.hour);
+		//
+		// 											while (fragment.Length() < 2)
+		// 											{
+		// 												fragment = L"0" + fragment;
+		// 											}
+		//
+		// 											result += fragment;
+		// 											reading += 2;
+		// 										}
+		// 										else
+		// 											if (wcsncmp(reading, L"HH", 2) == 0)
+		// 											{
+		// 												WString fragment = itow(date.hour);
+		//
+		// 												while (fragment.Length() < 2)
+		// 												{
+		// 													fragment = L"0" + fragment;
+		// 												}
+		//
+		// 												result += fragment;
+		// 												reading += 2;
+		// 											}
+		// 											else
+		// 												if (wcsncmp(reading, L"mm", 2) == 0)
+		// 												{
+		// 													WString fragment = itow(date.minute);
+		//
+		// 													while (fragment.Length() < 2)
+		// 													{
+		// 														fragment = L"0" + fragment;
+		// 													}
+		//
+		// 													result += fragment;
+		// 													reading += 2;
+		// 												}
+		// 												else
+		// 													if (wcsncmp(reading, L"ss", 2) == 0)
+		// 													{
+		// 														WString fragment = itow(date.second);
+		//
+		// 														while (fragment.Length() < 2)
+		// 														{
+		// 															fragment = L"0" + fragment;
+		// 														}
+		//
+		// 														result += fragment;
+		// 														reading += 2;
+		// 													}
+		// 													else
+		// 														if (wcsncmp(reading, L"tt", 2) == 0)
+		// 														{
+		// 															result += date.hour > 12 ? L"PM" : L"AM";
+		// 															reading += 2;
+		// 														}
+		// 														else
+		// 														{
+		// 															result += *reading;
+		// 															reading++;
+		// 														}
+		// 		}
+		//
+		// 		return result;
 #endif
 	}
 	
@@ -4117,8 +4269,8 @@ namespace vl
 		Array<wchar_t> buffer(length);
 		GetTimeFormatEx(localeName.Buffer(), 0, &st, format.Buffer(), &buffer[0], (int)buffer.Count());
 		return &buffer[0];
-#elif defined VCZH_GCC
-		return FormatDate(format, time);
+		// #elif defined VCZH_GCC
+		// 		return FormatDate(format, time);
 #endif
 	}
 	
@@ -4156,26 +4308,26 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FormatDate(L"ddd", DateTime::FromDateTime(2000, 1, 2 + dayOfWeek));
-#elif defined VCZH_GCC
-		
-		switch (dayOfWeek)
-		{
-			case 0: return L"Sun";
-		
-			case 1: return L"Mon";
-		
-			case 2:	return L"Tue";
-		
-			case 3:	return L"Wed";
-		
-			case 4:	return L"Thu";
-		
-			case 5:	return L"Fri";
-		
-			case 6:	return L"Sat";
-		}
-		
-		return L"";
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (dayOfWeek)
+		// 		{
+		// 			case 0: return L"Sun";
+		//
+		// 			case 1: return L"Mon";
+		//
+		// 			case 2:	return L"Tue";
+		//
+		// 			case 3:	return L"Wed";
+		//
+		// 			case 4:	return L"Thu";
+		//
+		// 			case 5:	return L"Fri";
+		//
+		// 			case 6:	return L"Sat";
+		// 		}
+		//
+		// 		return L"";
 #endif
 	}
 	
@@ -4183,26 +4335,26 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FormatDate(L"dddd", DateTime::FromDateTime(2000, 1, 2 + dayOfWeek));
-#elif defined VCZH_GCC
-		
-		switch (dayOfWeek)
-		{
-			case 0: return L"Sunday";
-		
-			case 1: return L"Monday";
-		
-			case 2:	return L"Tuesday";
-		
-			case 3:	return L"Wednesday";
-		
-			case 4:	return L"Thursday";
-		
-			case 5:	return L"Friday";
-		
-			case 6:	return L"Saturday";
-		}
-		
-		return L"";
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (dayOfWeek)
+		// 		{
+		// 			case 0: return L"Sunday";
+		//
+		// 			case 1: return L"Monday";
+		//
+		// 			case 2:	return L"Tuesday";
+		//
+		// 			case 3:	return L"Wednesday";
+		//
+		// 			case 4:	return L"Thursday";
+		//
+		// 			case 5:	return L"Friday";
+		//
+		// 			case 6:	return L"Saturday";
+		// 		}
+		//
+		// 		return L"";
 #endif
 	}
 	
@@ -4210,36 +4362,36 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FormatDate(L"MMM", DateTime::FromDateTime(2000, month, 1));
-#elif defined VCZH_GCC
-		
-		switch (month)
-		{
-			case 1: return L"Jan";
-		
-			case 2: return L"Feb";
-		
-			case 3: return L"Mar";
-		
-			case 4: return L"Apr";
-		
-			case 5: return L"May";
-		
-			case 6: return L"Jun";
-		
-			case 7: return L"Jul";
-		
-			case 8: return L"Aug";
-		
-			case 9: return L"Sep";
-		
-			case 10: return L"Oct";
-		
-			case 11: return L"Nov";
-		
-			case 12: return L"Dec";
-		}
-		
-		return L"";
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (month)
+		// 		{
+		// 			case 1: return L"Jan";
+		//
+		// 			case 2: return L"Feb";
+		//
+		// 			case 3: return L"Mar";
+		//
+		// 			case 4: return L"Apr";
+		//
+		// 			case 5: return L"May";
+		//
+		// 			case 6: return L"Jun";
+		//
+		// 			case 7: return L"Jul";
+		//
+		// 			case 8: return L"Aug";
+		//
+		// 			case 9: return L"Sep";
+		//
+		// 			case 10: return L"Oct";
+		//
+		// 			case 11: return L"Nov";
+		//
+		// 			case 12: return L"Dec";
+		// 		}
+		//
+		// 		return L"";
 #endif
 	}
 	
@@ -4247,36 +4399,36 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FormatDate(L"MMMM", DateTime::FromDateTime(2000, month, 1));
-#elif defined VCZH_GCC
-		
-		switch (month)
-		{
-			case 1: return L"January";
-		
-			case 2: return L"February";
-		
-			case 3: return L"March";
-		
-			case 4: return L"April";
-		
-			case 5: return L"May";
-		
-			case 6: return L"June";
-		
-			case 7: return L"July";
-		
-			case 8: return L"August";
-		
-			case 9: return L"September";
-		
-			case 10: return L"October";
-		
-			case 11: return L"November";
-		
-			case 12: return L"December";
-		}
-		
-		return L"";
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (month)
+		// 		{
+		// 			case 1: return L"January";
+		//
+		// 			case 2: return L"February";
+		//
+		// 			case 3: return L"March";
+		//
+		// 			case 4: return L"April";
+		//
+		// 			case 5: return L"May";
+		//
+		// 			case 6: return L"June";
+		//
+		// 			case 7: return L"July";
+		//
+		// 			case 8: return L"August";
+		//
+		// 			case 9: return L"September";
+		//
+		// 			case 10: return L"October";
+		//
+		// 			case 11: return L"November";
+		//
+		// 			case 12: return L"December";
+		// 		}
+		//
+		// 		return L"";
 #endif
 	}
 	
@@ -4373,17 +4525,17 @@ namespace vl
 			default: return 0;
 		}
 		
-#elif defined VCZH_GCC
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				return wcscmp(s1.Buffer(), s2.Buffer());
-		
-			case Normalization::IgnoreCase:
-				return wcscasecmp(s1.Buffer(), s2.Buffer());
-		}
-		
+		// #elif defined VCZH_GCC
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				return wcscmp(s1.Buffer(), s2.Buffer());
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				return wcscasecmp(s1.Buffer(), s2.Buffer());
+		// 		}
+		//
 #endif
 	}
 	
@@ -4429,53 +4581,53 @@ namespace vl
 		int length = 0;
 		int result = FindNLSStringEx(localeName.Buffer(), FIND_FROMSTART | TranslateNormalization(normalization), text.Buffer(), (int)text.Length(), find.Buffer(), (int)find.Length(), &length, NULL, NULL, NULL);
 		return result == -1 ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result, length);
-#elif defined VCZH_GCC
-		
-		if (text.Length() < find.Length() || find.Length() == 0)
-		{
-			return Pair<vint, vint>(-1, 0);
-		}
-		
-		const wchar_t* result = 0;
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				{
-					const wchar_t* reading = text.Buffer();
-		
-					while (*reading)
-					{
-						if (wcsncmp(reading, find.Buffer(), find.Length()) == 0)
-						{
-							result = reading;
-							break;
-						}
-		
-						reading++;
-					}
-				}
-				break;
-		
-			case Normalization::IgnoreCase:
-				{
-					const wchar_t* reading = text.Buffer();
-		
-					while (*reading)
-					{
-						if (wcsncasecmp(reading, find.Buffer(), find.Length()) == 0)
-						{
-							result = reading;
-							break;
-						}
-		
-						reading++;
-					}
-				}
-				break;
-		}
-		
-		return result == NULL ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result - text.Buffer(), find.Length());
+		// #elif defined VCZH_GCC
+		//
+		// 		if (text.Length() < find.Length() || find.Length() == 0)
+		// 		{
+		// 			return Pair<vint, vint>(-1, 0);
+		// 		}
+		//
+		// 		const wchar_t* result = 0;
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				{
+		// 					const wchar_t* reading = text.Buffer();
+		//
+		// 					while (*reading)
+		// 					{
+		// 						if (wcsncmp(reading, find.Buffer(), find.Length()) == 0)
+		// 						{
+		// 							result = reading;
+		// 							break;
+		// 						}
+		//
+		// 						reading++;
+		// 					}
+		// 				}
+		// 				break;
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				{
+		// 					const wchar_t* reading = text.Buffer();
+		//
+		// 					while (*reading)
+		// 					{
+		// 						if (wcsncasecmp(reading, find.Buffer(), find.Length()) == 0)
+		// 						{
+		// 							result = reading;
+		// 							break;
+		// 						}
+		//
+		// 						reading++;
+		// 					}
+		// 				}
+		// 				break;
+		// 		}
+		//
+		// 		return result == NULL ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result - text.Buffer(), find.Length());
 #endif
 	}
 	
@@ -4485,51 +4637,51 @@ namespace vl
 		int length = 0;
 		int result = FindNLSStringEx(localeName.Buffer(), FIND_FROMEND | TranslateNormalization(normalization), text.Buffer(), (int)text.Length(), find.Buffer(), (int)find.Length(), &length, NULL, NULL, NULL);
 		return result == -1 ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result, length);
-#elif defined VCZH_GCC
-		
-		if (text.Length() < find.Length() || find.Length() == 0)
-		{
-			return Pair<vint, vint>(-1, 0);
-		}
-		
-		const wchar_t* result = 0;
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				{
-					const wchar_t* reading = text.Buffer();
-		
-					while (*reading)
-					{
-						if (wcsncmp(reading, find.Buffer(), find.Length()) == 0)
-						{
-							result = reading;
-						}
-		
-						reading++;
-					}
-				}
-				break;
-		
-			case Normalization::IgnoreCase:
-				{
-					const wchar_t* reading = text.Buffer();
-		
-					while (*reading)
-					{
-						if (wcsncasecmp(reading, find.Buffer(), find.Length()) == 0)
-						{
-							result = reading;
-						}
-		
-						reading++;
-					}
-				}
-				break;
-		}
-		
-		return result == NULL ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result - text.Buffer(), find.Length());
+		// #elif defined VCZH_GCC
+		//
+		// 		if (text.Length() < find.Length() || find.Length() == 0)
+		// 		{
+		// 			return Pair<vint, vint>(-1, 0);
+		// 		}
+		//
+		// 		const wchar_t* result = 0;
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				{
+		// 					const wchar_t* reading = text.Buffer();
+		//
+		// 					while (*reading)
+		// 					{
+		// 						if (wcsncmp(reading, find.Buffer(), find.Length()) == 0)
+		// 						{
+		// 							result = reading;
+		// 						}
+		//
+		// 						reading++;
+		// 					}
+		// 				}
+		// 				break;
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				{
+		// 					const wchar_t* reading = text.Buffer();
+		//
+		// 					while (*reading)
+		// 					{
+		// 						if (wcsncasecmp(reading, find.Buffer(), find.Length()) == 0)
+		// 						{
+		// 							result = reading;
+		// 						}
+		//
+		// 						reading++;
+		// 					}
+		// 				}
+		// 				break;
+		// 		}
+		//
+		// 		return result == NULL ? Pair<vint, vint>(-1, 0) : Pair<vint, vint>(result - text.Buffer(), find.Length());
 #endif
 	}
 	
@@ -4538,22 +4690,22 @@ namespace vl
 #if defined VCZH_MSVC
 		int result = FindNLSStringEx(localeName.Buffer(), FIND_STARTSWITH | TranslateNormalization(normalization), text.Buffer(), (int)text.Length(), find.Buffer(), (int)find.Length(), NULL, NULL, NULL, NULL);
 		return result != -1;
-#elif defined VCZH_GCC
-		
-		if (text.Length() < find.Length() || find.Length() == 0)
-		{
-			return false;
-		}
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				return wcsncmp(text.Buffer(), find.Buffer(), find.Length()) == 0;
-		
-			case Normalization::IgnoreCase:
-				return wcsncasecmp(text.Buffer(), find.Buffer(), find.Length()) == 0;
-		}
-		
+		// #elif defined VCZH_GCC
+		//
+		// 		if (text.Length() < find.Length() || find.Length() == 0)
+		// 		{
+		// 			return false;
+		// 		}
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				return wcsncmp(text.Buffer(), find.Buffer(), find.Length()) == 0;
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				return wcsncasecmp(text.Buffer(), find.Buffer(), find.Length()) == 0;
+		// 		}
+		//
 #endif
 	}
 	
@@ -4562,22 +4714,22 @@ namespace vl
 #if defined VCZH_MSVC
 		int result = FindNLSStringEx(localeName.Buffer(), FIND_ENDSWITH | TranslateNormalization(normalization), text.Buffer(), (int)text.Length(), find.Buffer(), (int)find.Length(), NULL, NULL, NULL, NULL);
 		return result != -1;
-#elif defined VCZH_GCC
-		
-		if (text.Length() < find.Length() || find.Length() == 0)
-		{
-			return false;
-		}
-		
-		switch (normalization)
-		{
-			case Normalization::None:
-				return wcsncmp(text.Buffer() + text.Length() - find.Length(), find.Buffer(), find.Length()) == 0;
-		
-			case Normalization::IgnoreCase:
-				return wcsncasecmp(text.Buffer() + text.Length() - find.Length(), find.Buffer(), find.Length()) == 0;
-		}
-		
+		// #elif defined VCZH_GCC
+		//
+		// 		if (text.Length() < find.Length() || find.Length() == 0)
+		// 		{
+		// 			return false;
+		// 		}
+		//
+		// 		switch (normalization)
+		// 		{
+		// 			case Normalization::None:
+		// 				return wcsncmp(text.Buffer() + text.Length() - find.Length(), find.Buffer(), find.Length()) == 0;
+		//
+		// 			case Normalization::IgnoreCase:
+		// 				return wcsncasecmp(text.Buffer() + text.Length() - find.Length(), find.Buffer(), find.Length()) == 0;
+		// 		}
+		//
 #endif
 	}
 }
@@ -4592,9 +4744,6 @@ namespace vl
 {
 	namespace filesystem
 	{
-		using namespace collections;
-		using namespace stream;
-		
 		FileInfo::FileInfo()
 		{
 		}
@@ -4602,13 +4751,13 @@ namespace vl
 		FileInfo::FileInfo(const FilePath& path)
 		{
 			attrbute.filePath = path;
-			getProperty();
+			Initialize();
 		}
 		
 		FileInfo::FileInfo(const WString& path)
 		{
 			attrbute.filePath = path;
-			getProperty();
+			Initialize();
 		}
 		
 		FileInfo::~FileInfo()
@@ -4616,105 +4765,127 @@ namespace vl
 		}
 		
 		
+		void FileInfo::SetFile(const WString& path)
+		{
+			attrbute.filePath = path;
+			Initialize();
+		}
+		
+		void FileInfo::SetFile(const FilePath& path)
+		{
+			attrbute.filePath = path;
+			Initialize();
+		}
+		
 		void FileInfo::SetPath(const WString& path)
 		{
 			attrbute.filePath = path;
-			getProperty();
+			Initialize();
 		}
 		
 		void FileInfo::SetPath(const FilePath& path)
 		{
 			attrbute.filePath = path;
-			getProperty();
+			Initialize();
 		}
 		
 		bool FileInfo::Exists()const
 		{
-			return attrbute.attrbutes  != 0;
+			return attrbute.nattrbutes  != 0;
 		}
 		
 		bool FileInfo::IsFolder()const
 		{
-			return (attrbute.attrbutes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+			return (attrbute.nattrbutes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 		}
 		
 		bool FileInfo::IsFile()const
 		{
-			return Exists() && (attrbute.attrbutes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+			return Exists() && (attrbute.nattrbutes & FILE_ATTRIBUTE_DIRECTORY) == 0;
 		}
 		
 		bool FileInfo::IsReadable() const
 		{
-			return (attrbute.attrbutes & FILE_SHARE_READ) == 1;
+			return (attrbute.nattrbutes & FILE_SHARE_READ) == 1;
 		}
 		
 		bool FileInfo::IsWritable() const
 		{
-			return (attrbute.attrbutes & FILE_SHARE_WRITE) == 1;
+			return (attrbute.nattrbutes & FILE_SHARE_WRITE) == 1;
 		}
 		
 		bool FileInfo::IsHidden() const
 		{
-			return (attrbute.attrbutes & FILE_ATTRIBUTE_HIDDEN) == 1;
+			return (attrbute.nattrbutes & FILE_ATTRIBUTE_HIDDEN) == 1;
 		}
 		
-		vl::WString FileInfo::FileName()
+		vl::WString FileInfo::FileName()const
 		{
 			return ::PathFindFileName(attrbute.filePath.GetFullPath().Buffer());
 		}
 		
-		vl::WString FileInfo::Extemsion()
+		vl::WString FileInfo::Extemsion()const
 		{
 			return ::PathFindExtension(attrbute.filePath.GetFullPath().Buffer());
 		}
 		
-		vl::DateTime FileInfo::Created()
+		vl::WString FileInfo::Path()const
+		{
+			return attrbute.filePath.GetFullPath();
+		}
+		
+		vl::DateTime FileInfo::Created()const
 		{
 			return attrbute.creation;
 		}
 		
-		vl::DateTime FileInfo::LastModified()
+		vl::DateTime FileInfo::CreatedTime() const
+		{
+			return attrbute.creation;
+		}
+		
+		vl::DateTime FileInfo::LastModified()const
 		{
 			return attrbute.lastWrite;
 		}
 		
-		vl::DateTime FileInfo::LastRead()
+		vl::DateTime FileInfo::LastRead()const
 		{
 			return attrbute.lastAccess;
 		}
 		
-		vl::vuint64_t FileInfo::Size()
+		vl::vuint64_t FileInfo::Size()const
 		{
-			return attrbute.size;
+			return attrbute.nsize;
 		}
-
-		bool FileInfo::getProperty()
+		
+		bool FileInfo::Initialize()
 		{
-			WIN32_FILE_ATTRIBUTE_DATA data;
-			memset(&data, 0, sizeof(WIN32_FILE_ATTRIBUTE_DATA));
-			BOOL result = GetFileAttributesEx(attrbute.filePath.GetFullPath().Buffer(), GetFileExInfoStandard, &data);
+			WIN32_FILE_ATTRIBUTE_DATA data = {0};
+			// 			memset(&data, 0, sizeof(WIN32_FILE_ATTRIBUTE_DATA));
+			BOOL result = GetFileAttributesEx(attrbute.filePath.GetFullPath().Buffer(),
+			    GetFileExInfoStandard, &data);
 			{
-				attrbute.attrbutes = data.dwFileAttributes;
+				attrbute.nattrbutes = data.dwFileAttributes;
 				ULARGE_INTEGER largeInteger;
 				largeInteger.HighPart = data.ftCreationTime.dwHighDateTime;
 				largeInteger.LowPart = data.ftCreationTime.dwLowDateTime;
 				attrbute.creation = DateTime::FromFileTime(largeInteger.QuadPart);
-
+				
 				largeInteger.HighPart = data.ftLastAccessTime.dwHighDateTime;
 				largeInteger.LowPart = data.ftLastAccessTime.dwLowDateTime;
 				attrbute.lastAccess = DateTime::FromFileTime(largeInteger.QuadPart);
-
+				
 				largeInteger.HighPart = data.ftLastWriteTime.dwHighDateTime;
 				largeInteger.LowPart = data.ftLastWriteTime.dwLowDateTime;
 				attrbute.lastWrite = DateTime::FromFileTime(largeInteger.QuadPart);
-
+				
 				largeInteger.HighPart = data.nFileSizeHigh;
 				largeInteger.LowPart = data.nFileSizeLow;
-				attrbute.size = largeInteger.QuadPart;
+				attrbute.nsize = largeInteger.QuadPart;
 			}
 			return result == TRUE;
 		}
-		
 	}
 }
 
@@ -5491,151 +5662,6 @@ NVariant::NVariant()
 
 NVariant::~NVariant()
 {
-}
-
-
-/***********************************************************************
-.\PATH.CPP
-***********************************************************************/
-
-#pragma comment(lib, "Shlwapi.lib")
-
-namespace vl
-{
-	namespace path
-	{
-		using namespace collections;
-
-		Path::Path()
-		{
-		}
-		
-		
-		Path::Path(const WString& _filePath)
-			:fullPath(_filePath)
-		{
-			Initialize();
-		}
-
-		Path::Path(const wchar_t* _filePath)
-			: fullPath(_filePath)
-		{
-			Initialize();
-		}
-
-		Path::Path(const Path& _filePath)
-			: fullPath(_filePath.fullPath)
-		{
-			Initialize();
-		}
-
-		Path::~Path()
-		{
-		}
-		
-		vl::WString Path::UnquoteSpaces()
-		{
-			Array<wchar_t> buffer(fullPath.Length() + 1);
-			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
-
-			BOOL bRes = PathUnquoteSpaces(&buffer[0]);
-			if (bRes)
-			{
-				fullPath = &buffer[0];
-			}
-			return fullPath;
-		}
-
-		bool Path::IsDirectory()
-		{
-			return PathIsDirectory(fullPath.Buffer()) != FALSE;
-		}
-
-		bool Path::IsFileSpec()
-		{
-			return PathIsFileSpec(fullPath.Buffer()) == TRUE;
-		}
-
-		bool Path::IsUNC()
-		{
-			return PathIsUNC(fullPath.Buffer()) == TRUE;
-		}
-
-		bool Path::IsUNCServer()
-		{
-			return PathIsUNCServer(fullPath.Buffer()) == TRUE;
-		}
-
-		bool Path::IsUNCServerShare()
-		{
-			return PathIsUNCServerShare(fullPath.Buffer()) == TRUE;
-		}
-
-		bool Path::IsURL()
-		{
-			return PathIsURL(fullPath.Buffer()) == TRUE;
-		}
-
-		bool Path::IsNetworkPath()
-		{
-			return PathIsNetworkPath(fullPath.Buffer()) == TRUE;
-		}
-
-		bool Path::IsPrefix(WString strPrefix)
-		{
-			return PathIsPrefix(fullPath.Buffer(),strPrefix.Buffer()) == TRUE;
-		}
-
-		bool Path::MatchSpec(WString strSpec)
-		{
-			return PathMatchSpec(fullPath.Buffer(), strSpec.Buffer()) == TRUE;
-		}
-
-		void Path::RemoveBackslash()
-		{
-			Array<wchar_t> buffer(fullPath.Length() + 1);
-			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
-
-			PathRemoveBackslash(&buffer[0]);
-			{
-				fullPath = &buffer[0];
-			}
-		}
-
-		void Path::RemoveExtension()
-		{
-			Array<wchar_t> buffer(fullPath.Length() + 1);
-			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
-
-			PathRemoveExtension(&buffer[0]);
-			{
-				fullPath = &buffer[0];
-			}
-		}
-
-		bool Path::RemoveFileSpec()
-		{
-			Array<wchar_t> buffer(fullPath.Length() + 1);
-			wcscpy_s(&buffer[0], fullPath.Length() + 1, fullPath.Buffer());
-
-			BOOL bRes = PathRemoveFileSpec(&buffer[0]);
-			if(bRes)
-			{
-				fullPath = &buffer[0];
-			}
-			return bRes == TRUE;
-		}
-
-		bool Path::FileExists()
-		{
-			return PathFileExists(fullPath.Buffer()) == TRUE;
-		}
-
-		void Path::Initialize()
-		{
-		
-		}
-	}
 }
 
 
@@ -11563,7 +11589,7 @@ UnitTest
 
 
 /***********************************************************************
-.\NATOMICINT.CPP
+.\NATOMICINT-.CPP
 ***********************************************************************/
 
 
@@ -11582,8 +11608,8 @@ UnitTest
 
 namespace vl
 {
-	extern DateTime DateTimeToSystemTime(const DateTime& dateTime);
-	extern DateTime SystemTimeToDateTime(const SYSTEMTIME& systemTime);
+	// 	extern DateTime DateTimeToSystemTime(const DateTime& dateTime);
+	// 	extern DateTime SystemTimeToDateTime(const SYSTEMTIME& systemTime);
 	
 	namespace system
 	{
@@ -11607,13 +11633,13 @@ namespace vl
 		
 		Process::~Process()
 		{
-			
+		
 		}
 		
 		
 		void Process::InitializeCurrent()
 		{
-			
+		
 		}
 		
 		vl::vuint Process::CurrentID()
@@ -11669,9 +11695,7 @@ namespace vl
 		
 		DateTime System::Time()
 		{
-			SYSTEMTIME time;
-			GetSystemTime(&time);
-			return SystemTimeToDateTime(time);
+			return DateTime::UtcTime();
 		}
 		
 		vl::WString System::ComputerName()
@@ -11703,6 +11727,12 @@ namespace vl
 			wchar_t directory[NICE_MAX_PATH] = { 0 };
 			GetSystemWindowsDirectory(directory, sizeof(directory) / sizeof(*directory));
 			return directory;
+		}
+		
+		vl::WString System::CommandLine()
+		{
+			WString string = ::GetCommandLine();
+			return string;
 		}
 		
 		void System::Version()
@@ -11819,7 +11849,7 @@ namespace vl
 		bool System::GetDiskSpaceInfo(DiskSpaceInfo& disk)
 		{
 			ULARGE_INTEGER liFreeBytesAvailable, liTotalBytes, liTotalFreeBytes;
-			BOOL bRes = GetDiskFreeSpaceEx(disk.disk.Buffer(),&liFreeBytesAvailable,&liTotalBytes,&liTotalFreeBytes);
+			BOOL bRes = GetDiskFreeSpaceEx(disk.disk.Buffer(), &liFreeBytesAvailable, &liTotalBytes, &liTotalFreeBytes);
 			if (bRes)
 			{
 				disk.available = liFreeBytesAvailable.QuadPart;
@@ -11828,7 +11858,7 @@ namespace vl
 			}
 			return bRes == TRUE;
 		}
-
+		
 		eProcessorArchitecture System::ProcessorArchitecture(vuint architecture)
 		{
 			eProcessorArchitecture pa;

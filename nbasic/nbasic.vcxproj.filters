@@ -216,9 +216,6 @@
     <Filter Include="FileSystem">
       <UniqueIdentifier>{8c90714b-5dea-4be9-ae3c-3e515065f9fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NewType">
-      <UniqueIdentifier>{1e21d92d-3257-4234-bf3a-3a6e4c41cb7d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UnitTest">
       <UniqueIdentifier>{315ca12f-6244-41a5-9250-e34f5d362975}</UniqueIdentifier>
     </Filter>

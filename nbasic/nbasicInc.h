@@ -14,7 +14,6 @@
 #include "HttpUtility.h"
 #include "system.h"
 #include "NVariant.h"
-// #include "nAtomicInt.h"
 #include "Path.h"
 
 #include ".\FileSystem\Folder.h"

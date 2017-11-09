@@ -1,8 +1,24 @@
 #include "stdafx.h"
+#include "windows.h"
 #include <WinBase.h>
 
 // using namespace vl::environemnt;
 using namespace vl::system;
+using namespace vl::console;
+using namespace vl::collections;
+
+void ConsoleOutComputerName(COMPUTER_NAME_FORMAT fmt)
+{
+	DWORD nsize;
+	BOOL bRes;
+	WString string;
+	wchar_t buffer[200];
+	bRes = GetComputerNameEx(fmt, buffer, &nsize);
+	string = buffer;
+	Console::WriteLine(string);
+}
+
+
 TEST_CASE(TestEnvironment)
 {
 	WString user = System::UserName();
@@ -22,15 +38,22 @@ TEST_CASE(TestEnvironment)
 	ProcessMemory memo;
 	proc.GetMemoryInfo(memo);
 	
-	BOOL bRes = GetComputerNameEx();
-	
+	ConsoleOutComputerName(ComputerNameNetBIOS);
+	ConsoleOutComputerName(ComputerNameDnsHostname);
+	ConsoleOutComputerName(ComputerNameDnsDomain);
+	ConsoleOutComputerName(ComputerNameDnsFullyQualified);
+	ConsoleOutComputerName(ComputerNamePhysicalNetBIOS);
+	ConsoleOutComputerName(ComputerNamePhysicalDnsHostname);
+	ConsoleOutComputerName(ComputerNamePhysicalDnsDomain);
+	ConsoleOutComputerName(ComputerNamePhysicalDnsFullyQualified);
+	ConsoleOutComputerName(ComputerNameMax);
 	
 }
 
 TEST_CASE(TestDiskInfo)
 {
 	DiskSpaceInfo info;
-	info.disk = L"c:/";
+	info.disk = L"c://";
 	System::GetDiskSpaceInfo(info);
 	
 	WString strCmd = System::CommandLine();

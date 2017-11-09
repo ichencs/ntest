@@ -25,8 +25,6 @@ namespace vl
 		 public:
 #if defined VCZH_MSVC
 			static const wchar_t		Delimiter = L'\\';
-#elif defined VCZH_GCC
-			static const wchar_t		Delimiter = L'/';
 #endif
 			
 			/// <summary>Create a root path.</summary>

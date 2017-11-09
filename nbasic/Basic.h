@@ -67,15 +67,6 @@ namespace vl
 	typedef signed __int64			vint64_t;
 	/// <summary>8-bytes unsigned integer.</summary>
 	typedef unsigned __int64		vuint64_t;
-#elif defined VCZH_GCC
-	typedef int8_t					vint8_t;
-	typedef uint8_t					vuint8_t;
-	typedef int16_t					vint16_t;
-	typedef uint16_t				vuint16_t;
-	typedef int32_t					vint32_t;
-	typedef uint32_t				vuint32_t;
-	typedef int64_t					vint64_t;
-	typedef uint64_t				vuint64_t;
 #endif
 	
 #ifdef VCZH_64
@@ -136,22 +127,22 @@ namespace vl
 	
 	class NotCopyable
 	{
-		private:
-			NotCopyable(const NotCopyable&);
-			NotCopyable& operator=(const NotCopyable&);
-		public:
-			NotCopyable();
+	 private:
+		NotCopyable(const NotCopyable&);
+		NotCopyable& operator=(const NotCopyable&);
+	 public:
+		NotCopyable();
 	};
 	
 	/// <summary>Base type of all errors. An error is an exception that you are not allowed to catch. Raising it means there is a fatal error in the code.</summary>
 	class Error
 	{
-		private:
-			const wchar_t*		description;
-		public:
-			Error(const wchar_t* _description);
-			
-			const wchar_t*		Description()const;
+	 private:
+		const wchar_t*		description;
+	 public:
+		Error(const wchar_t* _description);
+		
+		const wchar_t*		Description()const;
 	};
 	
 #if defined VCZH_MSVC || defined VCZH_GCC || defined _DEBUG
@@ -250,8 +241,8 @@ namespace vl
 	/// <summary>Base type of all classes.</summary>
 	class Object
 	{
-		public:
-			virtual ~Object();
+	 public:
+		virtual ~Object();
 	};
 	
 	/// <summary>Type for storing a value to wherever requiring a [T:vl.Ptr`1] to [T:vl.Object].</summary>
@@ -259,51 +250,51 @@ namespace vl
 	template<typename T>
 	class ObjectBox : public Object
 	{
-		private:
-			T					object;
-		public:
-			/// <summary>Box a value.</summary>
-			/// <param name="_object">The value to box.</param>
-			ObjectBox(const T& _object)
-				: object(_object)
-			{
-			}
-			
-			
-			
-			/// <summary>Copy a box.</summary>
-			/// <param name="value">The box.</param>
-			ObjectBox(const ObjectBox<T>& value)
-				: object(value.object)
-			{
-			}
-			
-			
-			/// <summary>Box a value.</summary>
-			/// <returns>The boxed value.</returns>
-			/// <param name="_object">The value to box.</param>
-			ObjectBox<T>& operator=(const T& _object)
-			{
-				object = _object;
-				return *this;
-			}
-			
-			/// <summary>Copy a box.</summary>
-			/// <returns>The boxed value.</returns>
-			/// <param name="value">The box.</param>
-			ObjectBox<T>& operator=(const ObjectBox<T>& value)
-			{
-				object = value.object;
-				return *this;
-			}
-			
-			
-			/// <summary>Unbox the value.</summary>
-			/// <returns>The original value.</returns>
-			const T& Unbox()
-			{
-				return object;
-			}
+	 private:
+		T					object;
+	 public:
+		/// <summary>Box a value.</summary>
+		/// <param name="_object">The value to box.</param>
+		ObjectBox(const T& _object)
+			: object(_object)
+		{
+		}
+		
+		
+		
+		/// <summary>Copy a box.</summary>
+		/// <param name="value">The box.</param>
+		ObjectBox(const ObjectBox<T>& value)
+			: object(value.object)
+		{
+		}
+		
+		
+		/// <summary>Box a value.</summary>
+		/// <returns>The boxed value.</returns>
+		/// <param name="_object">The value to box.</param>
+		ObjectBox<T>& operator=(const T& _object)
+		{
+			object = _object;
+			return *this;
+		}
+		
+		/// <summary>Copy a box.</summary>
+		/// <returns>The boxed value.</returns>
+		/// <param name="value">The box.</param>
+		ObjectBox<T>& operator=(const ObjectBox<T>& value)
+		{
+			object = value.object;
+			return *this;
+		}
+		
+		
+		/// <summary>Unbox the value.</summary>
+		/// <returns>The original value.</returns>
+		const T& Unbox()
+		{
+			return object;
+		}
 	};
 	
 	/// <summary>Type for optionally storing a value.</summary>
@@ -311,44 +302,61 @@ namespace vl
 	template<typename T>
 	class Nullable
 	{
-		private:
-			T*					object;
-		public:
-			/// <summary>Create a null value.</summary>
-			Nullable()
-				: object(0)
+	 private:
+		T*					object;
+	 public:
+		/// <summary>Create a null value.</summary>
+		Nullable()
+			: object(0)
+		{
+		}
+		
+		/// <summary>Create a non-null value.</summary>
+		/// <param name="value">The value to copy.</param>
+		Nullable(const T& value)
+			: object(new T(value))
+		{
+		}
+		
+		
+		/// <summary>Copy a nullable value.</summary>
+		/// <param name="nullable">The nullable value to copy.</param>
+		Nullable(const Nullable<T>& nullable)
+			: object(nullable.object ? new T(*nullable.object) : 0)
+		{
+		}
+		
+		
+		~Nullable()
+		{
+			if (object)
 			{
+				delete object;
+				object = 0;
+			}
+		}
+		
+		/// <summary>Create a non-null value.</summary>
+		/// <returns>The created nullable value.</returns>
+		/// <param name="value">The value to copy.</param>
+		Nullable<T>& operator=(const T& value)
+		{
+			if (object)
+			{
+				delete object;
+				object = 0;
 			}
 			
-			/// <summary>Create a non-null value.</summary>
-			/// <param name="value">The value to copy.</param>
-			Nullable(const T& value)
-				: object(new T(value))
-			{
-			}
-			
-			
-			/// <summary>Copy a nullable value.</summary>
-			/// <param name="nullable">The nullable value to copy.</param>
-			Nullable(const Nullable<T>& nullable)
-				: object(nullable.object ? new T(*nullable.object) : 0)
-			{
-			}
-			
-			
-			~Nullable()
-			{
-				if (object)
-				{
-					delete object;
-					object = 0;
-				}
-			}
-			
-			/// <summary>Create a non-null value.</summary>
-			/// <returns>The created nullable value.</returns>
-			/// <param name="value">The value to copy.</param>
-			Nullable<T>& operator=(const T& value)
+			object = new T(value);
+			return *this;
+		}
+		
+		/// <summary>Copy a nullable value.</summary>
+		/// <returns>The created nullable value.</returns>
+		/// <param name="nullable">The nullable value to copy.</param>
+		Nullable<T>& operator=(const Nullable<T>& nullable)
+		{
+			if (this != &nullable)
 			{
 				if (object)
 				{
@@ -356,101 +364,84 @@ namespace vl
 					object = 0;
 				}
 				
-				object = new T(value);
-				return *this;
-			}
-			
-			/// <summary>Copy a nullable value.</summary>
-			/// <returns>The created nullable value.</returns>
-			/// <param name="nullable">The nullable value to copy.</param>
-			Nullable<T>& operator=(const Nullable<T>& nullable)
-			{
-				if (this != &nullable)
+				if (nullable.object)
 				{
-					if (object)
-					{
-						delete object;
-						object = 0;
-					}
-					
-					if (nullable.object)
-					{
-						object = new T(*nullable.object);
-					}
+					object = new T(*nullable.object);
 				}
-				
-				return *this;
 			}
 			
-			
-			
-			static bool Equals(const Nullable<T>& a, const Nullable<T>& b)
-			{
-				return
-				  a.object
-				  ? b.object
-				  ? *a.object == *b.object
-				  : false
-				  : b.object
-				  ? false
-				  : true;
-			}
-			
-			static vint Compare(const Nullable<T>& a, const Nullable<T>& b)
-			{
-				return
-				  a.object
-				  ? b.object
-				  ? (*a.object == *b.object ? 0 : *a.object < *b.object ? -1 : 1)
-				  : 1
-				  : b.object
-				  ? -1
-				  : 0;
-			}
-			
-			bool operator==(const Nullable<T>& nullable)const
-			{
-				return Equals(*this, nullable);
-			}
-			
-			bool operator!=(const Nullable<T>& nullable)const
-			{
-				return !Equals(*this, nullable);
-			}
-			
-			bool operator<(const Nullable<T>& nullable)const
-			{
-				return Compare(*this, nullable) < 0;
-			}
-			
-			bool operator<=(const Nullable<T>& nullable)const
-			{
-				return Compare(*this, nullable) <= 0;
-			}
-			
-			bool operator>(const Nullable<T>& nullable)const
-			{
-				return Compare(*this, nullable) > 0;
-			}
-			
-			bool operator>=(const Nullable<T>& nullable)const
-			{
-				return Compare(*this, nullable) >= 0;
-			}
-			
-			/// <summary>Convert the nullable value to a bool value.</summary>
-			/// <returns>Returns true if it is not null.</returns>
-			operator bool()const
-			{
-				return object != 0;
-			}
-			
-			/// <summary>Unbox the value. This operation will cause an access violation of it is null.</summary>
-			/// <returns>The original value.</returns>
-			const T& Value()const
-			{
-				return *object;
-			}
+			return *this;
+		}
+		
+		
+		
+		static bool Equals(const Nullable<T>& a, const Nullable<T>& b)
+		{
+			return
+			  a.object
+			  ? b.object
+			  ? *a.object == *b.object
+			  : false
+			  : b.object
+			  ? false
+			  : true;
+		}
+		
+		static vint Compare(const Nullable<T>& a, const Nullable<T>& b)
+		{
+			return
+			  a.object
+			  ? b.object
+			  ? (*a.object == *b.object ? 0 : *a.object < *b.object ? -1 : 1)
+			  : 1
+			  : b.object
+			  ? -1
+			  : 0;
+		}
+		
+		bool operator==(const Nullable<T>& nullable)const
+		{
+			return Equals(*this, nullable);
+		}
+		
+		bool operator!=(const Nullable<T>& nullable)const
+		{
+			return !Equals(*this, nullable);
+		}
+		
+		bool operator<(const Nullable<T>& nullable)const
+		{
+			return Compare(*this, nullable) < 0;
+		}
+		
+		bool operator<=(const Nullable<T>& nullable)const
+		{
+			return Compare(*this, nullable) <= 0;
+		}
+		
+		bool operator>(const Nullable<T>& nullable)const
+		{
+			return Compare(*this, nullable) > 0;
+		}
+		
+		bool operator>=(const Nullable<T>& nullable)const
+		{
+			return Compare(*this, nullable) >= 0;
+		}
+		
+		/// <summary>Convert the nullable value to a bool value.</summary>
+		/// <returns>Returns true if it is not null.</returns>
+		operator bool()const
+		{
+			return object != 0;
+		}
+		
+		/// <summary>Unbox the value. This operation will cause an access violation of it is null.</summary>
+		/// <returns>The original value.</returns>
+		const T& Value()const
+		{
+			return *object;
+		}
 	};
 	
 	template<typename T, size_t minSize>
@@ -469,17 +460,17 @@ namespace vl
 	template<typename T>
 	struct KeyType
 	{
-		public:
-			/// <summary>The index type of a value for containers.</summary>
-			typedef T Type;
-			
-			/// <summary>Convert a value to its index type.</summary>
-			/// <returns>The corresponding index value.</returns>
-			/// <param name="value">The value.</param>
-			static T GetKeyValue(const T& value)
-			{
-				return value;
-			}
+	 public:
+		/// <summary>The index type of a value for containers.</summary>
+		typedef T Type;
+		
+		/// <summary>Convert a value to its index type.</summary>
+		/// <returns>The corresponding index value.</returns>
+		/// <param name="value">The value.</param>
+		static T GetKeyValue(const T& value)
+		{
+			return value;
+		}
 	};
 	
 	/// <summary>Test is a type a Plain-Old-Data type for containers.</summary>
@@ -657,8 +648,8 @@ namespace vl
 	/// <summary>Base type of all interfaces. All interface types are encouraged to be virtual inherited.</summary>
 	class Interface : private NotCopyable
 	{
-		public:
-			virtual ~Interface();
+	 public:
+		virtual ~Interface();
 	};
 	
 	/***********************************************************************
