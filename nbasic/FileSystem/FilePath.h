@@ -1,6 +1,6 @@
 
-#ifndef FILEPATH
-#define FILEPATH
+#ifndef FILE_PATH
+#define FILE_PATH
 #include "../Basic.h"
 #include "../String.h"
 #include "../Collections/List.h"
@@ -43,7 +43,7 @@ namespace vl
 			
 		 public:
 			static FilePath CurrentPath();
-			static FilePath ModuleFolder();		//app(exe) path
+			static FilePath ModuleFolder(void* pAddress = NULL);		//app(exe) path
 			/// <summary>
 			/// 通过当前模块（dll）的基地址获取dll路径
 			/// </summary>

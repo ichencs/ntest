@@ -278,6 +278,7 @@
     <ClInclude Include="Collections\OperationSequence.h" />
     <ClInclude Include="Collections\OperationString.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="FileSystem\PathFile.h" />
     <ClInclude Include="NVariant.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="system.h" />
@@ -316,6 +317,7 @@
   <ItemGroup>
     <ClCompile Include="Basic.cpp" />
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="FileSystem\PathFile.cpp" />
     <ClCompile Include="NVariant.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="system.cpp" />

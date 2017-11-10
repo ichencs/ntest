@@ -14,18 +14,15 @@ namespace vl
 			Path(const WString& _filePath);
 			Path(const wchar_t* _filePath);
 			Path(const Path& _filePath);
-<<<<<<< HEAD
-		public:
+		 public:
 			//************************************
 			// Method:    UnquoteSpaces
 			// FullName:  vl::path::Path::UnquoteSpaces
-			// Access:    public 
+			// Access:    public
 			// Returns:   vl::WString
 			// Qualifier: 从带引号的路径中取出路径
 			//************************************
-=======
 		 public:
->>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
 			WString UnquoteSpaces();
 			bool IsDirectory();
 			//************************************
@@ -61,11 +58,25 @@ namespace vl
 			// Access:    public
 			// Returns:   void
 			// Qualifier:
-			// 去除路径最后的反斜杠“\”
+			// L"c:\\Program Files\\File.txt\\" -> L"c:\\Program Files\\File.txt"
+			// L"c:\\Program Files\\File.txt/" -> L"c:\\Program Files\\File.txt"
+			// 去除路径最后的反斜杠“\”(仅去除“\”)
 			//************************************
 			void RemoveBackslash();
 			void RemoveExtension();
+			/// <summary>
+			/// 获取文件路径，路径不带"\\"，不检查是否有效 等效 GetFolder()
+			/// 移除文件名、/+文件名、 反斜杠
+			/// L"c:\\Program Files\\File.txt\\" -> L"c:\\Program Files\\File.txt"
+			/// L"c:\\Program Files\\File.txt" -> L"c:\\Program Files"
+			///  L"c:\\Program Files\\File.txt/" -> L"c:\\Program Files"
+			/// </summary>
+			/// <returns></returns>
 			bool RemoveFileSpec();
+			WString FindFileName()const;
+			WString FindExtension()const;
+			virtual	WString						GetFullPath()const;
+			
 		 public:
 			bool FileExists();
 		 protected:

@@ -13,6 +13,7 @@ Framework::FileSystem
 #include "../Collections/List.h"
 #include "../Stream/CharFormat.h"
 #include "FilePath.h"
+#include "PathFile.h"
 namespace vl
 {
 	namespace filesystem
@@ -34,6 +35,7 @@ namespace vl
 			};
 		 public:
 			FileInfo();
+			FileInfo(const PathFile& _pathFile);
 			FileInfo(const FilePath& path);
 			FileInfo(const WString& path);
 			~FileInfo();
@@ -51,9 +53,9 @@ namespace vl
 			bool IsHidden()const;
 			WString FileName()const;
 			WString Extemsion()const;
-			WString Path()const;
+			WString FullPath()const;
 			
-			DateTime Created()const;
+			DateTime Created()const;		//创建时间
 			DateTime CreatedTime()const;
 			DateTime LastModified()const;
 			DateTime LastRead()const;
@@ -63,10 +65,6 @@ namespace vl
 		 protected:
 			FileAttrbutes attrbute;
 		};
-		
-		
-		
-		
 		
 	}
 }

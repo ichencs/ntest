@@ -4,6 +4,7 @@
 
 #include "../Collections/OperationForEach.h"
 #include "Folder.h"
+#include "File.h"
 // #include "FileSystem.h"
 
 namespace vl
@@ -21,30 +22,42 @@ namespace vl
 		}
 		
 		Folder::Folder(const FilePath& _filePath)
-			: filePath(_filePath)
+			: PathFile(_filePath)
 		{
 		}
 		
 		Folder::Folder(const WString& _filePath)
-			:filePath(_filePath)
+			: PathFile(_filePath)
 		{
-
+		
 		}
-
+		
 		Folder::Folder(const wchar_t* _filePath)
-			: filePath(_filePath)
+			: PathFile(_filePath)
 		{
-
+		
 		}
-
+		
+		Folder::Folder(const Folder& _folder)
+			: PathFile(_folder)
+		{
+		
+		}
+		
+		Folder::Folder(const PathFile& _pathFile)
+			: PathFile(_pathFile)
+		{
+		
+		}
+		
 		Folder::~Folder()
 		{
 		}
 		
-		const FilePath& Folder::GetFilePath()const
-		{
-			return filePath;
-		}
+		// 		const FilePath& Folder::GetFilePath()const
+		// 		{
+		// 			return filePath;
+		// 		}
 		
 		bool Folder::GetFolders(collections::List<Folder>& folders)const
 		{
@@ -120,41 +133,6 @@ namespace vl
 				
 				return true;
 			}
-			
-#elif defined VCZH_GCC
-			
-			if (!Exists())
-			{
-				return false;
-			}
-			
-			DIR* dir;
-			AString searchPath = wtoa(filePath.GetFullPath());
-			
-			if ((dir = opendir(searchPath.Buffer())) == NULL)
-			{
-				return false;
-			}
-			
-			struct dirent* entry;
-			
-			while ((entry = readdir(dir)) != NULL)
-			{
-				WString childName = atow(AString(entry->d_name));
-				FilePath childFullPath = filePath / childName;
-			
-				if (childName != L"." && childName != L".." && childFullPath.IsFolder())
-				{
-					folders.Add(Folder(childFullPath));
-				}
-			}
-			
-			if (closedir(dir) != 0)
-			{
-				return false;
-			}
-			
-			return true;
 #endif
 		}
 		
@@ -268,9 +246,6 @@ namespace vl
 			{
 #if defined VCZH_MSVC
 				return CreateDirectory(filePath.GetFullPath().Buffer(), NULL) != 0;
-#elif defined VCZH_GCC
-				AString path = wtoa(filePath.GetFullPath());
-				return mkdir(path.Buffer(), 0777) == 0;
 #endif
 			}
 		}
@@ -309,29 +284,22 @@ namespace vl
 			
 #if defined VCZH_MSVC
 			return RemoveDirectory(filePath.GetFullPath().Buffer()) != 0;
-#elif defined VCZH_GCC
-			AString path = wtoa(filePath.GetFullPath());
-			return rmdir(path.Buffer()) == 0;
 #endif
 		}
 		
-		bool Folder::Rename(const WString& newName)const
-		{
-#if defined VCZH_MSVC
-			WString oldFileName = filePath.GetFullPath();
-			WString newFileName = (filePath.GetFolder() / newName).GetFullPath();
-			return MoveFile(oldFileName.Buffer(), newFileName.Buffer()) != 0;
-#elif defined VCZH_GCC
-			AString oldFileName = wtoa(filePath.GetFullPath());
-			AString newFileName = wtoa((filePath.GetFolder() / newName).GetFullPath());
-			return rename(oldFileName.Buffer(), newFileName.Buffer()) == 0;
-#endif
-		}
-
-		vl::WString Folder::GetName()
-		{
-			return filePath.GetName();
-		}
-
+		// 		bool Folder::Rename(const WString& newName)const
+		// 		{
+		// #if defined VCZH_MSVC
+		// 			WString oldFileName = filePath.GetFullPath();
+		// 			WString newFileName = (filePath.GetFolder() / newName).GetFullPath();
+		// 			return MoveFile(oldFileName.Buffer(), newFileName.Buffer()) != 0;
+		// #endif
+		// 		}
+		//
+		// 		vl::WString Folder::GetName()
+		// 		{
+		// 			return filePath.GetName();
+		// 		}
+		
 	}
 }

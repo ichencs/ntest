@@ -28,6 +28,12 @@ namespace vl
 			Initialize();
 		}
 		
+		FileInfo::FileInfo(const PathFile& _pathFile)
+		{
+			attrbute.filePath = _pathFile.GetFilePath();
+			Initialize();
+		}
+		
 		FileInfo::~FileInfo()
 		{
 		}
@@ -94,10 +100,11 @@ namespace vl
 		
 		vl::WString FileInfo::Extemsion()const
 		{
-			return ::PathFindExtension(attrbute.filePath.GetFullPath().Buffer());
+			// 			return ::PathFindExtension(attrbute.filePath.GetFullPath().Buffer());
+			return attrbute.filePath.FindExtension();
 		}
 		
-		vl::WString FileInfo::Path()const
+		vl::WString FileInfo::FullPath()const
 		{
 			return attrbute.filePath.GetFullPath();
 		}

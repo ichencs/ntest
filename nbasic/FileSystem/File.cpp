@@ -22,18 +22,42 @@ namespace vl
 		}
 		
 		File::File(const FilePath& _filePath)
-			: filePath(_filePath)
+			: PathFile(_filePath)
 		{
+		}
+		
+		File::File(const File& _file)
+			: PathFile(_file)
+		{
+		
+		}
+		
+		File::File(const WString& _filePath)
+			: PathFile(_filePath)
+		{
+		
+		}
+		
+		File::File(const wchar_t* _filePath)
+			: PathFile(_filePath)
+		{
+		
+		}
+		
+		File::File(const PathFile& _filePath)
+			: PathFile(_filePath)
+		{
+		
 		}
 		
 		File::~File()
 		{
 		}
 		
-		const FilePath& File::GetFilePath()const
-		{
-			return filePath;
-		}
+		// 		const FilePath& File::GetFilePath()const
+		// 		{
+		// 			return filePath;
+		// 		}
 		
 		bool File::ReadAllTextWithEncodingTesting(WString& text, stream::BomEncoder::Encoding& encoding, bool& containsBom)
 		{
@@ -257,30 +281,21 @@ namespace vl
 		{
 #if defined VCZH_MSVC
 			return DeleteFile(filePath.GetFullPath().Buffer()) != 0;
-#elif defined VCZH_GCC
-			AString path = wtoa(filePath.GetFullPath());
-			return unlink(path.Buffer()) == 0;
 #endif
 		}
 		
-		bool File::Rename(const WString& newName)const
-		{
-#if defined VCZH_MSVC
-			WString oldFileName = filePath.GetFullPath();
-			WString newFileName = (filePath.GetFolder() / newName).GetFullPath();
-			return MoveFile(oldFileName.Buffer(), newFileName.Buffer()) != 0;
-#elif defined VCZH_GCC
-			AString oldFileName = wtoa(filePath.GetFullPath());
-			AString newFileName = wtoa((filePath.GetFolder() / newName).GetFullPath());
-			return rename(oldFileName.Buffer(), newFileName.Buffer()) == 0;
-#endif
-		}
+		// 		bool File::Rename(const WString& newName)const
+		// 		{
+		// 			WString oldFileName = filePath.GetFullPath();
+		// 			WString newFileName = (filePath.GetFolder() / newName).GetFullPath();
+		// 			return MoveFile(oldFileName.Buffer(), newFileName.Buffer()) != 0;
+		// 		}
+		//
+		// 		vl::WString File::GetName()
+		// 		{
+		// 			return filePath.GetName();
+		// 		}
 		
-		vl::WString File::GetName()
-		{
-			return filePath.GetName();
-		}
-
 	}
 }
 

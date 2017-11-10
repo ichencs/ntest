@@ -53,331 +53,331 @@ namespace vl
 	template<typename T>
 	class Ptr
 	{
-			template<typename X>
-			friend class Ptr;
-		protected:
-			typedef void	(*Destructor)(volatile vint*, void*);
-			
-			volatile vint*		counter;
-			T*					reference;
-			void*				originalReference;
-			Destructor			originalDestructor;
-			
-			void Inc()
-			{
-				if (counter)
-				{
-					INCRC(counter);
-				}
-			}
-			
-			void Dec(bool deleteIfZero = true)
-			{
-				if (counter)
-				{
-					if (DECRC(counter) == 0)
-					{
-						if (deleteIfZero)
-						{
-							originalDestructor(counter, originalReference);
-						}
-						
-						counter = NULL;
-						reference = NULL;
-						originalReference = NULL;
-						originalDestructor = NULL;
-					}
-				}
-			}
-			
-			volatile vint* Counter()const
-			{
-				return counter;
-			}
-			
-			Ptr(volatile vint* _counter, T* _reference, void* _originalReference, Destructor _originalDestructor)
-				: counter(_counter)
-				, reference(_reference)
-				, originalReference(_originalReference)
-				, originalDestructor(_originalDestructor)
-			{
-				Inc();
-			}
-		public:
+		template<typename X>
+		friend class Ptr;		//定义为自己的友元
+	 protected:
+		typedef void	(*Destructor)(volatile vint*, void*);
 		
-			/// <summary>Create a null pointer.</summary>
-			Ptr()
-				: counter(0)
-				, reference(0)
-				, originalReference(0)
-				, originalDestructor(0)
+		volatile vint*		counter;
+		T*					reference;
+		void*				originalReference;
+		Destructor			originalDestructor;
+		
+		void Inc()
+		{
+			if (counter)
 			{
+				INCRC(counter);
 			}
-			
-			/// <summary>Convert a pointer to an object to a smart pointer.</summary>
-			/// <param name="pointer">The pointer to the object.</param>
-			Ptr(T* pointer)
-				: counter(0)
-				, reference(0)
-				, originalReference(0)
-				, originalDestructor(0)
+		}
+		
+		void Dec(bool deleteIfZero = true)
+		{
+			if (counter)
 			{
-				if (pointer)
+				if (DECRC(counter) == 0)
 				{
-					counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
-					reference = pointer;
-					originalReference = pointer;
-					originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
-					Inc();
+					if (deleteIfZero)
+					{
+						originalDestructor(counter, originalReference);
+					}
+					
+					counter = NULL;
+					reference = NULL;
+					originalReference = NULL;
+					originalDestructor = NULL;
 				}
 			}
-			
-			/// <summary>Copy a smart pointer.</summary>
-			/// <param name="pointer">The smart pointer to copy.</param>
-			Ptr(const Ptr<T>& pointer)
-				: counter(pointer.counter)
-				, reference(pointer.reference)
-				, originalReference(pointer.originalReference)
-				, originalDestructor(pointer.originalDestructor)
+		}
+		
+		volatile vint* Counter()const
+		{
+			return counter;
+		}
+		
+		Ptr(volatile vint* _counter, T* _reference, void* _originalReference, Destructor _originalDestructor)
+			: counter(_counter)
+			, reference(_reference)
+			, originalReference(_originalReference)
+			, originalDestructor(_originalDestructor)
+		{
+			Inc();
+		}
+	 public:
+	 
+		/// <summary>Create a null pointer.</summary>
+		Ptr()
+			: counter(0)
+			, reference(0)
+			, originalReference(0)
+			, originalDestructor(0)
+		{
+		}
+		
+		/// <summary>Convert a pointer to an object to a smart pointer.</summary>
+		/// <param name="pointer">The pointer to the object.</param>
+		Ptr(T* pointer)
+			: counter(0)
+			, reference(0)
+			, originalReference(0)
+			, originalDestructor(0)
+		{
+			if (pointer)
 			{
+				counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
+				reference = pointer;
+				originalReference = pointer;
+				originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
+				Inc();
+			}
+		}
+		
+		/// <summary>Copy a smart pointer.</summary>
+		/// <param name="pointer">The smart pointer to copy.</param>
+		Ptr(const Ptr<T>& pointer)
+			: counter(pointer.counter)
+			, reference(pointer.reference)
+			, originalReference(pointer.originalReference)
+			, originalDestructor(pointer.originalDestructor)
+		{
+			Inc();
+		}
+		
+		/// <summary>Move a smart pointer.</summary>
+		/// <param name="pointer">The smart pointer to Move.</param>
+		// 		Ptr(Ptr<T>&& pointer)
+		// 			:counter(pointer.counter)
+		// 			,reference(pointer.reference)
+		// 			,originalReference(pointer.originalReference)
+		// 			,originalDestructor(pointer.originalDestructor)
+		// 		{
+		// 			pointer.counter=0;
+		// 			pointer.reference=0;
+		// 			pointer.originalReference=0;
+		// 			pointer.originalDestructor=0;
+		// 		}
+		
+		/// <summary>Cast a smart pointer.</summary>
+		/// <typeparam name="C">The type of the object before casting.</typeparam>
+		/// <param name="pointer">The smart pointer to cast.</param>
+		template<typename C>
+		Ptr(const Ptr<C>& pointer)
+			: counter(0)
+			, reference(0)
+			, originalReference(0)
+			, originalDestructor(0)
+		{
+			T* converted = pointer.Obj();
+			
+			if (converted)
+			{
+				counter = pointer.Counter();
+				reference = converted;
+				originalReference = pointer.originalReference;
+				originalDestructor = pointer.originalDestructor;
+				Inc();
+			}
+		}
+		
+		~Ptr()
+		{
+			Dec();
+		}
+		
+		/// <summary>Detach the contained object from this smart pointer.</summary>
+		/// <returns>The detached object. Returns null if this smart pointer is empty.</returns>
+		T* Detach()
+		{
+			T* detached = reference;
+			Dec(false);
+			return detached;
+		}
+		
+		/// <summary>Cast a smart pointer.</summary>
+		/// <typeparam name="C">The type of the object after casting.</typeparam>
+		/// <returns>The casted smart pointer. Returns null if failed.</returns>
+		template<typename C>
+		Ptr<C> Cast()const
+		{
+			C* converted = dynamic_cast<C*>(reference);
+			return Ptr<C>((converted ? counter : 0), converted, originalReference, originalDestructor);
+		}
+		
+		/// <summary>Convert a pointer to an object to a smart pointer.</summary>
+		/// <returns>The converted smart pointer.</returns>
+		/// <param name="pointer">The pointer to the object.</param>
+		Ptr<T>& operator=(T* pointer)
+		{
+			Dec();
+			
+			if (pointer)
+			{
+				counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
+				reference = pointer;
+				originalReference = pointer;
+				originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
+				Inc();
+			}
+			else
+			{
+				counter = 0;
+				reference = 0;
+				originalReference = 0;
+				originalDestructor = 0;
+			}
+			
+			return *this;
+		}
+		
+		/// <summary>Copy a smart pointer.</summary>
+		/// <returns>The copied smart pointer.</returns>
+		/// <param name="pointer">The smart pointer to copy.</param>
+		Ptr<T>& operator=(const Ptr<T>& pointer)
+		{
+			if (this != &pointer)
+			{
+				Dec();
+				counter = pointer.counter;
+				reference = pointer.reference;
+				originalReference = pointer.originalReference;
+				originalDestructor = pointer.originalDestructor;
 				Inc();
 			}
 			
-			/// <summary>Move a smart pointer.</summary>
-			/// <param name="pointer">The smart pointer to Move.</param>
-			// 		Ptr(Ptr<T>&& pointer)
-			// 			:counter(pointer.counter)
-			// 			,reference(pointer.reference)
-			// 			,originalReference(pointer.originalReference)
-			// 			,originalDestructor(pointer.originalDestructor)
-			// 		{
-			// 			pointer.counter=0;
-			// 			pointer.reference=0;
-			// 			pointer.originalReference=0;
-			// 			pointer.originalDestructor=0;
-			// 		}
-			
-			/// <summary>Cast a smart pointer.</summary>
-			/// <typeparam name="C">The type of the object before casting.</typeparam>
-			/// <param name="pointer">The smart pointer to cast.</param>
-			template<typename C>
-			Ptr(const Ptr<C>& pointer)
-				: counter(0)
-				, reference(0)
-				, originalReference(0)
-				, originalDestructor(0)
-			{
-				T* converted = pointer.Obj();
-				
-				if (converted)
-				{
-					counter = pointer.Counter();
-					reference = converted;
-					originalReference = pointer.originalReference;
-					originalDestructor = pointer.originalDestructor;
-					Inc();
-				}
-			}
-			
-			~Ptr()
+			return *this;
+		}
+		
+		/// <summary>Move a smart pointer.</summary>
+		/// <returns>The moved smart pointer.</returns>
+		/// <param name="pointer">The smart pointer to Move.</param>
+		/*Ptr<T>& operator=(Ptr<T>&& pointer)
+		{
+			if (this != &pointer)
 			{
 				Dec();
+				counter = pointer.counter;
+				reference = pointer.reference;
+				originalReference = pointer.originalReference;
+				originalDestructor = pointer.originalDestructor;
+		
+				pointer.counter = 0;
+				pointer.reference = 0;
+				pointer.originalReference = 0;
+				pointer.originalDestructor = 0;
+			}
+		
+			return *this;
+		}*/
+		
+		/// <summary>Cast a smart pointer.</summary>
+		/// <typeparam name="C">The type of the object before casting.</typeparam>
+		/// <returns>The smart pointer after casting.</returns>
+		/// <param name="pointer">The smart pointer to cast.</param>
+		template<typename C>
+		Ptr<T>& operator=(const Ptr<C>& pointer)
+		{
+			T* converted = pointer.Obj();
+			Dec();
+			
+			if (converted)
+			{
+				counter = pointer.counter;
+				reference = converted;
+				originalReference = pointer.originalReference;
+				originalDestructor = pointer.originalDestructor;
+				Inc();
+			}
+			else
+			{
+				counter = 0;
+				reference = 0;
+				originalReference = 0;
+				originalDestructor = 0;
 			}
 			
-			/// <summary>Detach the contained object from this smart pointer.</summary>
-			/// <returns>The detached object. Returns null if this smart pointer is empty.</returns>
-			T* Detach()
-			{
-				T* detached = reference;
-				Dec(false);
-				return detached;
-			}
-			
-			/// <summary>Cast a smart pointer.</summary>
-			/// <typeparam name="C">The type of the object after casting.</typeparam>
-			/// <returns>The casted smart pointer. Returns null if failed.</returns>
-			template<typename C>
-			Ptr<C> Cast()const
-			{
-				C* converted = dynamic_cast<C*>(reference);
-				return Ptr<C>((converted ? counter : 0), converted, originalReference, originalDestructor);
-			}
-			
-			/// <summary>Convert a pointer to an object to a smart pointer.</summary>
-			/// <returns>The converted smart pointer.</returns>
-			/// <param name="pointer">The pointer to the object.</param>
-			Ptr<T>& operator=(T* pointer)
-			{
-				Dec();
-				
-				if (pointer)
-				{
-					counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
-					reference = pointer;
-					originalReference = pointer;
-					originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
-					Inc();
-				}
-				else
-				{
-					counter = 0;
-					reference = 0;
-					originalReference = 0;
-					originalDestructor = 0;
-				}
-				
-				return *this;
-			}
-			
-			/// <summary>Copy a smart pointer.</summary>
-			/// <returns>The copied smart pointer.</returns>
-			/// <param name="pointer">The smart pointer to copy.</param>
-			Ptr<T>& operator=(const Ptr<T>& pointer)
-			{
-				if (this != &pointer)
-				{
-					Dec();
-					counter = pointer.counter;
-					reference = pointer.reference;
-					originalReference = pointer.originalReference;
-					originalDestructor = pointer.originalDestructor;
-					Inc();
-				}
-				
-				return *this;
-			}
-			
-			/// <summary>Move a smart pointer.</summary>
-			/// <returns>The moved smart pointer.</returns>
-			/// <param name="pointer">The smart pointer to Move.</param>
-			/*Ptr<T>& operator=(Ptr<T>&& pointer)
-			{
-				if (this != &pointer)
-				{
-					Dec();
-					counter = pointer.counter;
-					reference = pointer.reference;
-					originalReference = pointer.originalReference;
-					originalDestructor = pointer.originalDestructor;
-			
-					pointer.counter = 0;
-					pointer.reference = 0;
-					pointer.originalReference = 0;
-					pointer.originalDestructor = 0;
-				}
-			
-				return *this;
-			}*/
-			
-			/// <summary>Cast a smart pointer.</summary>
-			/// <typeparam name="C">The type of the object before casting.</typeparam>
-			/// <returns>The smart pointer after casting.</returns>
-			/// <param name="pointer">The smart pointer to cast.</param>
-			template<typename C>
-			Ptr<T>& operator=(const Ptr<C>& pointer)
-			{
-				T* converted = pointer.Obj();
-				Dec();
-				
-				if (converted)
-				{
-					counter = pointer.counter;
-					reference = converted;
-					originalReference = pointer.originalReference;
-					originalDestructor = pointer.originalDestructor;
-					Inc();
-				}
-				else
-				{
-					counter = 0;
-					reference = 0;
-					originalReference = 0;
-					originalDestructor = 0;
-				}
-				
-				return *this;
-			}
-			
-			bool operator==(const T* pointer)const
-			{
-				return reference == pointer;
-			}
-			
-			bool operator!=(const T* pointer)const
-			{
-				return reference != pointer;
-			}
-			
-			bool operator>(const T* pointer)const
-			{
-				return reference > pointer;
-			}
-			
-			bool operator>=(const T* pointer)const
-			{
-				return reference >= pointer;
-			}
-			
-			bool operator<(const T* pointer)const
-			{
-				return reference < pointer;
-			}
-			
-			bool operator<=(const T* pointer)const
-			{
-				return reference <= pointer;
-			}
-			
-			bool operator==(const Ptr<T>& pointer)const
-			{
-				return reference == pointer.reference;
-			}
-			
-			bool operator!=(const Ptr<T>& pointer)const
-			{
-				return reference != pointer.reference;
-			}
-			
-			bool operator>(const Ptr<T>& pointer)const
-			{
-				return reference > pointer.reference;
-			}
-			
-			bool operator>=(const Ptr<T>& pointer)const
-			{
-				return reference >= pointer.reference;
-			}
-			
-			bool operator<(const Ptr<T>& pointer)const
-			{
-				return reference < pointer.reference;
-			}
-			
-			bool operator<=(const Ptr<T>& pointer)const
-			{
-				return reference <= pointer.reference;
-			}
-			
-			/// <summary>Test if it is a null pointer.</summary>
-			/// <returns>Returns true if it is not null.</returns>
-			operator bool()const
-			{
-				return reference != 0;
-			}
-			
-			/// <summary>Get the pointer to the object.</summary>
-			/// <returns>The pointer to the object.</returns>
-			T* Obj()const
-			{
-				return reference;
-			}
-			
-			/// <summary>Get the pointer to the object.</summary>
-			/// <returns>The pointer to the object.</returns>
-			T* operator->()const
-			{
-				return reference;
-			}
+			return *this;
+		}
+		
+		bool operator==(const T* pointer)const
+		{
+			return reference == pointer;
+		}
+		
+		bool operator!=(const T* pointer)const
+		{
+			return reference != pointer;
+		}
+		
+		bool operator>(const T* pointer)const
+		{
+			return reference > pointer;
+		}
+		
+		bool operator>=(const T* pointer)const
+		{
+			return reference >= pointer;
+		}
+		
+		bool operator<(const T* pointer)const
+		{
+			return reference < pointer;
+		}
+		
+		bool operator<=(const T* pointer)const
+		{
+			return reference <= pointer;
+		}
+		
+		bool operator==(const Ptr<T>& pointer)const
+		{
+			return reference == pointer.reference;
+		}
+		
+		bool operator!=(const Ptr<T>& pointer)const
+		{
+			return reference != pointer.reference;
+		}
+		
+		bool operator>(const Ptr<T>& pointer)const
+		{
+			return reference > pointer.reference;
+		}
+		
+		bool operator>=(const Ptr<T>& pointer)const
+		{
+			return reference >= pointer.reference;
+		}
+		
+		bool operator<(const Ptr<T>& pointer)const
+		{
+			return reference < pointer.reference;
+		}
+		
+		bool operator<=(const Ptr<T>& pointer)const
+		{
+			return reference <= pointer.reference;
+		}
+		
+		/// <summary>Test if it is a null pointer.</summary>
+		/// <returns>Returns true if it is not null.</returns>
+		operator bool()const
+		{
+			return reference != 0;
+		}
+		
+		/// <summary>Get the pointer to the object.</summary>
+		/// <returns>The pointer to the object.</returns>
+		T* Obj()const
+		{
+			return reference;
+		}
+		
+		/// <summary>Get the pointer to the object.</summary>
+		/// <returns>The pointer to the object.</returns>
+		T* operator->()const
+		{
+			return reference;
+		}
 	};
 	
 	/***********************************************************************
@@ -387,206 +387,206 @@ namespace vl
 	template<typename T>
 	class ComPtr
 	{
-		protected:
-			volatile vint*		counter;
-			T*					reference;
-			
-			void Inc()
-			{
-				if (counter)
-				{
-					INCRC(counter);
-				}
-			}
-			
-			void Dec()
-			{
-				if (counter)
-				{
-					if (DECRC(counter) == 0)
-					{
-						delete counter;
-						reference->Release();
-						counter = 0;
-						reference = 0;
-					}
-				}
-			}
-			
-			volatile vint* Counter()const
-			{
-				return counter;
-			}
-			
-			ComPtr(volatile vint* _counter, T* _reference)
-				: counter(_counter)
-				, reference(_reference)
-			{
-				Inc();
-			}
-		public:
+	 protected:
+		volatile vint*		counter;
+		T*					reference;
 		
-			ComPtr()
+		void Inc()
+		{
+			if (counter)
+			{
+				INCRC(counter);
+			}
+		}
+		
+		void Dec()
+		{
+			if (counter)
+			{
+				if (DECRC(counter) == 0)
+				{
+					delete counter;
+					reference->Release();
+					counter = 0;
+					reference = 0;
+				}
+			}
+		}
+		
+		volatile vint* Counter()const
+		{
+			return counter;
+		}
+		
+		ComPtr(volatile vint* _counter, T* _reference)
+			: counter(_counter)
+			, reference(_reference)
+		{
+			Inc();
+		}
+	 public:
+	 
+		ComPtr()
+		{
+			counter = 0;
+			reference = 0;
+		}
+		
+		ComPtr(T* pointer)
+		{
+			if (pointer)
+			{
+				counter = new volatile vint(1);
+				reference = pointer;
+			}
+			else
+			{
+				counter = 0;
+				reference = 0;
+			}
+		}
+		
+		ComPtr(const ComPtr<T>& pointer)
+		{
+			counter = pointer.counter;
+			reference = pointer.reference;
+			Inc();
+		}
+		
+		/*ComPtr(ComPtr<T>&& pointer)
+		{
+			counter = pointer.counter;
+			reference = pointer.reference;
+		
+			pointer.counter = 0;
+			pointer.reference = 0;
+		}*/
+		
+		~ComPtr()
+		{
+			Dec();
+		}
+		
+		ComPtr<T>& operator=(T* pointer)
+		{
+			Dec();
+			
+			if (pointer)
+			{
+				counter = new vint(1);
+				reference = pointer;
+			}
+			else
 			{
 				counter = 0;
 				reference = 0;
 			}
 			
-			ComPtr(T* pointer)
+			return *this;
+		}
+		
+		ComPtr<T>& operator=(const ComPtr<T>& pointer)
+		{
+			if (this != &pointer)
 			{
-				if (pointer)
-				{
-					counter = new volatile vint(1);
-					reference = pointer;
-				}
-				else
-				{
-					counter = 0;
-					reference = 0;
-				}
-			}
-			
-			ComPtr(const ComPtr<T>& pointer)
-			{
+				Dec();
 				counter = pointer.counter;
 				reference = pointer.reference;
 				Inc();
 			}
 			
-			/*ComPtr(ComPtr<T>&& pointer)
+			return *this;
+		}
+		
+		/*ComPtr<T>& operator=(ComPtr<T>&& pointer)
+		{
+			if (this != &pointer)
 			{
+				Dec();
 				counter = pointer.counter;
 				reference = pointer.reference;
-			
+		
 				pointer.counter = 0;
 				pointer.reference = 0;
-			}*/
-			
-			~ComPtr()
-			{
-				Dec();
 			}
-			
-			ComPtr<T>& operator=(T* pointer)
-			{
-				Dec();
-				
-				if (pointer)
-				{
-					counter = new vint(1);
-					reference = pointer;
-				}
-				else
-				{
-					counter = 0;
-					reference = 0;
-				}
-				
-				return *this;
-			}
-			
-			ComPtr<T>& operator=(const ComPtr<T>& pointer)
-			{
-				if (this != &pointer)
-				{
-					Dec();
-					counter = pointer.counter;
-					reference = pointer.reference;
-					Inc();
-				}
-				
-				return *this;
-			}
-			
-			/*ComPtr<T>& operator=(ComPtr<T>&& pointer)
-			{
-				if (this != &pointer)
-				{
-					Dec();
-					counter = pointer.counter;
-					reference = pointer.reference;
-			
-					pointer.counter = 0;
-					pointer.reference = 0;
-				}
-			
-				return *this;
-			}*/
-			
-			bool operator==(const T* pointer)const
-			{
-				return reference == pointer;
-			}
-			
-			bool operator!=(const T* pointer)const
-			{
-				return reference != pointer;
-			}
-			
-			bool operator>(const T* pointer)const
-			{
-				return reference > pointer;
-			}
-			
-			bool operator>=(const T* pointer)const
-			{
-				return reference >= pointer;
-			}
-			
-			bool operator<(const T* pointer)const
-			{
-				return reference < pointer;
-			}
-			
-			bool operator<=(const T* pointer)const
-			{
-				return reference <= pointer;
-			}
-			
-			bool operator==(const ComPtr<T>& pointer)const
-			{
-				return reference == pointer.reference;
-			}
-			
-			bool operator!=(const ComPtr<T>& pointer)const
-			{
-				return reference != pointer.reference;
-			}
-			
-			bool operator>(const ComPtr<T>& pointer)const
-			{
-				return reference > pointer.reference;
-			}
-			
-			bool operator>=(const ComPtr<T>& pointer)const
-			{
-				return reference >= pointer.reference;
-			}
-			
-			bool operator<(const ComPtr<T>& pointer)const
-			{
-				return reference < pointer.reference;
-			}
-			
-			bool operator<=(const ComPtr<T>& pointer)const
-			{
-				return reference <= pointer.reference;
-			}
-			
-			operator bool()const
-			{
-				return reference != 0;
-			}
-			
-			T* Obj()const
-			{
-				return reference;
-			}
-			
-			T* operator->()const
-			{
-				return reference;
-			}
+		
+			return *this;
+		}*/
+		
+		bool operator==(const T* pointer)const
+		{
+			return reference == pointer;
+		}
+		
+		bool operator!=(const T* pointer)const
+		{
+			return reference != pointer;
+		}
+		
+		bool operator>(const T* pointer)const
+		{
+			return reference > pointer;
+		}
+		
+		bool operator>=(const T* pointer)const
+		{
+			return reference >= pointer;
+		}
+		
+		bool operator<(const T* pointer)const
+		{
+			return reference < pointer;
+		}
+		
+		bool operator<=(const T* pointer)const
+		{
+			return reference <= pointer;
+		}
+		
+		bool operator==(const ComPtr<T>& pointer)const
+		{
+			return reference == pointer.reference;
+		}
+		
+		bool operator!=(const ComPtr<T>& pointer)const
+		{
+			return reference != pointer.reference;
+		}
+		
+		bool operator>(const ComPtr<T>& pointer)const
+		{
+			return reference > pointer.reference;
+		}
+		
+		bool operator>=(const ComPtr<T>& pointer)const
+		{
+			return reference >= pointer.reference;
+		}
+		
+		bool operator<(const ComPtr<T>& pointer)const
+		{
+			return reference < pointer.reference;
+		}
+		
+		bool operator<=(const ComPtr<T>& pointer)const
+		{
+			return reference <= pointer.reference;
+		}
+		
+		operator bool()const
+		{
+			return reference != 0;
+		}
+		
+		T* Obj()const
+		{
+			return reference;
+		}
+		
+		T* operator->()const
+		{
+			return reference;
+		}
 	};
 	
 	//template<typename T, typename ...TArgs>

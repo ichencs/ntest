@@ -2,14 +2,12 @@
 
 
 #include "Basic.h"
-
 #include "Pointer.h"
 #include "String.h"
 #include "Console.h"
 #include "Exception.h"
 #include "Locale.h"
 #include "GlobalStorage.h"
-#include "Locale.h"
 #include "Threading.h"
 #include "HttpUtility.h"
 #include "system.h"
@@ -17,7 +15,7 @@
 #include "Path.h"
 
 #include ".\FileSystem\Folder.h"
-#include ".\FileSystem\file.h"
+#include ".\FileSystem\File.h"
 #include ".\FileSystem\FilePath.h"
 #include ".\FileSystem\FileInfo.h"
 

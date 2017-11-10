@@ -78,6 +78,9 @@
     </ClCompile>
     <ClCompile Include="NVariant.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="FileSystem\PathFile.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="NVariant.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="FileSystem\PathFile.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

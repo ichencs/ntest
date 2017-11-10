@@ -26,10 +26,6 @@ namespace vl
 		FilePath
 		***********************************************************************/
 		
-#if defined VCZH_GCC
-		const wchar_t FilePath::Delimiter;
-#endif
-		
 		void FilePath::Initialize()
 		{
 			{
@@ -138,7 +134,7 @@ namespace vl
 			MEMORY_BASIC_INFORMATION mbi = {0};			//通过函数指针地址，获取dll基地址（HMODULE）
 			return ((::VirtualQuery(GetSafeModuleHandle, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
 		}
-				
+		
 		FilePath FilePath::ModulePath(void* pAddress)
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
@@ -155,11 +151,11 @@ namespace vl
 			return buffer;
 		}
 		
-		FilePath FilePath::ModuleFolder()
+		FilePath FilePath::ModuleFolder(void* pAddress)
 		{
-			return ModulePath().GetFolder();
+			return ModulePath(pAddress).GetFolder();
 		}
-
+		
 		FilePath FilePath::TempPath()
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };

@@ -18,37 +18,37 @@ namespace vl
 	/// <summary>Base type of all exceptions.</summary>
 	class Exception : public Object
 	{
-	protected:
+	 protected:
 		WString						message;
-
-	public:
-		Exception(const WString& _message=WString::Empty);
-
+		
+	 public:
+		Exception(const WString& _message = WString::Empty);
+		
 		const WString&				Message()const;
 	};
-
+	
 	class ArgumentException : public Exception
 	{
-	protected:
+	 protected:
 		WString						function;
 		WString						name;
-
-	public:
-		ArgumentException(const WString& _message=WString::Empty, const WString& _function=WString::Empty, const WString& _name=WString::Empty);
-
+		
+	 public:
+		ArgumentException(const WString& _message = WString::Empty, const WString& _function = WString::Empty, const WString& _name = WString::Empty);
+		
 		const WString&				GetFunction()const;
 		const WString&				GetName()const;
 	};
-
+	
 	class ParsingException : public Exception
 	{
-	protected:
-		vint							position;
+	 protected:
+		vint						position;
 		WString						expression;
-
-	public:
+		
+	 public:
 		ParsingException(const WString& _message, const WString& _expression, vint _position);
-
+		
 		const WString&				GetExpression()const;
 		vint							GetPosition()const;
 	};
