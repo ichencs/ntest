@@ -79,15 +79,6 @@ namespace vl
 	typedef signed __int64			vint64_t;
 	/// <summary>8-bytes unsigned integer.</summary>
 	typedef unsigned __int64		vuint64_t;
-#elif defined VCZH_GCC
-	typedef int8_t					vint8_t;
-	typedef uint8_t					vuint8_t;
-	typedef int16_t					vint16_t;
-	typedef uint16_t				vuint16_t;
-	typedef int32_t					vint32_t;
-	typedef uint32_t				vuint32_t;
-	typedef int64_t					vint64_t;
-	typedef uint64_t				vuint64_t;
 #endif
 	
 #ifdef VCZH_64
@@ -148,22 +139,22 @@ namespace vl
 	
 	class NotCopyable
 	{
-		private:
-			NotCopyable(const NotCopyable&);
-			NotCopyable& operator=(const NotCopyable&);
-		public:
-			NotCopyable();
+	 private:
+		NotCopyable(const NotCopyable&);
+		NotCopyable& operator=(const NotCopyable&);
+	 public:
+		NotCopyable();
 	};
 	
 	/// <summary>Base type of all errors. An error is an exception that you are not allowed to catch. Raising it means there is a fatal error in the code.</summary>
 	class Error
 	{
-		private:
-			const wchar_t*		description;
-		public:
-			Error(const wchar_t* _description);
-			
-			const wchar_t*		Description()const;
+	 private:
+		const wchar_t*		description;
+	 public:
+		Error(const wchar_t* _description);
+		
+		const wchar_t*		Description()const;
 	};
 	
 #if defined VCZH_MSVC || defined VCZH_GCC || defined _DEBUG
@@ -262,8 +253,8 @@ namespace vl
 	/// <summary>Base type of all classes.</summary>
 	class Object
 	{
-		public:
-			virtual ~Object();
+	 public:
+		virtual ~Object();
 	};
 	
 	/// <summary>Type for storing a value to wherever requiring a [T:vl.Ptr`1] to [T:vl.Object].</summary>
@@ -271,51 +262,51 @@ namespace vl
 	template<typename T>
 	class ObjectBox : public Object
 	{
-		private:
-			T					object;
-		public:
-			/// <summary>Box a value.</summary>
-			/// <param name="_object">The value to box.</param>
-			ObjectBox(const T& _object)
-				: object(_object)
-			{
-			}
-			
-			
-			
-			/// <summary>Copy a box.</summary>
-			/// <param name="value">The box.</param>
-			ObjectBox(const ObjectBox<T>& value)
-				: object(value.object)
-			{
-			}
-			
-			
-			/// <summary>Box a value.</summary>
-			/// <returns>The boxed value.</returns>
-			/// <param name="_object">The value to box.</param>
-			ObjectBox<T>& operator=(const T& _object)
-			{
-				object = _object;
-				return *this;
-			}
-			
-			/// <summary>Copy a box.</summary>
-			/// <returns>The boxed value.</returns>
-			/// <param name="value">The box.</param>
-			ObjectBox<T>& operator=(const ObjectBox<T>& value)
-			{
-				object = value.object;
-				return *this;
-			}
-			
-			
-			/// <summary>Unbox the value.</summary>
-			/// <returns>The original value.</returns>
-			const T& Unbox()
-			{
-				return object;
-			}
+	 private:
+		T					object;
+	 public:
+		/// <summary>Box a value.</summary>
+		/// <param name="_object">The value to box.</param>
+		ObjectBox(const T& _object)
+			: object(_object)
+		{
+		}
+		
+		
+		
+		/// <summary>Copy a box.</summary>
+		/// <param name="value">The box.</param>
+		ObjectBox(const ObjectBox<T>& value)
+			: object(value.object)
+		{
+		}
+		
+		
+		/// <summary>Box a value.</summary>
+		/// <returns>The boxed value.</returns>
+		/// <param name="_object">The value to box.</param>
+		ObjectBox<T>& operator=(const T& _object)
+		{
+			object = _object;
+			return *this;
+		}
+		
+		/// <summary>Copy a box.</summary>
+		/// <returns>The boxed value.</returns>
+		/// <param name="value">The box.</param>
+		ObjectBox<T>& operator=(const ObjectBox<T>& value)
+		{
+			object = value.object;
+			return *this;
+		}
+		
+		
+		/// <summary>Unbox the value.</summary>
+		/// <returns>The original value.</returns>
+		const T& Unbox()
+		{
+			return object;
+		}
 	};
 	
 	/// <summary>Type for optionally storing a value.</summary>
@@ -323,44 +314,61 @@ namespace vl
 	template<typename T>
 	class Nullable
 	{
-		private:
-			T*					object;
-		public:
-			/// <summary>Create a null value.</summary>
-			Nullable()
-				: object(0)
+	 private:
+		T*					object;
+	 public:
+		/// <summary>Create a null value.</summary>
+		Nullable()
+			: object(0)
+		{
+		}
+		
+		/// <summary>Create a non-null value.</summary>
+		/// <param name="value">The value to copy.</param>
+		Nullable(const T& value)
+			: object(new T(value))
+		{
+		}
+		
+		
+		/// <summary>Copy a nullable value.</summary>
+		/// <param name="nullable">The nullable value to copy.</param>
+		Nullable(const Nullable<T>& nullable)
+			: object(nullable.object ? new T(*nullable.object) : 0)
+		{
+		}
+		
+		
+		~Nullable()
+		{
+			if (object)
 			{
+				delete object;
+				object = 0;
+			}
+		}
+		
+		/// <summary>Create a non-null value.</summary>
+		/// <returns>The created nullable value.</returns>
+		/// <param name="value">The value to copy.</param>
+		Nullable<T>& operator=(const T& value)
+		{
+			if (object)
+			{
+				delete object;
+				object = 0;
 			}
 			
-			/// <summary>Create a non-null value.</summary>
-			/// <param name="value">The value to copy.</param>
-			Nullable(const T& value)
-				: object(new T(value))
-			{
-			}
-			
-			
-			/// <summary>Copy a nullable value.</summary>
-			/// <param name="nullable">The nullable value to copy.</param>
-			Nullable(const Nullable<T>& nullable)
-				: object(nullable.object ? new T(*nullable.object) : 0)
-			{
-			}
-			
-			
-			~Nullable()
-			{
-				if (object)
-				{
-					delete object;
-					object = 0;
-				}
-			}
-			
-			/// <summary>Create a non-null value.</summary>
-			/// <returns>The created nullable value.</returns>
-			/// <param name="value">The value to copy.</param>
-			Nullable<T>& operator=(const T& value)
+			object = new T(value);
+			return *this;
+		}
+		
+		/// <summary>Copy a nullable value.</summary>
+		/// <returns>The created nullable value.</returns>
+		/// <param name="nullable">The nullable value to copy.</param>
+		Nullable<T>& operator=(const Nullable<T>& nullable)
+		{
+			if (this != &nullable)
 			{
 				if (object)
 				{
@@ -368,101 +376,84 @@ namespace vl
 					object = 0;
 				}
 				
-				object = new T(value);
-				return *this;
-			}
-			
-			/// <summary>Copy a nullable value.</summary>
-			/// <returns>The created nullable value.</returns>
-			/// <param name="nullable">The nullable value to copy.</param>
-			Nullable<T>& operator=(const Nullable<T>& nullable)
-			{
-				if (this != &nullable)
+				if (nullable.object)
 				{
-					if (object)
-					{
-						delete object;
-						object = 0;
-					}
-					
-					if (nullable.object)
-					{
-						object = new T(*nullable.object);
-					}
+					object = new T(*nullable.object);
 				}
-				
-				return *this;
 			}
 			
-			
-			
-			static bool Equals(const Nullable<T>& a, const Nullable<T>& b)
-			{
-				return
-				  a.object
-				  ? b.object
-				  ? *a.object == *b.object
-				  : false
-				  : b.object
-				  ? false
-				  : true;
-			}
-			
-			static vint Compare(const Nullable<T>& a, const Nullable<T>& b)
-			{
-				return
-				  a.object
-				  ? b.object
-				  ? (*a.object == *b.object ? 0 : *a.object < *b.object ? -1 : 1)
-				  : 1
-				  : b.object
-				  ? -1
-				  : 0;
-			}
-			
-			bool operator==(const Nullable<T>& nullable)const
-			{
-				return Equals(*this, nullable);
-			}
-			
-			bool operator!=(const Nullable<T>& nullable)const
-			{
-				return !Equals(*this, nullable);
-			}
-			
-			bool operator<(const Nullable<T>& nullable)const
-			{
-				return Compare(*this, nullable) < 0;
-			}
-			
-			bool operator<=(const Nullable<T>& nullable)const
-			{
-				return Compare(*this, nullable) <= 0;
-			}
-			
-			bool operator>(const Nullable<T>& nullable)const
-			{
-				return Compare(*this, nullable) > 0;
-			}
-			
-			bool operator>=(const Nullable<T>& nullable)const
-			{
-				return Compare(*this, nullable) >= 0;
-			}
-			
-			/// <summary>Convert the nullable value to a bool value.</summary>
-			/// <returns>Returns true if it is not null.</returns>
-			operator bool()const
-			{
-				return object != 0;
-			}
-			
-			/// <summary>Unbox the value. This operation will cause an access violation of it is null.</summary>
-			/// <returns>The original value.</returns>
-			const T& Value()const
-			{
-				return *object;
-			}
+			return *this;
+		}
+		
+		
+		
+		static bool Equals(const Nullable<T>& a, const Nullable<T>& b)
+		{
+			return
+			  a.object
+			  ? b.object
+			  ? *a.object == *b.object
+			  : false
+			  : b.object
+			  ? false
+			  : true;
+		}
+		
+		static vint Compare(const Nullable<T>& a, const Nullable<T>& b)
+		{
+			return
+			  a.object
+			  ? b.object
+			  ? (*a.object == *b.object ? 0 : *a.object < *b.object ? -1 : 1)
+			  : 1
+			  : b.object
+			  ? -1
+			  : 0;
+		}
+		
+		bool operator==(const Nullable<T>& nullable)const
+		{
+			return Equals(*this, nullable);
+		}
+		
+		bool operator!=(const Nullable<T>& nullable)const
+		{
+			return !Equals(*this, nullable);
+		}
+		
+		bool operator<(const Nullable<T>& nullable)const
+		{
+			return Compare(*this, nullable) < 0;
+		}
+		
+		bool operator<=(const Nullable<T>& nullable)const
+		{
+			return Compare(*this, nullable) <= 0;
+		}
+		
+		bool operator>(const Nullable<T>& nullable)const
+		{
+			return Compare(*this, nullable) > 0;
+		}
+		
+		bool operator>=(const Nullable<T>& nullable)const
+		{
+			return Compare(*this, nullable) >= 0;
+		}
+		
+		/// <summary>Convert the nullable value to a bool value.</summary>
+		/// <returns>Returns true if it is not null.</returns>
+		operator bool()const
+		{
+			return object != 0;
+		}
+		
+		/// <summary>Unbox the value. This operation will cause an access violation of it is null.</summary>
+		/// <returns>The original value.</returns>
+		const T& Value()const
+		{
+			return *object;
+		}
 	};
 	
 	template<typename T, size_t minSize>
@@ -481,17 +472,17 @@ namespace vl
 	template<typename T>
 	struct KeyType
 	{
-		public:
-			/// <summary>The index type of a value for containers.</summary>
-			typedef T Type;
-			
-			/// <summary>Convert a value to its index type.</summary>
-			/// <returns>The corresponding index value.</returns>
-			/// <param name="value">The value.</param>
-			static T GetKeyValue(const T& value)
-			{
-				return value;
-			}
+	 public:
+		/// <summary>The index type of a value for containers.</summary>
+		typedef T Type;
+		
+		/// <summary>Convert a value to its index type.</summary>
+		/// <returns>The corresponding index value.</returns>
+		/// <param name="value">The value.</param>
+		static T GetKeyValue(const T& value)
+		{
+			return value;
+		}
 	};
 	
 	/// <summary>Test is a type a Plain-Old-Data type for containers.</summary>
@@ -669,8 +660,8 @@ namespace vl
 	/// <summary>Base type of all interfaces. All interface types are encouraged to be virtual inherited.</summary>
 	class Interface : private NotCopyable
 	{
-		public:
-			virtual ~Interface();
+	 public:
+		virtual ~Interface();
 	};
 	
 	/***********************************************************************
@@ -884,331 +875,331 @@ namespace vl
 	template<typename T>
 	class Ptr
 	{
-			template<typename X>
-			friend class Ptr;
-		protected:
-			typedef void	(*Destructor)(volatile vint*, void*);
-			
-			volatile vint*		counter;
-			T*					reference;
-			void*				originalReference;
-			Destructor			originalDestructor;
-			
-			void Inc()
-			{
-				if (counter)
-				{
-					INCRC(counter);
-				}
-			}
-			
-			void Dec(bool deleteIfZero = true)
-			{
-				if (counter)
-				{
-					if (DECRC(counter) == 0)
-					{
-						if (deleteIfZero)
-						{
-							originalDestructor(counter, originalReference);
-						}
-						
-						counter = NULL;
-						reference = NULL;
-						originalReference = NULL;
-						originalDestructor = NULL;
-					}
-				}
-			}
-			
-			volatile vint* Counter()const
-			{
-				return counter;
-			}
-			
-			Ptr(volatile vint* _counter, T* _reference, void* _originalReference, Destructor _originalDestructor)
-				: counter(_counter)
-				, reference(_reference)
-				, originalReference(_originalReference)
-				, originalDestructor(_originalDestructor)
-			{
-				Inc();
-			}
-		public:
+		template<typename X>
+		friend class Ptr;		//定义为自己的友元
+	 protected:
+		typedef void	(*Destructor)(volatile vint*, void*);
 		
-			/// <summary>Create a null pointer.</summary>
-			Ptr()
-				: counter(0)
-				, reference(0)
-				, originalReference(0)
-				, originalDestructor(0)
+		volatile vint*		counter;
+		T*					reference;
+		void*				originalReference;
+		Destructor			originalDestructor;
+		
+		void Inc()
+		{
+			if (counter)
 			{
+				INCRC(counter);
 			}
-			
-			/// <summary>Convert a pointer to an object to a smart pointer.</summary>
-			/// <param name="pointer">The pointer to the object.</param>
-			Ptr(T* pointer)
-				: counter(0)
-				, reference(0)
-				, originalReference(0)
-				, originalDestructor(0)
+		}
+		
+		void Dec(bool deleteIfZero = true)
+		{
+			if (counter)
 			{
-				if (pointer)
+				if (DECRC(counter) == 0)
 				{
-					counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
-					reference = pointer;
-					originalReference = pointer;
-					originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
-					Inc();
+					if (deleteIfZero)
+					{
+						originalDestructor(counter, originalReference);
+					}
+					
+					counter = NULL;
+					reference = NULL;
+					originalReference = NULL;
+					originalDestructor = NULL;
 				}
 			}
-			
-			/// <summary>Copy a smart pointer.</summary>
-			/// <param name="pointer">The smart pointer to copy.</param>
-			Ptr(const Ptr<T>& pointer)
-				: counter(pointer.counter)
-				, reference(pointer.reference)
-				, originalReference(pointer.originalReference)
-				, originalDestructor(pointer.originalDestructor)
+		}
+		
+		volatile vint* Counter()const
+		{
+			return counter;
+		}
+		
+		Ptr(volatile vint* _counter, T* _reference, void* _originalReference, Destructor _originalDestructor)
+			: counter(_counter)
+			, reference(_reference)
+			, originalReference(_originalReference)
+			, originalDestructor(_originalDestructor)
+		{
+			Inc();
+		}
+	 public:
+	 
+		/// <summary>Create a null pointer.</summary>
+		Ptr()
+			: counter(0)
+			, reference(0)
+			, originalReference(0)
+			, originalDestructor(0)
+		{
+		}
+		
+		/// <summary>Convert a pointer to an object to a smart pointer.</summary>
+		/// <param name="pointer">The pointer to the object.</param>
+		Ptr(T* pointer)
+			: counter(0)
+			, reference(0)
+			, originalReference(0)
+			, originalDestructor(0)
+		{
+			if (pointer)
 			{
+				counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
+				reference = pointer;
+				originalReference = pointer;
+				originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
+				Inc();
+			}
+		}
+		
+		/// <summary>Copy a smart pointer.</summary>
+		/// <param name="pointer">The smart pointer to copy.</param>
+		Ptr(const Ptr<T>& pointer)
+			: counter(pointer.counter)
+			, reference(pointer.reference)
+			, originalReference(pointer.originalReference)
+			, originalDestructor(pointer.originalDestructor)
+		{
+			Inc();
+		}
+		
+		/// <summary>Move a smart pointer.</summary>
+		/// <param name="pointer">The smart pointer to Move.</param>
+		// 		Ptr(Ptr<T>&& pointer)
+		// 			:counter(pointer.counter)
+		// 			,reference(pointer.reference)
+		// 			,originalReference(pointer.originalReference)
+		// 			,originalDestructor(pointer.originalDestructor)
+		// 		{
+		// 			pointer.counter=0;
+		// 			pointer.reference=0;
+		// 			pointer.originalReference=0;
+		// 			pointer.originalDestructor=0;
+		// 		}
+		
+		/// <summary>Cast a smart pointer.</summary>
+		/// <typeparam name="C">The type of the object before casting.</typeparam>
+		/// <param name="pointer">The smart pointer to cast.</param>
+		template<typename C>
+		Ptr(const Ptr<C>& pointer)
+			: counter(0)
+			, reference(0)
+			, originalReference(0)
+			, originalDestructor(0)
+		{
+			T* converted = pointer.Obj();
+			
+			if (converted)
+			{
+				counter = pointer.Counter();
+				reference = converted;
+				originalReference = pointer.originalReference;
+				originalDestructor = pointer.originalDestructor;
+				Inc();
+			}
+		}
+		
+		~Ptr()
+		{
+			Dec();
+		}
+		
+		/// <summary>Detach the contained object from this smart pointer.</summary>
+		/// <returns>The detached object. Returns null if this smart pointer is empty.</returns>
+		T* Detach()
+		{
+			T* detached = reference;
+			Dec(false);
+			return detached;
+		}
+		
+		/// <summary>Cast a smart pointer.</summary>
+		/// <typeparam name="C">The type of the object after casting.</typeparam>
+		/// <returns>The casted smart pointer. Returns null if failed.</returns>
+		template<typename C>
+		Ptr<C> Cast()const
+		{
+			C* converted = dynamic_cast<C*>(reference);
+			return Ptr<C>((converted ? counter : 0), converted, originalReference, originalDestructor);
+		}
+		
+		/// <summary>Convert a pointer to an object to a smart pointer.</summary>
+		/// <returns>The converted smart pointer.</returns>
+		/// <param name="pointer">The pointer to the object.</param>
+		Ptr<T>& operator=(T* pointer)
+		{
+			Dec();
+			
+			if (pointer)
+			{
+				counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
+				reference = pointer;
+				originalReference = pointer;
+				originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
+				Inc();
+			}
+			else
+			{
+				counter = 0;
+				reference = 0;
+				originalReference = 0;
+				originalDestructor = 0;
+			}
+			
+			return *this;
+		}
+		
+		/// <summary>Copy a smart pointer.</summary>
+		/// <returns>The copied smart pointer.</returns>
+		/// <param name="pointer">The smart pointer to copy.</param>
+		Ptr<T>& operator=(const Ptr<T>& pointer)
+		{
+			if (this != &pointer)
+			{
+				Dec();
+				counter = pointer.counter;
+				reference = pointer.reference;
+				originalReference = pointer.originalReference;
+				originalDestructor = pointer.originalDestructor;
 				Inc();
 			}
 			
-			/// <summary>Move a smart pointer.</summary>
-			/// <param name="pointer">The smart pointer to Move.</param>
-			// 		Ptr(Ptr<T>&& pointer)
-			// 			:counter(pointer.counter)
-			// 			,reference(pointer.reference)
-			// 			,originalReference(pointer.originalReference)
-			// 			,originalDestructor(pointer.originalDestructor)
-			// 		{
-			// 			pointer.counter=0;
-			// 			pointer.reference=0;
-			// 			pointer.originalReference=0;
-			// 			pointer.originalDestructor=0;
-			// 		}
-			
-			/// <summary>Cast a smart pointer.</summary>
-			/// <typeparam name="C">The type of the object before casting.</typeparam>
-			/// <param name="pointer">The smart pointer to cast.</param>
-			template<typename C>
-			Ptr(const Ptr<C>& pointer)
-				: counter(0)
-				, reference(0)
-				, originalReference(0)
-				, originalDestructor(0)
-			{
-				T* converted = pointer.Obj();
-				
-				if (converted)
-				{
-					counter = pointer.Counter();
-					reference = converted;
-					originalReference = pointer.originalReference;
-					originalDestructor = pointer.originalDestructor;
-					Inc();
-				}
-			}
-			
-			~Ptr()
+			return *this;
+		}
+		
+		/// <summary>Move a smart pointer.</summary>
+		/// <returns>The moved smart pointer.</returns>
+		/// <param name="pointer">The smart pointer to Move.</param>
+		/*Ptr<T>& operator=(Ptr<T>&& pointer)
+		{
+			if (this != &pointer)
 			{
 				Dec();
+				counter = pointer.counter;
+				reference = pointer.reference;
+				originalReference = pointer.originalReference;
+				originalDestructor = pointer.originalDestructor;
+		
+				pointer.counter = 0;
+				pointer.reference = 0;
+				pointer.originalReference = 0;
+				pointer.originalDestructor = 0;
+			}
+		
+			return *this;
+		}*/
+		
+		/// <summary>Cast a smart pointer.</summary>
+		/// <typeparam name="C">The type of the object before casting.</typeparam>
+		/// <returns>The smart pointer after casting.</returns>
+		/// <param name="pointer">The smart pointer to cast.</param>
+		template<typename C>
+		Ptr<T>& operator=(const Ptr<C>& pointer)
+		{
+			T* converted = pointer.Obj();
+			Dec();
+			
+			if (converted)
+			{
+				counter = pointer.counter;
+				reference = converted;
+				originalReference = pointer.originalReference;
+				originalDestructor = pointer.originalDestructor;
+				Inc();
+			}
+			else
+			{
+				counter = 0;
+				reference = 0;
+				originalReference = 0;
+				originalDestructor = 0;
 			}
 			
-			/// <summary>Detach the contained object from this smart pointer.</summary>
-			/// <returns>The detached object. Returns null if this smart pointer is empty.</returns>
-			T* Detach()
-			{
-				T* detached = reference;
-				Dec(false);
-				return detached;
-			}
-			
-			/// <summary>Cast a smart pointer.</summary>
-			/// <typeparam name="C">The type of the object after casting.</typeparam>
-			/// <returns>The casted smart pointer. Returns null if failed.</returns>
-			template<typename C>
-			Ptr<C> Cast()const
-			{
-				C* converted = dynamic_cast<C*>(reference);
-				return Ptr<C>((converted ? counter : 0), converted, originalReference, originalDestructor);
-			}
-			
-			/// <summary>Convert a pointer to an object to a smart pointer.</summary>
-			/// <returns>The converted smart pointer.</returns>
-			/// <param name="pointer">The pointer to the object.</param>
-			Ptr<T>& operator=(T* pointer)
-			{
-				Dec();
-				
-				if (pointer)
-				{
-					counter = ReferenceCounterOperator<T>::CreateCounter(/*pointer*/);
-					reference = pointer;
-					originalReference = pointer;
-					originalDestructor = &ReferenceCounterOperator<T>::DeleteReference;
-					Inc();
-				}
-				else
-				{
-					counter = 0;
-					reference = 0;
-					originalReference = 0;
-					originalDestructor = 0;
-				}
-				
-				return *this;
-			}
-			
-			/// <summary>Copy a smart pointer.</summary>
-			/// <returns>The copied smart pointer.</returns>
-			/// <param name="pointer">The smart pointer to copy.</param>
-			Ptr<T>& operator=(const Ptr<T>& pointer)
-			{
-				if (this != &pointer)
-				{
-					Dec();
-					counter = pointer.counter;
-					reference = pointer.reference;
-					originalReference = pointer.originalReference;
-					originalDestructor = pointer.originalDestructor;
-					Inc();
-				}
-				
-				return *this;
-			}
-			
-			/// <summary>Move a smart pointer.</summary>
-			/// <returns>The moved smart pointer.</returns>
-			/// <param name="pointer">The smart pointer to Move.</param>
-			/*Ptr<T>& operator=(Ptr<T>&& pointer)
-			{
-				if (this != &pointer)
-				{
-					Dec();
-					counter = pointer.counter;
-					reference = pointer.reference;
-					originalReference = pointer.originalReference;
-					originalDestructor = pointer.originalDestructor;
-			
-					pointer.counter = 0;
-					pointer.reference = 0;
-					pointer.originalReference = 0;
-					pointer.originalDestructor = 0;
-				}
-			
-				return *this;
-			}*/
-			
-			/// <summary>Cast a smart pointer.</summary>
-			/// <typeparam name="C">The type of the object before casting.</typeparam>
-			/// <returns>The smart pointer after casting.</returns>
-			/// <param name="pointer">The smart pointer to cast.</param>
-			template<typename C>
-			Ptr<T>& operator=(const Ptr<C>& pointer)
-			{
-				T* converted = pointer.Obj();
-				Dec();
-				
-				if (converted)
-				{
-					counter = pointer.counter;
-					reference = converted;
-					originalReference = pointer.originalReference;
-					originalDestructor = pointer.originalDestructor;
-					Inc();
-				}
-				else
-				{
-					counter = 0;
-					reference = 0;
-					originalReference = 0;
-					originalDestructor = 0;
-				}
-				
-				return *this;
-			}
-			
-			bool operator==(const T* pointer)const
-			{
-				return reference == pointer;
-			}
-			
-			bool operator!=(const T* pointer)const
-			{
-				return reference != pointer;
-			}
-			
-			bool operator>(const T* pointer)const
-			{
-				return reference > pointer;
-			}
-			
-			bool operator>=(const T* pointer)const
-			{
-				return reference >= pointer;
-			}
-			
-			bool operator<(const T* pointer)const
-			{
-				return reference < pointer;
-			}
-			
-			bool operator<=(const T* pointer)const
-			{
-				return reference <= pointer;
-			}
-			
-			bool operator==(const Ptr<T>& pointer)const
-			{
-				return reference == pointer.reference;
-			}
-			
-			bool operator!=(const Ptr<T>& pointer)const
-			{
-				return reference != pointer.reference;
-			}
-			
-			bool operator>(const Ptr<T>& pointer)const
-			{
-				return reference > pointer.reference;
-			}
-			
-			bool operator>=(const Ptr<T>& pointer)const
-			{
-				return reference >= pointer.reference;
-			}
-			
-			bool operator<(const Ptr<T>& pointer)const
-			{
-				return reference < pointer.reference;
-			}
-			
-			bool operator<=(const Ptr<T>& pointer)const
-			{
-				return reference <= pointer.reference;
-			}
-			
-			/// <summary>Test if it is a null pointer.</summary>
-			/// <returns>Returns true if it is not null.</returns>
-			operator bool()const
-			{
-				return reference != 0;
-			}
-			
-			/// <summary>Get the pointer to the object.</summary>
-			/// <returns>The pointer to the object.</returns>
-			T* Obj()const
-			{
-				return reference;
-			}
-			
-			/// <summary>Get the pointer to the object.</summary>
-			/// <returns>The pointer to the object.</returns>
-			T* operator->()const
-			{
-				return reference;
-			}
+			return *this;
+		}
+		
+		bool operator==(const T* pointer)const
+		{
+			return reference == pointer;
+		}
+		
+		bool operator!=(const T* pointer)const
+		{
+			return reference != pointer;
+		}
+		
+		bool operator>(const T* pointer)const
+		{
+			return reference > pointer;
+		}
+		
+		bool operator>=(const T* pointer)const
+		{
+			return reference >= pointer;
+		}
+		
+		bool operator<(const T* pointer)const
+		{
+			return reference < pointer;
+		}
+		
+		bool operator<=(const T* pointer)const
+		{
+			return reference <= pointer;
+		}
+		
+		bool operator==(const Ptr<T>& pointer)const
+		{
+			return reference == pointer.reference;
+		}
+		
+		bool operator!=(const Ptr<T>& pointer)const
+		{
+			return reference != pointer.reference;
+		}
+		
+		bool operator>(const Ptr<T>& pointer)const
+		{
+			return reference > pointer.reference;
+		}
+		
+		bool operator>=(const Ptr<T>& pointer)const
+		{
+			return reference >= pointer.reference;
+		}
+		
+		bool operator<(const Ptr<T>& pointer)const
+		{
+			return reference < pointer.reference;
+		}
+		
+		bool operator<=(const Ptr<T>& pointer)const
+		{
+			return reference <= pointer.reference;
+		}
+		
+		/// <summary>Test if it is a null pointer.</summary>
+		/// <returns>Returns true if it is not null.</returns>
+		operator bool()const
+		{
+			return reference != 0;
+		}
+		
+		/// <summary>Get the pointer to the object.</summary>
+		/// <returns>The pointer to the object.</returns>
+		T* Obj()const
+		{
+			return reference;
+		}
+		
+		/// <summary>Get the pointer to the object.</summary>
+		/// <returns>The pointer to the object.</returns>
+		T* operator->()const
+		{
+			return reference;
+		}
 	};
 	
 	/***********************************************************************
@@ -1218,206 +1209,206 @@ namespace vl
 	template<typename T>
 	class ComPtr
 	{
-		protected:
-			volatile vint*		counter;
-			T*					reference;
-			
-			void Inc()
-			{
-				if (counter)
-				{
-					INCRC(counter);
-				}
-			}
-			
-			void Dec()
-			{
-				if (counter)
-				{
-					if (DECRC(counter) == 0)
-					{
-						delete counter;
-						reference->Release();
-						counter = 0;
-						reference = 0;
-					}
-				}
-			}
-			
-			volatile vint* Counter()const
-			{
-				return counter;
-			}
-			
-			ComPtr(volatile vint* _counter, T* _reference)
-				: counter(_counter)
-				, reference(_reference)
-			{
-				Inc();
-			}
-		public:
+	 protected:
+		volatile vint*		counter;
+		T*					reference;
 		
-			ComPtr()
+		void Inc()
+		{
+			if (counter)
+			{
+				INCRC(counter);
+			}
+		}
+		
+		void Dec()
+		{
+			if (counter)
+			{
+				if (DECRC(counter) == 0)
+				{
+					delete counter;
+					reference->Release();
+					counter = 0;
+					reference = 0;
+				}
+			}
+		}
+		
+		volatile vint* Counter()const
+		{
+			return counter;
+		}
+		
+		ComPtr(volatile vint* _counter, T* _reference)
+			: counter(_counter)
+			, reference(_reference)
+		{
+			Inc();
+		}
+	 public:
+	 
+		ComPtr()
+		{
+			counter = 0;
+			reference = 0;
+		}
+		
+		ComPtr(T* pointer)
+		{
+			if (pointer)
+			{
+				counter = new volatile vint(1);
+				reference = pointer;
+			}
+			else
+			{
+				counter = 0;
+				reference = 0;
+			}
+		}
+		
+		ComPtr(const ComPtr<T>& pointer)
+		{
+			counter = pointer.counter;
+			reference = pointer.reference;
+			Inc();
+		}
+		
+		/*ComPtr(ComPtr<T>&& pointer)
+		{
+			counter = pointer.counter;
+			reference = pointer.reference;
+		
+			pointer.counter = 0;
+			pointer.reference = 0;
+		}*/
+		
+		~ComPtr()
+		{
+			Dec();
+		}
+		
+		ComPtr<T>& operator=(T* pointer)
+		{
+			Dec();
+			
+			if (pointer)
+			{
+				counter = new vint(1);
+				reference = pointer;
+			}
+			else
 			{
 				counter = 0;
 				reference = 0;
 			}
 			
-			ComPtr(T* pointer)
+			return *this;
+		}
+		
+		ComPtr<T>& operator=(const ComPtr<T>& pointer)
+		{
+			if (this != &pointer)
 			{
-				if (pointer)
-				{
-					counter = new volatile vint(1);
-					reference = pointer;
-				}
-				else
-				{
-					counter = 0;
-					reference = 0;
-				}
-			}
-			
-			ComPtr(const ComPtr<T>& pointer)
-			{
+				Dec();
 				counter = pointer.counter;
 				reference = pointer.reference;
 				Inc();
 			}
 			
-			/*ComPtr(ComPtr<T>&& pointer)
+			return *this;
+		}
+		
+		/*ComPtr<T>& operator=(ComPtr<T>&& pointer)
+		{
+			if (this != &pointer)
 			{
+				Dec();
 				counter = pointer.counter;
 				reference = pointer.reference;
-			
+		
 				pointer.counter = 0;
 				pointer.reference = 0;
-			}*/
-			
-			~ComPtr()
-			{
-				Dec();
 			}
-			
-			ComPtr<T>& operator=(T* pointer)
-			{
-				Dec();
-				
-				if (pointer)
-				{
-					counter = new vint(1);
-					reference = pointer;
-				}
-				else
-				{
-					counter = 0;
-					reference = 0;
-				}
-				
-				return *this;
-			}
-			
-			ComPtr<T>& operator=(const ComPtr<T>& pointer)
-			{
-				if (this != &pointer)
-				{
-					Dec();
-					counter = pointer.counter;
-					reference = pointer.reference;
-					Inc();
-				}
-				
-				return *this;
-			}
-			
-			/*ComPtr<T>& operator=(ComPtr<T>&& pointer)
-			{
-				if (this != &pointer)
-				{
-					Dec();
-					counter = pointer.counter;
-					reference = pointer.reference;
-			
-					pointer.counter = 0;
-					pointer.reference = 0;
-				}
-			
-				return *this;
-			}*/
-			
-			bool operator==(const T* pointer)const
-			{
-				return reference == pointer;
-			}
-			
-			bool operator!=(const T* pointer)const
-			{
-				return reference != pointer;
-			}
-			
-			bool operator>(const T* pointer)const
-			{
-				return reference > pointer;
-			}
-			
-			bool operator>=(const T* pointer)const
-			{
-				return reference >= pointer;
-			}
-			
-			bool operator<(const T* pointer)const
-			{
-				return reference < pointer;
-			}
-			
-			bool operator<=(const T* pointer)const
-			{
-				return reference <= pointer;
-			}
-			
-			bool operator==(const ComPtr<T>& pointer)const
-			{
-				return reference == pointer.reference;
-			}
-			
-			bool operator!=(const ComPtr<T>& pointer)const
-			{
-				return reference != pointer.reference;
-			}
-			
-			bool operator>(const ComPtr<T>& pointer)const
-			{
-				return reference > pointer.reference;
-			}
-			
-			bool operator>=(const ComPtr<T>& pointer)const
-			{
-				return reference >= pointer.reference;
-			}
-			
-			bool operator<(const ComPtr<T>& pointer)const
-			{
-				return reference < pointer.reference;
-			}
-			
-			bool operator<=(const ComPtr<T>& pointer)const
-			{
-				return reference <= pointer.reference;
-			}
-			
-			operator bool()const
-			{
-				return reference != 0;
-			}
-			
-			T* Obj()const
-			{
-				return reference;
-			}
-			
-			T* operator->()const
-			{
-				return reference;
-			}
+		
+			return *this;
+		}*/
+		
+		bool operator==(const T* pointer)const
+		{
+			return reference == pointer;
+		}
+		
+		bool operator!=(const T* pointer)const
+		{
+			return reference != pointer;
+		}
+		
+		bool operator>(const T* pointer)const
+		{
+			return reference > pointer;
+		}
+		
+		bool operator>=(const T* pointer)const
+		{
+			return reference >= pointer;
+		}
+		
+		bool operator<(const T* pointer)const
+		{
+			return reference < pointer;
+		}
+		
+		bool operator<=(const T* pointer)const
+		{
+			return reference <= pointer;
+		}
+		
+		bool operator==(const ComPtr<T>& pointer)const
+		{
+			return reference == pointer.reference;
+		}
+		
+		bool operator!=(const ComPtr<T>& pointer)const
+		{
+			return reference != pointer.reference;
+		}
+		
+		bool operator>(const ComPtr<T>& pointer)const
+		{
+			return reference > pointer.reference;
+		}
+		
+		bool operator>=(const ComPtr<T>& pointer)const
+		{
+			return reference >= pointer.reference;
+		}
+		
+		bool operator<(const ComPtr<T>& pointer)const
+		{
+			return reference < pointer.reference;
+		}
+		
+		bool operator<=(const ComPtr<T>& pointer)const
+		{
+			return reference <= pointer.reference;
+		}
+		
+		operator bool()const
+		{
+			return reference != 0;
+		}
+		
+		T* Obj()const
+		{
+			return reference;
+		}
+		
+		T* operator->()const
+		{
+			return reference;
+		}
 	};
 	
 	//template<typename T, typename ...TArgs>
@@ -6181,37 +6172,37 @@ namespace vl
 	/// <summary>Base type of all exceptions.</summary>
 	class Exception : public Object
 	{
-	protected:
+	 protected:
 		WString						message;
-
-	public:
-		Exception(const WString& _message=WString::Empty);
-
+		
+	 public:
+		Exception(const WString& _message = WString::Empty);
+		
 		const WString&				Message()const;
 	};
-
+	
 	class ArgumentException : public Exception
 	{
-	protected:
+	 protected:
 		WString						function;
 		WString						name;
-
-	public:
-		ArgumentException(const WString& _message=WString::Empty, const WString& _function=WString::Empty, const WString& _name=WString::Empty);
-
+		
+	 public:
+		ArgumentException(const WString& _message = WString::Empty, const WString& _function = WString::Empty, const WString& _name = WString::Empty);
+		
 		const WString&				GetFunction()const;
 		const WString&				GetName()const;
 	};
-
+	
 	class ParsingException : public Exception
 	{
-	protected:
-		vint							position;
+	 protected:
+		vint						position;
 		WString						expression;
-
-	public:
+		
+	 public:
 		ParsingException(const WString& _message, const WString& _expression, vint _position);
-
+		
 		const WString&				GetExpression()const;
 		vint							GetPosition()const;
 	};
@@ -6653,21 +6644,15 @@ namespace vl
 			Path(const WString& _filePath);
 			Path(const wchar_t* _filePath);
 			Path(const Path& _filePath);
-<<<<<<< HEAD
 		 public:
-=======
-		public:
-<<<<<<< HEAD
 			//************************************
 			// Method:    UnquoteSpaces
 			// FullName:  vl::path::Path::UnquoteSpaces
-			// Access:    public 
+			// Access:    public
 			// Returns:   vl::WString
 			// Qualifier: 从带引号的路径中取出路径
 			//************************************
-=======
->>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
->>>>>>> 3acb50405f278c9ae3f366e9bab0e7c17f0a431f
+		 public:
 			WString UnquoteSpaces();
 			bool IsDirectory();
 			//************************************
@@ -6703,11 +6688,25 @@ namespace vl
 			// Access:    public
 			// Returns:   void
 			// Qualifier:
-			// 去除路径最后的反斜杠“\”
+			// L"c:\\Program Files\\File.txt\\" -> L"c:\\Program Files\\File.txt"
+			// L"c:\\Program Files\\File.txt/" -> L"c:\\Program Files\\File.txt"
+			// 去除路径最后的反斜杠“\”(仅去除“\”)
 			//************************************
 			void RemoveBackslash();
 			void RemoveExtension();
+			/// <summary>
+			/// 获取文件路径，路径不带"\\"，不检查是否有效 等效 GetFolder()
+			/// 移除文件名、/+文件名、 反斜杠
+			/// L"c:\\Program Files\\File.txt\\" -> L"c:\\Program Files\\File.txt"
+			/// L"c:\\Program Files\\File.txt" -> L"c:\\Program Files"
+			///  L"c:\\Program Files\\File.txt/" -> L"c:\\Program Files"
+			/// </summary>
+			/// <returns></returns>
 			bool RemoveFileSpec();
+			WString FindFileName()const;
+			WString FindExtension()const;
+			virtual	WString						GetFullPath()const;
+			
 		 public:
 			bool FileExists();
 		 protected:
@@ -9322,8 +9321,8 @@ namespace vl
 .\FILESYSTEM\FILEPATH.H
 ***********************************************************************/
 
-#ifndef FILEPATH
-#define FILEPATH
+#ifndef FILE_PATH
+#define FILE_PATH
 
 namespace vl
 {
@@ -9343,8 +9342,6 @@ namespace vl
 		 public:
 #if defined VCZH_MSVC
 			static const wchar_t		Delimiter = L'\\';
-#elif defined VCZH_GCC
-			static const wchar_t		Delimiter = L'/';
 #endif
 			
 			/// <summary>Create a root path.</summary>
@@ -9363,18 +9360,15 @@ namespace vl
 			
 		 public:
 			static FilePath CurrentPath();
-			static FilePath ModulePath();		//app(exe) path
-<<<<<<< HEAD
-			static FilePath ModuleFolder();		//app(exe) path
-=======
->>>>>>> 024666226acb04b40f00c59e69fb7a22e310f65f
+			static FilePath ModuleFolder(void* pAddress = NULL);		//app(exe) path
 			/// <summary>
 			/// 通过当前模块（dll）的基地址获取dll路径
 			/// </summary>
 			/// <param name="pAddress">当前模块中的函数或变量地址</param>
 			/// <param name="isDll"></param>
-			/// <returns></returns>
-			static FilePath ModulePath(void* pAddress);			//
+			/// <returns></returns>\
+			/// VirtualQuery: 查询进程地址信息
+			static FilePath ModulePath(void* pAddress = NULL);			//	NULL:EXE root  not null: dll root
 			static FilePath TempPath();
 		 public:
 			static vint					Compare(const FilePath& a, const FilePath& b);
@@ -9442,76 +9436,140 @@ namespace vl
 #endif
 
 /***********************************************************************
+.\FILESYSTEM\PATHFILE.H
+***********************************************************************/
+#ifndef PATH_FILE
+#define PATH_FILE
+
+namespace vl
+{
+	namespace filesystem
+	{
+		/*!
+		 * \class: 	PathFile
+		 *
+		 * \brief:  带路径的文件
+		 *			File/Folder 的基类
+		 *
+		 * \author: Chencs
+		 * \date:	2017/11/10
+		 */
+		class PathFile abstract :
+			public Object
+		{
+		 protected:
+			FilePath					filePath;
+		 protected:
+			PathFile();
+			PathFile(const wchar_t* _pathFile);
+			PathFile(const WString& _pathFile);
+			PathFile(const PathFile& _pathFile);
+			PathFile(const FilePath& _filePath);
+		 public:
+		 
+			virtual ~PathFile();
+			bool						IsFile()const;
+			bool						IsFolder()const;
+			/// <summary>Get the file path of the folder.</summary>
+			/// <returns>The file path.</returns>
+			const FilePath&				GetFilePath()const;
+			WString						GetFullPath()const;
+			/// <summary>Test does the folder exist or not.</summary>
+			/// <returns>Returns true if the folder exists.</returns>
+			virtual bool				Exists()const;
+			
+			/// <summary>Rename the folder in the same folder.</summary>
+			/// <returns>Returns true if this operation succeeded.</returns>
+			/// <param name="newName">The new folder name.</param>
+			WString						GetName()const;
+			/// <summary>Rename the file in the same folder.</summary>
+			/// <returns>Returns true if this operation succeeded.</returns>
+			/// <param name="newName">The new file name.</param>
+			bool						Rename(const WString& newName)const;
+			
+		 public:
+		 
+		 
+		};
+	}
+	
+}
+#endif
+
+/***********************************************************************
 .\FILESYSTEM\FILE.H
 ***********************************************************************/
 #ifndef NICE_FILE
 #define NICE_FILE
+// #include "FilePath.h"
 
 namespace vl
 {
 	namespace filesystem
 	{
 		/// <summary>Representing a file reference.</summary>
-		class File : public Object
+		class File : public PathFile
 		{
-			private:
-				FilePath					filePath;
-				
-			public:
-				/// <summary>Create an empty reference.</summary>
-				File();
-				/// <summary>Create a reference to a specified file.</summary>
-				/// <param name="_filePath">The specified file.</param>
-				File(const FilePath& _filePath);
-				~File();
-				
-				/// <summary>Get the file path of the file.</summary>
-				/// <returns>The file path.</returns>
-				const FilePath&				GetFilePath()const;
-				
-				/// <summary>Get the content of the file as text with encoding testing.</summary>
-				/// <returns>The content of the file.</returns>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="text">The content of the file.</param>
-				/// <param name="encoding">The encoding.</param>
-				/// <param name="bom">True if there is BOM.</param>
-				bool						ReadAllTextWithEncodingTesting(WString& text, stream::BomEncoder::Encoding& encoding, bool& containsBom);
-				/// <summary>Get the content of the file as text.</summary>
-				/// <returns>The content of the file.</returns>
-				WString						ReadAllTextByBom()const;
-				/// <summary>Get the content of the file as text.</summary>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="text">The content of the file.</param>
-				bool						ReadAllTextByBom(WString& text)const;
-				/// <summary>Get the content of the file as text.</summary>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="lines">The content of the file.</param>
-				bool						ReadAllLinesByBom(collections::List<WString>& lines)const;
-				
-				/// <summary>Write text to the file.</summary>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="text">The text to write.</param>
-				/// <param name="bom">Set to true to add a corresponding BOM at the beginning of the file according to the encoding.</param>
-				/// <param name="encoding">The text encoding.</param>
-				bool						WriteAllText(const WString& text, bool bom = true, stream::BomEncoder::Encoding encoding = stream::BomEncoder::Utf16);
-				/// <summary>Write text to the file.</summary>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="lines">The text to write.</param>
-				/// <param name="bom">Set to true to add a corresponding BOM at the beginning of the file according to the encoding.</param>
-				/// <param name="encoding">The text encoding.</param>
-				bool						WriteAllLines(collections::List<WString>& lines, bool bom = true, stream::BomEncoder::Encoding encoding = stream::BomEncoder::Utf16);
-				
-				/// <summary>Test does the file exist or not.</summary>
-				/// <returns>Returns true if the file exists.</returns>
-				bool						Exists()const;
-				/// <summary>Delete the file.</summary>
-				/// <returns>Returns true if this operation succeeded.</returns>
-				bool						Delete()const;
-				/// <summary>Rename the file in the same folder.</summary>
-				/// <returns>Returns true if this operation succeeded.</returns>
-				/// <param name="newName">The new file name.</param>
-				bool						Rename(const WString& newName)const;
-				WString						GetName();
+		
+		 public:
+			/// <summary>Create an empty reference.</summary>
+			File();
+			/// <summary>Create a reference to a specified file.</summary>
+			/// <param name="_filePath">The specified file.</param>
+			File(const File& _file);
+			File(const wchar_t* _filePath);
+			File(const WString& _filePath);
+			File(const FilePath& _filePath);
+			File(const PathFile& _filePath);
+			~File();
+			
+			// 			/// <summary>Get the file path of the file.</summary>
+			// 			/// <returns>The file path.</returns>
+			// 			const FilePath&				GetFilePath()const;
+			
+			/// <summary>Get the content of the file as text with encoding testing.</summary>
+			/// <returns>The content of the file.</returns>
+			/// <returns>Returns false if this operation succeeded.</returns>
+			/// <param name="text">The content of the file.</param>
+			/// <param name="encoding">The encoding.</param>
+			/// <param name="bom">True if there is BOM.</param>
+			bool						ReadAllTextWithEncodingTesting(WString& text, stream::BomEncoder::Encoding& encoding, bool& containsBom);
+			/// <summary>Get the content of the file as text.</summary>
+			/// <returns>The content of the file.</returns>
+			WString						ReadAllTextByBom()const;
+			/// <summary>Get the content of the file as text.</summary>
+			/// <returns>Returns false if this operation succeeded.</returns>
+			/// <param name="text">The content of the file.</param>
+			bool						ReadAllTextByBom(WString& text)const;
+			/// <summary>Get the content of the file as text.</summary>
+			/// <returns>Returns false if this operation succeeded.</returns>
+			/// <param name="lines">The content of the file.</param>
+			bool						ReadAllLinesByBom(collections::List<WString>& lines)const;
+			
+			/// <summary>Write text to the file.</summary>
+			/// <returns>Returns false if this operation succeeded.</returns>
+			/// <param name="text">The text to write.</param>
+			/// <param name="bom">Set to true to add a corresponding BOM at the beginning of the file according to the encoding.</param>
+			/// <param name="encoding">The text encoding.</param>
+			bool						WriteAllText(const WString& text, bool bom = true, stream::BomEncoder::Encoding encoding = stream::BomEncoder::Utf16);
+			/// <summary>Write text to the file.</summary>
+			/// <returns>Returns false if this operation succeeded.</returns>
+			/// <param name="lines">The text to write.</param>
+			/// <param name="bom">Set to true to add a corresponding BOM at the beginning of the file according to the encoding.</param>
+			/// <param name="encoding">The text encoding.</param>
+			bool						WriteAllLines(collections::List<WString>& lines, bool bom = true, stream::BomEncoder::Encoding encoding = stream::BomEncoder::Utf16);
+			
+			/// <summary>Test does the file exist or not.</summary>
+			/// <returns>Returns true if the file exists.</returns>
+			bool						Exists()const;
+			/// <summary>Delete the file.</summary>
+			/// <returns>Returns true if this operation succeeded.</returns>
+			bool						Delete()const;
+			/// <summary>Rename the file in the same folder.</summary>
+			/// <returns>Returns true if this operation succeeded.</returns>
+			/// <param name="newName">The new file name.</param>
+			// 			bool						Rename(const WString& newName)const;
+			// 			WString						GetName();
 		};
 		
 	}
@@ -9555,6 +9613,7 @@ namespace vl
 			};
 		 public:
 			FileInfo();
+			FileInfo(const PathFile& _pathFile);
 			FileInfo(const FilePath& path);
 			FileInfo(const WString& path);
 			~FileInfo();
@@ -9572,9 +9631,9 @@ namespace vl
 			bool IsHidden()const;
 			WString FileName()const;
 			WString Extemsion()const;
-			WString Path()const;
+			WString FullPath()const;
 			
-			DateTime Created()const;
+			DateTime Created()const;		//创建时间
 			DateTime CreatedTime()const;
 			DateTime LastModified()const;
 			DateTime LastRead()const;
@@ -9584,10 +9643,6 @@ namespace vl
 		 protected:
 			FileAttrbutes attrbute;
 		};
-		
-		
-		
-		
 		
 	}
 }
@@ -9609,137 +9664,59 @@ namespace vl
 	namespace filesystem
 	{
 		/// <summary>Representing a folder reference.</summary>
-		class Folder : public Object
+		class Folder : public PathFile
 		{
-			private:
-				FilePath					filePath;
-				
-			public:
-				/// <summary>Create a root reference.</summary>
-				Folder();
-				/// <summary>Create a reference to a specified folder.</summary>
-				/// <param name="_filePath">The specified folder.</param>
-				Folder(const WString& _filePath);
-				Folder(const FilePath& _filePath);
-				Folder(const wchar_t* _filePath);
-
-				~Folder();
-				
-				/// <summary>Get the file path of the folder.</summary>
-				/// <returns>The file path.</returns>
-				const FilePath&				GetFilePath()const;
-				/// <summary>Get all folders in this folder.</summary>
-				/// <returns>Returns true if this operation succeeded.</returns>
-				/// <param name="folders">All folders.</param>
-				bool						GetFolders(collections::List<Folder>& folders)const;
-				/// <summary>Get all files in this folder.</summary>
-				/// <returns>Returns true if this operation succeeded.</returns>
-				/// <param name="files">All files.</param>
-				bool						GetFiles(collections::List<File>& files)const;
-				
-				/// <summary>Test does the folder exist or not.</summary>
-				/// <returns>Returns true if the folder exists.</returns>
-				bool						Exists()const;
-				/// <summary>Create the folder.</summary>
-				/// <returns>Returns true if this operation succeeded.</returns>
-				/// <param name="recursively">Set to true to create all parent folders if necessary.</param>
-				bool						Create(bool recursively)const;
-				/// <summary>Delete the folder.</summary>
-				/// <returns>Returns true if this operation succeeded.</returns>
-				/// <param name="recursively">Set to true to delete everything in the folder.</param>
-				bool						Delete(bool recursively)const;
-				/// <summary>Rename the folder in the same folder.</summary>
-				/// <returns>Returns true if this operation succeeded.</returns>
-				/// <param name="newName">The new folder name.</param>
-				bool						Rename(const WString& newName)const;
-
-				WString						GetName();
+			// 		 private:
+			// 			FilePath					filePath;
+			
+		 public:
+			/// <summary>Create a root reference.</summary>
+			Folder();
+			/// <summary>Create a reference to a specified folder.</summary>
+			/// <param name="_filePath">The specified folder.</param>
+			Folder(const wchar_t* _filePath);
+			Folder(const WString& _filePath);
+			Folder(const FilePath& _filePath);
+			Folder(const PathFile& _pathFile);
+			Folder(const Folder& _folder);
+			
+			~Folder();
+			
+			// 			/// <summary>Get the file path of the folder.</summary>
+			// 			/// <returns>The file path.</returns>
+			// 			const FilePath&				GetFilePath()const;
+			/// <summary>Get all folders in this folder.</summary>
+			/// <returns>Returns true if this operation succeeded.</returns>
+			/// <param name="folders">All folders.</param>
+			bool						GetFolders(collections::List<Folder>& folders)const;
+			/// <summary>Get all files in this folder.</summary>
+			/// <returns>Returns true if this operation succeeded.</returns>
+			/// <param name="files">All files.</param>
+			bool						GetFiles(collections::List<File>& files)const;
+			
+			/// <summary>Test does the folder exist or not.</summary>
+			/// <returns>Returns true if the folder exists.</returns>
+			bool						Exists()const;
+			/// <summary>Create the folder.</summary>
+			/// <returns>Returns true if this operation succeeded.</returns>
+			/// <param name="recursively">Set to true to create all parent folders if necessary.</param>
+			bool						Create(bool recursively)const;
+			/// <summary>Delete the folder.</summary>
+			/// <returns>Returns true if this operation succeeded.</returns>
+			/// <param name="recursively">Set to true to delete everything in the folder.</param>
+			bool						Delete(bool recursively)const;
+			/// <summary>Rename the folder in the same folder.</summary>
+			/// <returns>Returns true if this operation succeeded.</returns>
+			/// <param name="newName">The new folder name.</param>
+			// 			bool						Rename(const WString& newName)const;
+			
+			// 			WString						GetName();
 		};
 	}
 	
 }
 #endif // !FOLDER
 
-
-/***********************************************************************
-.\FILESYSTEM\FILE.H
-***********************************************************************/
-#ifndef NICE_FILE
-#define NICE_FILE
-
-namespace vl
-{
-	namespace filesystem
-	{
-		/// <summary>Representing a file reference.</summary>
-		class File : public Object
-		{
-			private:
-				FilePath					filePath;
-				
-			public:
-				/// <summary>Create an empty reference.</summary>
-				File();
-				/// <summary>Create a reference to a specified file.</summary>
-				/// <param name="_filePath">The specified file.</param>
-				File(const FilePath& _filePath);
-				~File();
-				
-				/// <summary>Get the file path of the file.</summary>
-				/// <returns>The file path.</returns>
-				const FilePath&				GetFilePath()const;
-				
-				/// <summary>Get the content of the file as text with encoding testing.</summary>
-				/// <returns>The content of the file.</returns>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="text">The content of the file.</param>
-				/// <param name="encoding">The encoding.</param>
-				/// <param name="bom">True if there is BOM.</param>
-				bool						ReadAllTextWithEncodingTesting(WString& text, stream::BomEncoder::Encoding& encoding, bool& containsBom);
-				/// <summary>Get the content of the file as text.</summary>
-				/// <returns>The content of the file.</returns>
-				WString						ReadAllTextByBom()const;
-				/// <summary>Get the content of the file as text.</summary>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="text">The content of the file.</param>
-				bool						ReadAllTextByBom(WString& text)const;
-				/// <summary>Get the content of the file as text.</summary>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="lines">The content of the file.</param>
-				bool						ReadAllLinesByBom(collections::List<WString>& lines)const;
-				
-				/// <summary>Write text to the file.</summary>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="text">The text to write.</param>
-				/// <param name="bom">Set to true to add a corresponding BOM at the beginning of the file according to the encoding.</param>
-				/// <param name="encoding">The text encoding.</param>
-				bool						WriteAllText(const WString& text, bool bom = true, stream::BomEncoder::Encoding encoding = stream::BomEncoder::Utf16);
-				/// <summary>Write text to the file.</summary>
-				/// <returns>Returns false if this operation succeeded.</returns>
-				/// <param name="lines">The text to write.</param>
-				/// <param name="bom">Set to true to add a corresponding BOM at the beginning of the file according to the encoding.</param>
-				/// <param name="encoding">The text encoding.</param>
-				bool						WriteAllLines(collections::List<WString>& lines, bool bom = true, stream::BomEncoder::Encoding encoding = stream::BomEncoder::Utf16);
-				
-				/// <summary>Test does the file exist or not.</summary>
-				/// <returns>Returns true if the file exists.</returns>
-				bool						Exists()const;
-				/// <summary>Delete the file.</summary>
-				/// <returns>Returns true if this operation succeeded.</returns>
-				bool						Delete()const;
-				/// <summary>Rename the file in the same folder.</summary>
-				/// <returns>Returns true if this operation succeeded.</returns>
-				/// <param name="newName">The new file name.</param>
-				bool						Rename(const WString& newName)const;
-				WString						GetName();
-		};
-		
-	}
-}
-
-
-
-#endif
 
 /***********************************************************************
 .\STREAM\RECORDERSTREAM.H
@@ -10007,214 +9984,208 @@ namespace vl
 	class WaitableObject : public Object, public NotCopyable
 	{
 #if defined VCZH_MSVC
-		private:
-			threading_internal::WaitableData*			waitableData;
-		protected:
+	 private:
+		threading_internal::WaitableData*			waitableData;
+	 protected:
+	 
+		WaitableObject();
+		void										SetData(threading_internal::WaitableData* data);
+	 public:
+		/// <summary>Test if the object has already been created. Some of the synchronization objects should initialize itself after the constructor. This function is only available in Windows.</summary>
+		/// <returns>Returns true if the object has already been created.</returns>
+		bool										IsCreated();
+		/// <summary>Wait for this object to signal.</summary>
+		/// <returns>Returns true if the object is signaled. Returns false if this operation failed.</returns>
+		bool										Wait();
+		/// <summary>Wait for this object to signal for a period of time. This function is only available in Windows.</summary>
+		/// <returns>Returns true if the object is signaled. Returns false if this operation failed, including time out.</returns>
+		/// <param name="ms">Time in milliseconds.</param>
+		bool										WaitForTime(vint ms);
 		
-			WaitableObject();
-			void										SetData(threading_internal::WaitableData* data);
-		public:
-			/// <summary>Test if the object has already been created. Some of the synchronization objects should initialize itself after the constructor. This function is only available in Windows.</summary>
-			/// <returns>Returns true if the object has already been created.</returns>
-			bool										IsCreated();
-			/// <summary>Wait for this object to signal.</summary>
-			/// <returns>Returns true if the object is signaled. Returns false if this operation failed.</returns>
-			bool										Wait();
-			/// <summary>Wait for this object to signal for a period of time. This function is only available in Windows.</summary>
-			/// <returns>Returns true if the object is signaled. Returns false if this operation failed, including time out.</returns>
-			/// <param name="ms">Time in milliseconds.</param>
-			bool										WaitForTime(vint ms);
-			
-			/// <summary>Wait for multiple objects. This function is only available in Windows.</summary>
-			/// <returns>Returns true if all objects are signaled. Returns false if this operation failed.</returns>
-			/// <param name="objects">A pointer to an array to <see cref="WaitableObject"/> pointers.</param>
-			/// <param name="count">The number of <see cref="WaitableObject"/> objects in the array.</param>
-			static bool									WaitAll(WaitableObject** objects, vint count);
-			/// <summary>Wait for multiple objects for a period of time. This function is only available in Windows.</summary>
-			/// <returns>Returns true if all objects are signaled. Returns false if this operation failed, including time out.</returns>
-			/// <param name="objects">A pointer to an array to <see cref="WaitableObject"/> pointers.</param>
-			/// <param name="count">The number of <see cref="WaitableObject"/> objects in the array.</param>
-			/// <param name="ms">Time in milliseconds.</param>
-			static bool									WaitAllForTime(WaitableObject** objects, vint count, vint ms);
-			/// <summary>Wait for one of the objects. This function is only available in Windows.</summary>
-			/// <returns>Returns the index of the first signaled or abandoned object, according to the "abandoned" parameter. Returns -1 if this operation failed.</returns>
-			/// <param name="objects">A pointer to an array to <see cref="WaitableObject"/> pointers.</param>
-			/// <param name="count">The number of <see cref="WaitableObject"/> objects in the array.</param>
-			/// <param name="abandoned">Returns true if the waiting is canceled by an abandoned object. An abandoned object is caused by it's owner thread existing without releasing it.</param>
-			static vint									WaitAny(WaitableObject** objects, vint count, bool* abandoned);
-			/// <summary>Wait for one of the objects for a period of time. This function is only available in Windows.</summary>
-			/// <returns>Returns the index of the first signaled or abandoned object, according to the "abandoned" parameter. Returns -1 if this operation failed, including time out.</returns>
-			/// <param name="objects">A pointer to an array to <see cref="WaitableObject"/> pointers.</param>
-			/// <param name="count">The number of <see cref="WaitableObject"/> objects in the array.</param>
-			/// <param name="ms">Time in milliseconds.</param>
-			/// <param name="abandoned">Returns true if the waiting is canceled by an abandoned object. An abandoned object is caused by it's owner thread existing without releasing it.</param>
-			static vint									WaitAnyForTime(WaitableObject** objects, vint count, vint ms, bool* abandoned);
+		/// <summary>Wait for multiple objects. This function is only available in Windows.</summary>
+		/// <returns>Returns true if all objects are signaled. Returns false if this operation failed.</returns>
+		/// <param name="objects">A pointer to an array to <see cref="WaitableObject"/> pointers.</param>
+		/// <param name="count">The number of <see cref="WaitableObject"/> objects in the array.</param>
+		static bool									WaitAll(WaitableObject** objects, vint count);
+		/// <summary>Wait for multiple objects for a period of time. This function is only available in Windows.</summary>
+		/// <returns>Returns true if all objects are signaled. Returns false if this operation failed, including time out.</returns>
+		/// <param name="objects">A pointer to an array to <see cref="WaitableObject"/> pointers.</param>
+		/// <param name="count">The number of <see cref="WaitableObject"/> objects in the array.</param>
+		/// <param name="ms">Time in milliseconds.</param>
+		static bool									WaitAllForTime(WaitableObject** objects, vint count, vint ms);
+		/// <summary>Wait for one of the objects. This function is only available in Windows.</summary>
+		/// <returns>Returns the index of the first signaled or abandoned object, according to the "abandoned" parameter. Returns -1 if this operation failed.</returns>
+		/// <param name="objects">A pointer to an array to <see cref="WaitableObject"/> pointers.</param>
+		/// <param name="count">The number of <see cref="WaitableObject"/> objects in the array.</param>
+		/// <param name="abandoned">Returns true if the waiting is canceled by an abandoned object. An abandoned object is caused by it's owner thread existing without releasing it.</param>
+		static vint									WaitAny(WaitableObject** objects, vint count, bool* abandoned);
+		/// <summary>Wait for one of the objects for a period of time. This function is only available in Windows.</summary>
+		/// <returns>Returns the index of the first signaled or abandoned object, according to the "abandoned" parameter. Returns -1 if this operation failed, including time out.</returns>
+		/// <param name="objects">A pointer to an array to <see cref="WaitableObject"/> pointers.</param>
+		/// <param name="count">The number of <see cref="WaitableObject"/> objects in the array.</param>
+		/// <param name="ms">Time in milliseconds.</param>
+		/// <param name="abandoned">Returns true if the waiting is canceled by an abandoned object. An abandoned object is caused by it's owner thread existing without releasing it.</param>
+		static vint									WaitAnyForTime(WaitableObject** objects, vint count, vint ms, bool* abandoned);
 #endif
 	};
 	
 	/// <summary>Representing a thread. [M:vl.Thread.CreateAndStart] is the suggested way to create threads.</summary>
 	class Thread : public WaitableObject
 	{
-			friend void InternalThreadProc(Thread* thread);
-		public:
-			/// <summary>Thread state.</summary>
-			enum ThreadState
-			{
-				/// <summary>The thread has not started.</summary>
-				NotStarted,
-				/// <summary>The thread is running.</summary>
-				Running,
-				/// <summary>The thread has been stopped.</summary>
-				Stopped
-			};
-			
-			typedef void(*ThreadProcedure)(Thread*, void*);
-		protected:
-			threading_internal::ThreadData*				internalData;
-			volatile ThreadState						threadState;
-			
-			virtual void								Run() = 0;
-			
-			Thread();
-		public:
-			~Thread();
-			
-			/// <summary>Create a thread using a function pointer.</summary>
-			/// <returns>Returns the created thread.</returns>
-			/// <param name="procedure">The function pointer.</param>
-			/// <param name="argument">The argument to call the function pointer.</param>
-			/// <param name="deleteAfterStopped">Set to true (by default) to make the thread delete itself after the job is done. If you set this argument to true, you are not suggested to touch the returned thread pointer in any way.</param>
-			static Thread*								CreateAndStart(ThreadProcedure procedure, void* argument = 0, bool deleteAfterStopped = true);
-			/// <summary>Create a thread using a function object or a lambda expression.</summary>
-			/// <returns>Returns the created thread.</returns>
-			/// <param name="procedure">The function object or the lambda expression.</param>
-			/// <param name="deleteAfterStopped">Set to true (by default) to make the thread delete itself after the job is done. If you set this argument to true, you are not suggested to touch the returned thread pointer in any way.</param>
-			// 			static Thread*								CreateAndStart(const Func<void()>& procedure, bool deleteAfterStopped = true);
-			/// <summary>Pause the caller thread for a period of time.</summary>
-			/// <param name="ms">Time in milliseconds.</param>
-			static void									Sleep(vint ms);
-			/// <summary>Get the number of logical processors.</summary>
-			/// <returns>The number of logical processor.</returns>
-			static vint									GetCPUCount();
-			/// <summary>Get the current thread id.</summary>
-			/// <returns>The current thread id.</returns>
-			static vint									GetCurrentThreadId();
-			
-			/// <summary>Start the thread.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			bool										Start();
+		friend void InternalThreadProc(Thread* thread);
+	 public:
+		/// <summary>Thread state.</summary>
+		enum ThreadState
+		{
+			/// <summary>The thread has not started.</summary>
+			NotStarted,
+			/// <summary>The thread is running.</summary>
+			Running,
+			/// <summary>The thread has been stopped.</summary>
+			Stopped
+		};
+		
+		typedef void(*ThreadProcedure)(Thread*, void*);
+	 protected:
+		threading_internal::ThreadData*				internalData;
+		volatile ThreadState						threadState;
+		
+		virtual void								Run() = 0;
+		
+		Thread();
+	 public:
+		~Thread();
+		
+		/// <summary>Create a thread using a function pointer.</summary>
+		/// <returns>Returns the created thread.</returns>
+		/// <param name="procedure">The function pointer.</param>
+		/// <param name="argument">The argument to call the function pointer.</param>
+		/// <param name="deleteAfterStopped">Set to true (by default) to make the thread delete itself after the job is done. If you set this argument to true, you are not suggested to touch the returned thread pointer in any way.</param>
+		static Thread*								CreateAndStart(ThreadProcedure procedure, void* argument = 0, bool deleteAfterStopped = true);
+		/// <summary>Create a thread using a function object or a lambda expression.</summary>
+		/// <returns>Returns the created thread.</returns>
+		/// <param name="procedure">The function object or the lambda expression.</param>
+		/// <param name="deleteAfterStopped">Set to true (by default) to make the thread delete itself after the job is done. If you set this argument to true, you are not suggested to touch the returned thread pointer in any way.</param>
+		// 			static Thread*								CreateAndStart(const Func<void()>& procedure, bool deleteAfterStopped = true);
+		/// <summary>Pause the caller thread for a period of time.</summary>
+		/// <param name="ms">Time in milliseconds.</param>
+		static void									Sleep(vint ms);
+		/// <summary>Get the number of logical processors.</summary>
+		/// <returns>The number of logical processor.</returns>
+		static vint									GetCPUCount();
+		/// <summary>Get the current thread id.</summary>
+		/// <returns>The current thread id.</returns>
+		static vint									GetCurrentThreadId();
+		
+		/// <summary>Start the thread.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		bool										Start();
 #if defined VCZH_GCC
-			bool										Wait();
+		bool										Wait();
 #endif
-			/// <summary>Stop the thread.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			bool										Stop();
-			/// <summary>Get the state of the thread.</summary>
-			/// <returns>The state of the thread.</returns>
-			ThreadState									GetState();
+		/// <summary>Stop the thread.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		bool										Stop();
+		/// <summary>Get the state of the thread.</summary>
+		/// <returns>The state of the thread.</returns>
+		ThreadState									GetState();
 #ifdef VCZH_MSVC
-			void										SetCPU(vint index);
+		void										SetCPU(vint index);
 #endif
 	};
 	
 	/// <summary>Mutex.</summary>
 	class Mutex : public WaitableObject
 	{
-		private:
-			threading_internal::MutexData*				internalData;
-		public:
-			Mutex();
-			~Mutex();
-			
-			/// <summary>Create a mutex.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="owned">Set to true to own the created mutex.</param>
-			/// <param name="name">Name of the mutex. If it is not empty, than it is a global named mutex. This argument is ignored in Linux.</param>
-			bool										Create(bool owned = false, const WString& name = L"");
-			/// <summary>Open an existing global named mutex.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="inheritable">Set to true make the mutex visible to all all child processes. This argument is only used in Windows.</param>
-			/// <param name="name">Name of the mutex. This argument is ignored in Linux.</param>
-			bool										Open(bool inheritable, const WString& name);
-			
-			/// <summary>
-			/// Release the mutex.
-			/// In the implementation for Linux, calling Release() more than once between two Wait(), or calling Wait() more than once between two Release(), will results in an undefined behavior.
-			/// </summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			bool										Release();
+	 private:
+		threading_internal::MutexData*				internalData;
+	 public:
+		Mutex();
+		~Mutex();
+		
+		/// <summary>Create a mutex.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="owned">Set to true to own the created mutex.</param>
+		/// <param name="name">Name of the mutex. If it is not empty, than it is a global named mutex. This argument is ignored in Linux.</param>
+		bool										Create(bool owned = false, const WString& name = L"");
+		/// <summary>Open an existing global named mutex.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="inheritable">Set to true make the mutex visible to all all child processes. This argument is only used in Windows.</param>
+		/// <param name="name">Name of the mutex. This argument is ignored in Linux.</param>
+		bool										Open(bool inheritable, const WString& name);
+		
+		/// <summary>
+		/// Release the mutex.
+		/// In the implementation for Linux, calling Release() more than once between two Wait(), or calling Wait() more than once between two Release(), will results in an undefined behavior.
+		/// </summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		bool										Release();
 #ifdef VCZH_GCC
-			bool										Wait();
+		bool										Wait();
 #endif
 	};
 	
 	/// <summary>Semaphore.</summary>
 	class Semaphore : public WaitableObject
 	{
-		private:
-			threading_internal::SemaphoreData*			internalData;
-		public:
-			Semaphore();
-			~Semaphore();
-			
-			/// <summary>Create a semaphore.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="initialCount">Define the counter of the semaphore.</param>
-			/// <param name="maxCount">Define the maximum value of the counter of the semaphore. This argument is only used in Windows.</param>
-			/// <param name="name">Name of the semaphore. If it is not empty, than it is a global named semaphore. This argument is ignored in Linux.</param>
-			bool										Create(vint initialCount, vint maxCount, const WString& name = L"");
-			/// <summary>Open an existing global named semaphore.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="inheritable">Set to true make the semaphore visible to all all child processes. This argument is only used in Windows.</param>
-			/// <param name="name">Name of the semaphore. This argument is ignored in Linux.</param>
-			bool										Open(bool inheritable, const WString& name);
-			
-			/// <summary> Release the semaphore once. </summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			bool										Release();
-			/// <summary> Release the semaphore multiple times. </summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="count">The amout to release.</param>
-			vint										Release(vint count);
-#ifdef VCZH_GCC
-			bool										Wait();
-#endif
+	 private:
+		threading_internal::SemaphoreData*			internalData;
+	 public:
+		Semaphore();
+		~Semaphore();
+		
+		/// <summary>Create a semaphore.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="initialCount">Define the counter of the semaphore.</param>
+		/// <param name="maxCount">Define the maximum value of the counter of the semaphore. This argument is only used in Windows.</param>
+		/// <param name="name">Name of the semaphore. If it is not empty, than it is a global named semaphore. This argument is ignored in Linux.</param>
+		bool										Create(vint initialCount, vint maxCount, const WString& name = L"");
+		/// <summary>Open an existing global named semaphore.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="inheritable">Set to true make the semaphore visible to all all child processes. This argument is only used in Windows.</param>
+		/// <param name="name">Name of the semaphore. This argument is ignored in Linux.</param>
+		bool										Open(bool inheritable, const WString& name);
+		
+		/// <summary> Release the semaphore once. </summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		bool										Release();
+		/// <summary> Release the semaphore multiple times. </summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="count">The amout to release.</param>
+		vint										Release(vint count);
 	};
 	
 	/// <summary>Event.</summary>
 	class EventObject : public WaitableObject
 	{
-		private:
-			threading_internal::EventData*				internalData;
-		public:
-			EventObject();
-			~EventObject();
-			
-			/// <summary>Create an auto unsignal event. Auto unsignal means, when one thread waits for the event and succeeded, the event will become unsignaled immediately.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="signaled">Set to true make the event signaled at the beginning.</param>
-			/// <param name="name">Name of the event. If it is not empty, than it is a global named mutex. This argument is only used in Windows.</param>
-			bool										CreateAutoUnsignal(bool signaled, const WString& name = L"");
-			/// <summary>Create a manual unsignal event.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="signaled">Set to true make the event signaled at the beginning.</param>
-			/// <param name="name">Name of the event. If it is not empty, than it is a global named mutex. This argument is only used in Windows.</param>
-			bool										CreateManualUnsignal(bool signaled, const WString& name = L"");
-			/// <summary>Open an existing global named event.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="inheritable">Set to true make the event visible to all all child processes. This argument is only used in Windows.</param>
-			/// <param name="name">Name of the event. This argument is only used in Windows.</param>
-			bool										Open(bool inheritable, const WString& name);
-			
-			/// <summary>Signal the event.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			bool										Signal();
-			/// <summary>Unsignal the event.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			bool										Unsignal();
-#ifdef VCZH_GCC
-			bool										Wait();
-#endif
+	 private:
+		threading_internal::EventData*				internalData;
+	 public:
+		EventObject();
+		~EventObject();
+		
+		/// <summary>Create an auto unsignal event. Auto unsignal means, when one thread waits for the event and succeeded, the event will become unsignaled immediately.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="signaled">Set to true make the event signaled at the beginning.</param>
+		/// <param name="name">Name of the event. If it is not empty, than it is a global named mutex. This argument is only used in Windows.</param>
+		bool										CreateAutoUnsignal(bool signaled, const WString& name = L"");
+		/// <summary>Create a manual unsignal event.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="signaled">Set to true make the event signaled at the beginning.</param>
+		/// <param name="name">Name of the event. If it is not empty, than it is a global named mutex. This argument is only used in Windows.</param>
+		bool										CreateManualUnsignal(bool signaled, const WString& name = L"");
+		/// <summary>Open an existing global named event.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="inheritable">Set to true make the event visible to all all child processes. This argument is only used in Windows.</param>
+		/// <param name="name">Name of the event. This argument is only used in Windows.</param>
+		bool										Open(bool inheritable, const WString& name);
+		
+		/// <summary>Signal the event.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		bool										Signal();
+		/// <summary>Unsignal the event.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		bool										Unsignal();
 	};
 	
 	/***********************************************************************
@@ -10224,32 +10195,29 @@ namespace vl
 	/// <summary>A light-weight thread pool.</summary>
 	class ThreadPoolLite : public Object
 	{
-		private:
-			ThreadPoolLite();
-			~ThreadPoolLite();
-		public:
-			/// <summary>Queue a function pointer.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="proc">The function pointer.</param>
-			/// <param name="argument">The argument to call the function pointer.</param>
-			static bool									Queue(void(*proc)(void*), void* argument);
-			/// <summary>Queue a function object.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="proc">The function object.</param>
-			// 			static bool									Queue(const Func<void()>& proc);
-			
-			/// <summary>Queue a lambda expression.</summary>
-			/// <typeparam name="T">The type of the lambda expression.</typeparam>
-			/// <param name="proc">The lambda expression.</param>
-			template<typename T>
-			static void QueueLambda(const T& proc)
-			{
-				Queue(Func<void()>(proc));
-			}
-			
-#ifdef VCZH_GCC
-			static bool									Stop(bool discardPendingTasks);
-#endif
+	 private:
+		ThreadPoolLite();
+		~ThreadPoolLite();
+	 public:
+		/// <summary>Queue a function pointer.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="proc">The function pointer.</param>
+		/// <param name="argument">The argument to call the function pointer.</param>
+		static bool									Queue(void(*proc)(void*), void* argument);
+		/// <summary>Queue a function object.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="proc">The function object.</param>
+		// 			static bool									Queue(const Func<void()>& proc);
+		
+		/// <summary>Queue a lambda expression.</summary>
+		/// <typeparam name="T">The type of the lambda expression.</typeparam>
+		/// <param name="proc">The lambda expression.</param>
+		template<typename T>
+		static void QueueLambda(const T& proc)
+		{
+			Queue(Func<void()>(proc));
+		}
+		
 	};
 	
 	/***********************************************************************
@@ -10266,31 +10234,31 @@ namespace vl
 	/// ]]></summary>
 	class CriticalSection : public Object, public NotCopyable
 	{
-		private:
-			friend class ConditionVariable;
-			threading_internal::CriticalSectionData*	internalData;
-		public:
-			/// <summary>Create a critical section.</summary>
-			CriticalSection();
-			~CriticalSection();
-			
-			/// <summary>Try enter a critical section. This function will return immediately.</summary>
-			/// <returns>Returns true if the current thread owned the critical section.</returns>
-			bool										TryEnter();
-			/// <summary>Enter a critical section.</summary>
-			void										Enter();
-			/// <summary>Leave a critical section.</summary>
-			void										Leave();
-			
-		public:
-			class Scope : public Object, public NotCopyable
-			{
-				private:
-					CriticalSection*						criticalSection;
-				public:
-					Scope(CriticalSection& _criticalSection);
-					~Scope();
-			};
+	 private:
+		friend class ConditionVariable;
+		threading_internal::CriticalSectionData*	internalData;
+	 public:
+		/// <summary>Create a critical section.</summary>
+		CriticalSection();
+		~CriticalSection();
+		
+		/// <summary>Try enter a critical section. This function will return immediately.</summary>
+		/// <returns>Returns true if the current thread owned the critical section.</returns>
+		bool										TryEnter();
+		/// <summary>Enter a critical section.</summary>
+		void										Enter();
+		/// <summary>Leave a critical section.</summary>
+		void										Leave();
+		
+	 public:
+		class Scope : public Object, public NotCopyable
+		{
+		 private:
+			CriticalSection*						criticalSection;
+		 public:
+			Scope(CriticalSection& _criticalSection);
+			~Scope();
+		};
 	};
 	
 	/// <summary><![CDATA[
@@ -10308,91 +10276,91 @@ namespace vl
 	/// ]]></summary>
 	class ReaderWriterLock : public Object, public NotCopyable
 	{
-		private:
-			friend class ConditionVariable;
-			threading_internal::ReaderWriterLockData*	internalData;
-		public:
-			/// <summary>Create a reader writer lock.</summary>
-			ReaderWriterLock();
-			~ReaderWriterLock();
-			
-			/// <summary>Try acquire a reader lock. This function will return immediately.</summary>
-			/// <returns>Returns true if the current thread acquired the reader lock.</returns>
-			bool										TryEnterReader();
-			/// <summary>Acquire a reader lock.</summary>
-			void										EnterReader();
-			/// <summary>Release a reader lock.</summary>
-			void										LeaveReader();
-			/// <summary>Try acquire a writer lock. This function will return immediately.</summary>
-			/// <returns>Returns true if the current thread acquired the writer lock.</returns>
-			bool										TryEnterWriter();
-			/// <summary>Acquire a writer lock.</summary>
-			void										EnterWriter();
-			/// <summary>Release a writer lock.</summary>
-			void										LeaveWriter();
-		public:
-			class ReaderScope : public Object, public NotCopyable
-			{
-				private:
-					ReaderWriterLock*						lock;
-				public:
-					ReaderScope(ReaderWriterLock& _lock);
-					~ReaderScope();
-			};
-			
-			class WriterScope : public Object, public NotCopyable
-			{
-				private:
-					ReaderWriterLock*						lock;
-				public:
-					WriterScope(ReaderWriterLock& _lock);
-					~WriterScope();
-			};
+	 private:
+		friend class ConditionVariable;
+		threading_internal::ReaderWriterLockData*	internalData;
+	 public:
+		/// <summary>Create a reader writer lock.</summary>
+		ReaderWriterLock();
+		~ReaderWriterLock();
+		
+		/// <summary>Try acquire a reader lock. This function will return immediately.</summary>
+		/// <returns>Returns true if the current thread acquired the reader lock.</returns>
+		bool										TryEnterReader();
+		/// <summary>Acquire a reader lock.</summary>
+		void										EnterReader();
+		/// <summary>Release a reader lock.</summary>
+		void										LeaveReader();
+		/// <summary>Try acquire a writer lock. This function will return immediately.</summary>
+		/// <returns>Returns true if the current thread acquired the writer lock.</returns>
+		bool										TryEnterWriter();
+		/// <summary>Acquire a writer lock.</summary>
+		void										EnterWriter();
+		/// <summary>Release a writer lock.</summary>
+		void										LeaveWriter();
+	 public:
+		class ReaderScope : public Object, public NotCopyable
+		{
+		 private:
+			ReaderWriterLock*						lock;
+		 public:
+			ReaderScope(ReaderWriterLock& _lock);
+			~ReaderScope();
+		};
+		
+		class WriterScope : public Object, public NotCopyable
+		{
+		 private:
+			ReaderWriterLock*						lock;
+		 public:
+			WriterScope(ReaderWriterLock& _lock);
+			~WriterScope();
+		};
 	};
 	
 	/// <summary>Conditional variable.</summary>
 	class ConditionVariable : public Object, public NotCopyable
 	{
-		private:
-			threading_internal::ConditionVariableData*	internalData;
-		public:
-			/// <summary>Create a conditional variable.</summary>
-			ConditionVariable();
-			~ConditionVariable();
-			
-			/// <summary>Bind a conditional variable with a owned critical section and release it. When the function returns, the condition variable is activated, and the current thread owned the critical section again.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="cs">The critical section.</param>
-			bool										SleepWith(CriticalSection& cs);
+	 private:
+		threading_internal::ConditionVariableData*	internalData;
+	 public:
+		/// <summary>Create a conditional variable.</summary>
+		ConditionVariable();
+		~ConditionVariable();
+		
+		/// <summary>Bind a conditional variable with a owned critical section and release it. When the function returns, the condition variable is activated, and the current thread owned the critical section again.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="cs">The critical section.</param>
+		bool										SleepWith(CriticalSection& cs);
 #ifdef VCZH_MSVC
-			/// <summary>Bind a conditional variable with a owned critical section and release it for a period of time. When the function returns, the condition variable is activated or it is time out, and the current thread owned the critical section again. This function is only available in Windows.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="cs">The critical section.</param>
-			/// <param name="ms">Time in milliseconds.</param>
-			bool										SleepWithForTime(CriticalSection& cs, vint ms);
-			/// <summary>Bind a conditional variable with a owned reader lock and release it. When the function returns, the condition variable is activated, and the current thread owned the reader lock again. This function is only available in Windows.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="lock">The reader lock.</param>
-			bool										SleepWithReader(ReaderWriterLock& lock);
-			/// <summary>Bind a conditional variable with a owned reader lock and release it for a period of time. When the function returns, the condition variable is activated or it is time out, and the current thread owned the reader lock again. This function is only available in Windows.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="lock">The reader lock.</param>
-			/// <param name="ms">Time in milliseconds.</param>
-			bool										SleepWithReaderForTime(ReaderWriterLock& lock, vint ms);
-			/// <summary>Bind a conditional variable with a owned writer lock and release it. When the function returns, the condition variable is activated, and the current thread owned the writer lock again. This function is only available in Windows.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="lock">The writer lock.</param>
-			bool										SleepWithWriter(ReaderWriterLock& lock);
-			/// <summary>Bind a conditional variable with a owned writer lock and release it for a period of time. When the function returns, the condition variable is activated or it is time out, and the current thread owned the writer lock again. This function is only available in Windows.</summary>
-			/// <returns>Returns true if this operation succeeded.</returns>
-			/// <param name="lock">The writer lock.</param>
-			/// <param name="ms">Time in milliseconds.</param>
-			bool										SleepWithWriterForTime(ReaderWriterLock& lock, vint ms);
+		/// <summary>Bind a conditional variable with a owned critical section and release it for a period of time. When the function returns, the condition variable is activated or it is time out, and the current thread owned the critical section again. This function is only available in Windows.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="cs">The critical section.</param>
+		/// <param name="ms">Time in milliseconds.</param>
+		bool										SleepWithForTime(CriticalSection& cs, vint ms);
+		/// <summary>Bind a conditional variable with a owned reader lock and release it. When the function returns, the condition variable is activated, and the current thread owned the reader lock again. This function is only available in Windows.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="lock">The reader lock.</param>
+		bool										SleepWithReader(ReaderWriterLock& lock);
+		/// <summary>Bind a conditional variable with a owned reader lock and release it for a period of time. When the function returns, the condition variable is activated or it is time out, and the current thread owned the reader lock again. This function is only available in Windows.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="lock">The reader lock.</param>
+		/// <param name="ms">Time in milliseconds.</param>
+		bool										SleepWithReaderForTime(ReaderWriterLock& lock, vint ms);
+		/// <summary>Bind a conditional variable with a owned writer lock and release it. When the function returns, the condition variable is activated, and the current thread owned the writer lock again. This function is only available in Windows.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="lock">The writer lock.</param>
+		bool										SleepWithWriter(ReaderWriterLock& lock);
+		/// <summary>Bind a conditional variable with a owned writer lock and release it for a period of time. When the function returns, the condition variable is activated or it is time out, and the current thread owned the writer lock again. This function is only available in Windows.</summary>
+		/// <returns>Returns true if this operation succeeded.</returns>
+		/// <param name="lock">The writer lock.</param>
+		/// <param name="ms">Time in milliseconds.</param>
+		bool										SleepWithWriterForTime(ReaderWriterLock& lock, vint ms);
 #endif
-			/// <summary>Wake one thread that pending on this condition variable.</summary>
-			void										WakeOnePending();
-			/// <summary>Wake all thread that pending on this condition variable.</summary>
-			void										WakeAllPendings();
+		/// <summary>Wake one thread that pending on this condition variable.</summary>
+		void										WakeOnePending();
+		/// <summary>Wake all thread that pending on this condition variable.</summary>
+		void										WakeAllPendings();
 	};
 	
 	/***********************************************************************
@@ -10411,30 +10379,30 @@ namespace vl
 	/// ]]></summary>
 	class SpinLock : public Object, public NotCopyable
 	{
-		protected:
-			volatile LockedInt							token;
-		public:
-			/// <summary>Create a spin lock.</summary>
-			SpinLock();
-			~SpinLock();
-			
-			/// <summary>Try enter a spin lock. This function will return immediately.</summary>
-			/// <returns>Returns true if the current thread owned the spin lock.</returns>
-			bool										TryEnter();
-			/// <summary>Enter a spin lock.</summary>
-			void										Enter();
-			/// <summary>Leave a spin lock.</summary>
-			void										Leave();
-			
-		public:
-			class Scope : public Object, public NotCopyable
-			{
-				private:
-					SpinLock*								spinLock;
-				public:
-					Scope(SpinLock& _spinLock);
-					~Scope();
-			};
+	 protected:
+		volatile LockedInt							token;
+	 public:
+		/// <summary>Create a spin lock.</summary>
+		SpinLock();
+		~SpinLock();
+		
+		/// <summary>Try enter a spin lock. This function will return immediately.</summary>
+		/// <returns>Returns true if the current thread owned the spin lock.</returns>
+		bool										TryEnter();
+		/// <summary>Enter a spin lock.</summary>
+		void										Enter();
+		/// <summary>Leave a spin lock.</summary>
+		void										Leave();
+		
+	 public:
+		class Scope : public Object, public NotCopyable
+		{
+		 private:
+			SpinLock*								spinLock;
+		 public:
+			Scope(SpinLock& _spinLock);
+			~Scope();
+		};
 	};
 	
 #define SPIN_LOCK(LOCK) SCOPE_VARIABLE(const SpinLock::Scope&, scope, LOCK)
@@ -10452,28 +10420,28 @@ namespace vl
 	/// <summary>Thread local storage operations.</summary>
 	class ThreadLocalStorage : public Object, private NotCopyable
 	{
-			typedef void(*Destructor)(void*);
-		protected:
-			vuint64_t								key;
-			Destructor								destructor;
-			volatile bool							disposed /*= false*/;
-			
-			static void								PushStorage(ThreadLocalStorage* storage);
-		public:
-			ThreadLocalStorage(Destructor _destructor);
-			~ThreadLocalStorage();
-			
-			void*									Get();
-			void									Set(void* data);
-			void									Clear();
-			void									Dispose();
-			
-			/// <summary>Fix all storage creation.</summary>
-			static void								FixStorages();
-			/// <summary>Clear all storages for the current thread. For threads that are created using [T:vl.Thread], this function will be automatically called when before the thread exit.</summary>
-			static void								ClearStorages();
-			/// <summary>Clear all storages for the current thread (should be the main thread) and clear all records. This function can only be called by the main thread when all other threads are exited. It will reduce noices when you want to detect memory leaks.</summary>
-			static void								DisposeStorages();
+		typedef void(*Destructor)(void*);
+	 protected:
+		vuint64_t								key;
+		Destructor								destructor;
+		volatile bool							disposed /*= false*/;
+		
+		static void								PushStorage(ThreadLocalStorage* storage);
+	 public:
+		ThreadLocalStorage(Destructor _destructor);
+		~ThreadLocalStorage();
+		
+		void*									Get();
+		void									Set(void* data);
+		void									Clear();
+		void									Dispose();
+		
+		/// <summary>Fix all storage creation.</summary>
+		static void								FixStorages();
+		/// <summary>Clear all storages for the current thread. For threads that are created using [T:vl.Thread], this function will be automatically called when before the thread exit.</summary>
+		static void								ClearStorages();
+		/// <summary>Clear all storages for the current thread (should be the main thread) and clear all records. This function can only be called by the main thread when all other threads are exited. It will reduce noices when you want to detect memory leaks.</summary>
+		static void								DisposeStorages();
 	};
 	
 	/// <summary>Thread local variable. This type can only be used to define global variables. Different threads can store different values to and obtain differnt values from a thread local variable.</summary>
@@ -10481,91 +10449,91 @@ namespace vl
 	template<typename T>
 	class ThreadVariable : public Object, private NotCopyable
 	{
-		protected:
-			ThreadLocalStorage						storage;
-			
-			static void Destructor(void* data)
+	 protected:
+		ThreadLocalStorage						storage;
+		
+		static void Destructor(void* data)
+		{
+			if (data)
 			{
-				if (data)
-				{
-					delete (T*)data;
-				}
+				delete (T*)data;
 			}
-		public:
-			/// <summary>Create a thread local variable.</summary>
-			ThreadVariable()
-				: storage(&Destructor)
-			{
-			}
-			
-			~ThreadVariable()
-			{
-			}
-			
-			/// <summary>Test if the storage has data.</summary>
-			/// <returns>Returns true if the storage has data.</returns>
-			bool HasData()
-			{
-				return storage.Get() != NULL;
-			}
-			
-			/// <summary>Remove the data from this storage.</summary>
-			void Clear()
-			{
-				storage.Clear();
-			}
-			
-			/// <summary>Get the stored data.</summary>
-			/// <returns>The stored ata.</returns>
-			T& Get()
-			{
-				return *(T*)storage.Get();
-			}
-			
-			/// <summary>Set data to this storage.</summary>
-			/// <param name="value">The data to set.</param>
-			void Set(const T& value)
-			{
-				storage.Clear();
-				storage.Set(new T(value));
-			}
+		}
+	 public:
+		/// <summary>Create a thread local variable.</summary>
+		ThreadVariable()
+			: storage(&Destructor)
+		{
+		}
+		
+		~ThreadVariable()
+		{
+		}
+		
+		/// <summary>Test if the storage has data.</summary>
+		/// <returns>Returns true if the storage has data.</returns>
+		bool HasData()
+		{
+			return storage.Get() != NULL;
+		}
+		
+		/// <summary>Remove the data from this storage.</summary>
+		void Clear()
+		{
+			storage.Clear();
+		}
+		
+		/// <summary>Get the stored data.</summary>
+		/// <returns>The stored ata.</returns>
+		T& Get()
+		{
+			return *(T*)storage.Get();
+		}
+		
+		/// <summary>Set data to this storage.</summary>
+		/// <param name="value">The data to set.</param>
+		void Set(const T& value)
+		{
+			storage.Clear();
+			storage.Set(new T(value));
+		}
 	};
 	
 	template<typename T>
 	class ThreadVariable<T*> : public Object, private NotCopyable
 	{
-		protected:
-			ThreadLocalStorage						storage;
-			
-		public:
-			ThreadVariable()
-				: storage(NULL)
-			{
-			}
-			
-			~ThreadVariable()
-			{
-			}
-			
-			bool HasData()
-			{
-				return storage.Get() != NULL;
-			}
-			
-			void Clear()
-			{
-				storage.Set(NULL);
-			}
-			
-			T* Get()
-			{
-				return (T*)storage.Get();
-			}
-			
-			void Set(T* value)
-			{
-				storage.Set((void*)value);
-			}
+	 protected:
+		ThreadLocalStorage						storage;
+		
+	 public:
+		ThreadVariable()
+			: storage(NULL)
+		{
+		}
+		
+		~ThreadVariable()
+		{
+		}
+		
+		bool HasData()
+		{
+			return storage.Get() != NULL;
+		}
+		
+		void Clear()
+		{
+			storage.Set(NULL);
+		}
+		
+		T* Get()
+		{
+			return (T*)storage.Get();
+		}
+		
+		void Set(T* value)
+		{
+			storage.Set((void*)value);
+		}
 	};
 	
 	/***********************************************************************
@@ -10577,86 +10545,86 @@ namespace vl
 	template<typename T>
 	class RepeatingTaskExecutor : public Object
 	{
-		private:
-			SpinLock								inputLock;
-			T										inputData;
-			volatile bool							inputDataAvailable;
-			SpinLock								executingEvent;
-			volatile bool							executing;
-			
-			void ExecutingProcInternal()
+	 private:
+		SpinLock								inputLock;
+		T										inputData;
+		volatile bool							inputDataAvailable;
+		SpinLock								executingEvent;
+		volatile bool							executing;
+		
+		void ExecutingProcInternal()
+		{
+			while (true)
 			{
-				while (true)
-				{
-					bool currentInputDataAvailable;
-					T currentInputData;
-					SPIN_LOCK(inputLock)
-					{
-						currentInputData = inputData;
-						inputData = T();
-						currentInputDataAvailable = inputDataAvailable;
-						inputDataAvailable = false;
-						
-						if (!currentInputDataAvailable)
-						{
-							executing = false;
-							goto FINISH_EXECUTING;
-						}
-					}
-					Execute(currentInputData);
-				}
-				
-FINISH_EXECUTING:
-				executingEvent.Leave();
-			}
-			
-			static void ExecutingProc(void* argument)
-			{
-				((RepeatingTaskExecutor<T>*)argument)->ExecutingProcInternal();
-			}
-			
-		protected:
-			/// <summary>This function is called when it is ready to execute a task. Task execution is single threaded. All task code should be put inside the function.</summary>
-			/// <param name="input">The argument to run a task.</param>
-			virtual void							Execute(const T& input) = 0;
-			
-		public:
-			/// <summary>Create a task executor.</summary>
-			RepeatingTaskExecutor()
-				: inputDataAvailable(false)
-				, executing(false)
-			{
-			}
-			
-			~RepeatingTaskExecutor()
-			{
-				EnsureTaskFinished();
-			}
-			
-			/// <summary>Wait for all tasks to finish.</summary>
-			void EnsureTaskFinished()
-			{
-				executingEvent.Enter();
-				executingEvent.Leave();
-			}
-			
-			/// <summary>Queue a task. If there is a queued task that has not been executied yet, those tasks will be canceled. Only one task can be queued at the same moment.</summary>
-			/// <param name="input">The argument to run a task.</param>
-			void SubmitTask(const T& input)
-			{
+				bool currentInputDataAvailable;
+				T currentInputData;
 				SPIN_LOCK(inputLock)
 				{
-					inputData = input;
-					inputDataAvailable = true;
+					currentInputData = inputData;
+					inputData = T();
+					currentInputDataAvailable = inputDataAvailable;
+					inputDataAvailable = false;
+					
+					if (!currentInputDataAvailable)
+					{
+						executing = false;
+						goto FINISH_EXECUTING;
+					}
 				}
-				
-				if (!executing)
-				{
-					executing = true;
-					executingEvent.Enter();
-					ThreadPoolLite::Queue(&ExecutingProc, this);
-				}
+				Execute(currentInputData);
 			}
+			
+FINISH_EXECUTING:
+			executingEvent.Leave();
+		}
+		
+		static void ExecutingProc(void* argument)
+		{
+			((RepeatingTaskExecutor<T>*)argument)->ExecutingProcInternal();
+		}
+		
+	 protected:
+		/// <summary>This function is called when it is ready to execute a task. Task execution is single threaded. All task code should be put inside the function.</summary>
+		/// <param name="input">The argument to run a task.</param>
+		virtual void							Execute(const T& input) = 0;
+		
+	 public:
+		/// <summary>Create a task executor.</summary>
+		RepeatingTaskExecutor()
+			: inputDataAvailable(false)
+			, executing(false)
+		{
+		}
+		
+		~RepeatingTaskExecutor()
+		{
+			EnsureTaskFinished();
+		}
+		
+		/// <summary>Wait for all tasks to finish.</summary>
+		void EnsureTaskFinished()
+		{
+			executingEvent.Enter();
+			executingEvent.Leave();
+		}
+		
+		/// <summary>Queue a task. If there is a queued task that has not been executied yet, those tasks will be canceled. Only one task can be queued at the same moment.</summary>
+		/// <param name="input">The argument to run a task.</param>
+		void SubmitTask(const T& input)
+		{
+			SPIN_LOCK(inputLock)
+			{
+				inputData = input;
+				inputDataAvailable = true;
+			}
+			
+			if (!executing)
+			{
+				executing = true;
+				executingEvent.Enter();
+				ThreadPoolLite::Queue(&ExecutingProc, this);
+			}
+		}
 	};
 }
 #endif
@@ -11361,7 +11329,6 @@ namespace vl
 .\NBASICINC.H
 ***********************************************************************/
 #pragma once
-
 
 
 
