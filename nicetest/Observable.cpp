@@ -60,8 +60,3 @@ void CObservable::Notify(void* pArg/*=NULL*/)
 		(*itr)->Update(this, pArg);
 	}
 }
-
-TEST_CASE(TestObservable)
-{
-
-}

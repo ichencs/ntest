@@ -19,7 +19,6 @@ int main(int, char*)
 	vector<double> dval;
 	dval.push_back(0.25);
 	
-	double dval2 = *dval.end();
 	
 	UnitTest::RunAndDisposeTests();
 	

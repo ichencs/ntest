@@ -30,6 +30,35 @@ TEST_CASE(TestCstring)
 	WString wstr2 = CT2W(str);
 	Console::WriteLine(wstr2);
 	
+	CStringA astr = "abced";
+	
+	CStringW wstr3 = astr;
+	Console::WriteLine(wstr3.GetString());
+	
+	
+	Console::WriteLine(L"Æ¥Åä½áÊø");
+}
+
+void IsWStringValid(CStringW wcode)
+{
+	CStringW str(L"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ()-_.¦Á¦Â¦Ã¦Ä¦Å¦Æ¦Ç¦È¦Ë¦Ì¦Î¦Ð¦Ñ¦Ò¦Ó¦Ô¦Õ¦×¦Ø");
+	CStringW wstr_temp;
+	for (size_t i = 0; i < wcode.GetLength(); i++)
+	{
+		wstr_temp = wcode.GetAt(i);
+		if (wstr_temp.FindOneOf(str) < 0)
+		{
+			WString wstr = L"²»Æ¥Åä×Ö·û£º";
+			Console::WriteLine(wstr + wstr_temp.GetString());
+		}
+	}
 }
 
 
+TEST_CASE(TestCStringW)
+{
+	CStringW wstr1 = "ÄãºÃ";
+	CStringW wstr2 = "abcedfssfs612216-/*+23235r";
+	IsWStringValid(wstr1);
+	IsWStringValid(wstr2);
+}

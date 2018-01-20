@@ -81,6 +81,8 @@
     <ClCompile Include="FileSystem\PathFile.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="nAtomicInt.cpp" />
+    <ClCompile Include="AtomicInt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
@@ -205,6 +207,8 @@
     <ClInclude Include="FileSystem\PathFile.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="nAtomicInt.h" />
+    <ClInclude Include="AtomicInt.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

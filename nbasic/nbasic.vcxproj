@@ -263,6 +263,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AtomicInt.h" />
     <ClInclude Include="Basic.h" />
     <ClInclude Include="Collections\Interfaces.h" />
     <ClInclude Include="Collections\Dictionary.h" />
@@ -279,6 +280,7 @@
     <ClInclude Include="Collections\OperationString.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="FileSystem\PathFile.h" />
+    <ClInclude Include="nAtomicInt.h" />
     <ClInclude Include="NVariant.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="system.h" />
@@ -315,9 +317,11 @@
     <ClInclude Include="Tuple.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AtomicInt.cpp" />
     <ClCompile Include="Basic.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="FileSystem\PathFile.cpp" />
+    <ClCompile Include="nAtomicInt.cpp" />
     <ClCompile Include="NVariant.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="system.cpp" />
