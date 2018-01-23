@@ -32,10 +32,29 @@ WString GetTestOutputPath()
 #endif
 }
 
+#define CalculateSize(type)\
+	{	   \
+		WString strLine = wformat(L"%s类型占 %d 字节",L_(#type),sizeof(type));\
+		vl::console::Console::WriteLine(strLine);	\
+	}		\
+
 
 int main()
 {
 	{
+		CalculateSize(short);
+		CalculateSize(float);
+		CalculateSize(double);
+		CalculateSize(char);
+		CalculateSize(wchar_t);
+		CalculateSize(void*);
+		
+		CalculateSize(int);
+		CalculateSize(long);
+		CalculateSize(unsigned int);
+		CalculateSize(unsigned long long);
+		
+		
 		using namespace filesystem;
 		WString strPath = GetTestOutputPath();
 		Folder folder(strPath);

@@ -12,75 +12,40 @@ namespace vl
 			{
 				Invalid = 0,
 				
-				Bool = 1,
-				Int = 2,
-				UInt = 3,
-				LongLong = 4,
-				ULongLong = 5,
-				Double = 6,
-				Char = 7,
-				Map = 8,
-				List = 9,
-				String = 10,
-				StringList = 11,
-				ByteArray = 12,
-				BitArray = 13,
-				Date = 14,
-				Time = 15,
-				DateTime = 16,
-				Url = 17,
-				Locale = 18,
-				Rect = 19,
-				RectF = 20,
-				Size = 21,
-				SizeF = 22,
-				Line = 23,
-				LineF = 24,
-				Point = 25,
-				PointF = 26,
-				RegExp = 27,
-				Hash = 28,
-				EasingCurve = 29,
-				LastCoreType = EasingCurve,
+				Bool,
+				Short,
+				Int,
+				UInt,
+				VInt8_t,
+				VUInt8_t,
+				VInt16,
+				VUInt16_t,
+				VInt32_t,
+				VUInt32_t,
+				VInt64_t,
+				VUInt64_t,
 				
-				// value 62 is internally reserved
-				Font = 64,
-				Pixmap = 65,
-				Brush = 66,
-				Color = 67,
-				Palette = 68,
-				Icon = 69,
-				Image = 70,
-				Polygon = 71,
-				Region = 72,
-				Bitmap = 73,
-				Cursor = 74,
-				SizePolicy = 75,
-				KeySequence = 76,
-				Pen = 77,
-				TextLength = 78,
-				TextFormat = 79,
-				Matrix = 80,
-				Transform = 81,
-				Matrix4x4 = 82,
-				Vector2D = 83,
-				Vector3D = 84,
-				Vector4D = 85,
-				Quaternion = 86,
-				LastGuiType = Quaternion,
+				LongLong,
+				ULongLong,
+				Double,
+				Char,
+				WChar,
+				Float,
+				// 				String,
+				WString,
+				AString,
+				UString,
+				DateTime,
+				Locale,
 				
-				UserType = 127,
-#ifdef QT3_SUPPORT
-				IconSet = Icon,
-				CString = ByteArray,
-				PointArray = Polygon,
-#endif
-				LastType = 0xffffffff // need this so that gcc >= 3.4 allocates 32 bits for Type
+				UserType = 127,			//暂时不支持
+				
 			};
 		public:
 			inline Variant() {};
 			~Variant();
 			Variant(const Variant& other);
+			Variant& operator=(const Variant& other);
 			
 			
 			struct PrivateShared
@@ -102,13 +67,25 @@ namespace vl
 				{}
 				union Data
 					{
-					  char c;
-					  int i;
-					  vuint u;
 					  bool b;
+					  char c;
+					  short s;
+					  wchar_t wc;
+					  vint8_t i8;
+					  vuint8_t ui8;
+					  
+					  vint16_t i16;
+					  vuint16_t ui16;
+					  
+					  int i;
+					  vint32_t i32;
+					  vuint32_t ui32;
+					  
+					  vint64_t i64;
+					  vuint64_t ui64;
+					  
 					  double d;
 					  float f;
-					  // 					qreal real;
 					  long long ll;
 					  unsigned long long ull;
 					  Object* o;
@@ -120,7 +97,49 @@ namespace vl
 				vuint is_null : 1;
 			};
 			
+			typedef void(*f_construct)(Private*, const void*);
+			typedef void(*f_clear)(Private*);
+			typedef bool(*f_null)(const Private*);
+			typedef bool(*f_compare)(const Private*, const Private*);
+			typedef bool(*f_convert)(const Variant::Private* d, Type t, void*, bool*);
+			typedef bool(*f_canConvert)(const Variant::Private* d, Type t);
+			struct Handler
+			{
+				f_construct construct;
+				f_clear clear;
+				f_null isNull;
+				f_compare compare;
+				f_convert convert;
+				// 				f_canConvert canConvert;
+			};
+			void Variant::clear();
+		protected:
+			Private d;
+			static const Handler* handler;
+			
+			void* data();
+			const void* constData() const;
+			inline const void* data() const
+			{
+				return constData();
+			}
+			
+			inline bool isValid() const;
+			bool isNull() const;
+			
+			void detach();
+			inline bool isDetached() const;
 			
 	};
+	inline bool Variant::isValid() const
+	{
+		return d.type != Invalid;
+	}
+	inline bool Variant::isDetached() const
+	{
+		return !d.is_shared || d.data.shared->ref == 1;
+	}
+	
 	
 }
+
