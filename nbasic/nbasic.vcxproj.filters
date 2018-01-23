@@ -76,13 +76,12 @@
     <ClCompile Include="UnitTest\UnitTest.cpp">
       <Filter>UnitTest</Filter>
     </ClCompile>
-    <ClCompile Include="NVariant.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="FileSystem\PathFile.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
-    <ClCompile Include="nAtomicInt.cpp" />
     <ClCompile Include="AtomicInt.cpp" />
+    <ClCompile Include="Variant.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pointer.h" />
@@ -202,13 +201,12 @@
     <ClInclude Include="UnitTest\UnitTest.h">
       <Filter>UnitTest</Filter>
     </ClInclude>
-    <ClInclude Include="NVariant.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="FileSystem\PathFile.h">
       <Filter>FileSystem</Filter>
     </ClInclude>
-    <ClInclude Include="nAtomicInt.h" />
     <ClInclude Include="AtomicInt.h" />
+    <ClInclude Include="Variant.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

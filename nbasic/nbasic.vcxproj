@@ -280,8 +280,6 @@
     <ClInclude Include="Collections\OperationString.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="FileSystem\PathFile.h" />
-    <ClInclude Include="nAtomicInt.h" />
-    <ClInclude Include="NVariant.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="Exception.h" />
@@ -315,14 +313,13 @@
     <ClInclude Include="String.h" />
     <ClInclude Include="Threading.h" />
     <ClInclude Include="Tuple.h" />
+    <ClInclude Include="Variant.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtomicInt.cpp" />
     <ClCompile Include="Basic.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="FileSystem\PathFile.cpp" />
-    <ClCompile Include="nAtomicInt.cpp" />
-    <ClCompile Include="NVariant.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="Exception.cpp" />
@@ -353,6 +350,7 @@
     <ClCompile Include="Stream\RecorderStream.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="Threading.cpp" />
+    <ClCompile Include="Variant.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

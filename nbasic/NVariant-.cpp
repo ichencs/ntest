@@ -16,6 +16,10 @@
 // 	x->is_shared = false;
 // }
 
+
+
+
+
 NVariant::NVariant()
 {
 

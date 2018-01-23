@@ -11,3 +11,10 @@ TEST_CASE(TestNumberTrans)
 	
 	
 }
+
+TEST_CASE(TestNumberMemorySize)
+{
+	int nsize = sizeof(int);
+	
+	
+}

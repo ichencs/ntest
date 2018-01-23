@@ -36,3 +36,6 @@ nicebasic\bin
 bin/Output/Locale.txt
 *.ipdb
 *.iobj
+bin
+bin/Output/Locale.txt
+bin/Output/Locale.txt

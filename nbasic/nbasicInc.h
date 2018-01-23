@@ -11,7 +11,6 @@
 #include "Threading.h"
 #include "HttpUtility.h"
 #include "system.h"
-#include "NVariant.h"
 #include "Path.h"
 
 #include ".\FileSystem\Folder.h"

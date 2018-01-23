@@ -17,44 +17,29 @@ WString GetExePath()
 WString GetTestResourcePath()
 {
 #ifdef _WIN64
-	return GetExePath() + L"../../Resources/";
+	return GetExePath() + L"/../../Resources/";
 #else
-	return GetExePath() + L"../Resources/";
+	return GetExePath() + L"/../Resources/";
 #endif
 }
 
 WString GetTestOutputPath()
 {
 #ifdef _WIN64
-	return GetExePath() + L"../../Output/";
+	return GetExePath() + L"/../../Output/";
 #else
-	return GetExePath() + L"../Output/";
+	return GetExePath() + L"/../Output/";
 #endif
 }
 
-class testClass
-{
- public:
-	testClass();
-	~testClass();
-	
- private:
- 
-};
-
-testClass::testClass()
-{
-}
-
-testClass::~testClass()
-{
-}
 
 int main()
 {
 	{
 		using namespace filesystem;
-		Folder folder(GetTestOutputPath());
+		WString strPath = GetTestOutputPath();
+		Folder folder(strPath);
+		vl::console::Console::WriteLine(folder.GetFilePath().GetFullPath());
 		
 		if (!folder.Exists())
 		{

@@ -4,12 +4,11 @@
 namespace vl
 {
 
-	BasicAtomicInt::BasicAtomicInt()
-	{
-	}
-	
-	
-	BasicAtomicInt::~BasicAtomicInt()
-	{
-	}
+
+
+
+
+
+
+
 }
