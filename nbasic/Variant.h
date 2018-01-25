@@ -4,6 +4,23 @@
 
 namespace vl
 {
+
+#define COMPARE_EXCHANGE_POINTER(value, newValue, expectedValue)\
+	(_InterlockedCompareExchangePointer((void * volatile *)(value),\
+	    (void *)(newValue), \
+	    (void *)(expectedValue)))
+
+#define EXCHANGE_POINTER(value, newValue)\
+	(_InterlockedExchangePointer( \
+	    (void * volatile *)(value), \
+	    (void *) (newValue))
+
+#define 	EXCHANGE_ADD_POINTER(value, valueToAdd) \
+	(_InterlockedExchangeAdd64((void * volatile *)(value),(valueToAdd)))
+	// #define EXCHG(x)	(_InterlockedDecrement64(x))
+	// #define EXCHGADD() ()
+	
+	
 	class Variant:
 		public Object
 	{
@@ -11,30 +28,25 @@ namespace vl
 			enum Type
 			{
 				Invalid = 0,
-				
 				Bool,
-				Short,
-				Int,
-				UInt,
-				VInt8_t,
-				VUInt8_t,
-				VInt16,
-				VUInt16_t,
-				VInt32_t,
-				VUInt32_t,
-				VInt64_t,
-				VUInt64_t,
 				
-				LongLong,
-				ULongLong,
-				Double,
-				Char,
+				Int8,
+				UInt8,
+				Int16,
+				UInt16,
+				Int32,
+				UInt32,
+				Int64,	//8*8		long long
+				UInt64,
+				Double,		//8*8
+				Float,		//4*8
+				
 				WChar,
-				Float,
-				// 				String,
-				WString,
+				Char,
+				
 				AString,
-				UString,
+				// 				UString,	//
+				WString,
 				DateTime,
 				Locale,
 				
@@ -44,10 +56,19 @@ namespace vl
 		public:
 			inline Variant() {};
 			~Variant();
+			Variant(Variant::Type type);
 			Variant(const Variant& other);
 			Variant& operator=(const Variant& other);
+			Variant(vint8_t i);			//8
+			Variant(vint16_t i);			//8
+			Variant(vint32_t i);			//32
+			Variant(vint64_t i);			//8
+			// 			Variant(vint i);
+			// 			Variant(int i);			//32
+			// 			Variant(long long i);
 			
 			
+		public:		//内部类型定义
 			struct PrivateShared
 			{
 				inline PrivateShared(void* v) : ptr(v), ref(1) { };		//未写虚析构，释放内存时，需要static_cast转换类型
@@ -69,26 +90,21 @@ namespace vl
 					{
 					  bool b;
 					  char c;
-					  short s;
 					  wchar_t wc;
 					  vint8_t i8;
 					  vuint8_t ui8;
 					  
-					  vint16_t i16;
+					  vint16_t i16;			//short
 					  vuint16_t ui16;
 					  
-					  int i;
-					  vint32_t i32;
+					  vint32_t i32;			//int
 					  vuint32_t ui32;
 					  
-					  vint64_t i64;
-					  vuint64_t ui64;
+					  vint64_t i64;			//long
+					  vuint64_t ui64;		//long
 					  
 					  double d;
 					  float f;
-					  long long ll;
-					  unsigned long long ull;
-					  Object* o;
 					  void* ptr;
 					  PrivateShared* shared;
 					} data;
@@ -112,7 +128,9 @@ namespace vl
 				f_convert convert;
 				// 				f_canConvert canConvert;
 			};
+		protected:
 			void Variant::clear();
+			void create(int type, const void* copy);
 		protected:
 			Private d;
 			static const Handler* handler;

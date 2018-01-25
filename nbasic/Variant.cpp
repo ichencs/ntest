@@ -5,6 +5,51 @@
 
 namespace vl
 {
+
+	static vint64_t MetaTypeNumber(const Variant::Private* d)
+	{
+		switch (d->type)
+		{
+			case Variant::Int8:
+				return d->data.i16;
+			case Variant::Int16:
+				return d->data.i16;
+			case Variant::Int32:
+				return d->data.i32;
+			case Variant::Int64:
+				return d->data.i32;
+			case Variant::Float:
+				return qRound64(d->data.f);
+			case Variant::Double:
+				return qRound64(d->data.d);
+			case Variant::Char:
+				return vint(d->data.c);
+			case Variant::WChar:
+				return d->data.wc;
+		}
+		CHECK_ERROR(false, L"MetaTypeNumber::value type error!");
+		return 0;
+	}
+	
+	static vuint64_t MetaTypeUNumber(const Variant::Private* d)
+	{
+		switch (d->type)
+		{
+			case Variant::UInt8:
+				return d->data.ui16;
+			case Variant::UInt16:
+				return d->data.ui16;
+			case Variant::UInt32:
+				return d->data.ui32;
+			case Variant::UInt64:
+				return d->data.ui64;
+		}
+		CHECK_ERROR(false, L"MetaTypeUNumber::value type error!");
+		return 0;
+	}
+	
+	
+	
 	//为什么使用 T*=0 这样的参数
 	template <typename T>
 	inline const T* v_cast(const Variant::Private* d, T* = 0)
@@ -89,35 +134,28 @@ namespace vl
 			case vl::Variant::Bool:
 				x->data.b = copy ? *static_cast<const bool*>(copy) : false;
 				break;
-			case vl::Variant::Short:
-				x->data.s = copy ? *static_cast<const short*>(copy) : false;
-				break;
-			case vl::Variant::VInt32_t:
-			case vl::Variant::Int:
-				x->data.i32 = copy ? *static_cast<const int*>(copy) : 0;
-				break;
-			case vl::Variant::VUInt32_t:
-			case vl::Variant::UInt:
-				x->data.ui32 = copy ? *static_cast<const vint32_t*>(copy) : 0u;
-				break;
-			case vl::Variant::VInt8_t:
+			case vl::Variant::Int8:
 				x->data.i8 = copy ? *static_cast<const vint8_t*>(copy) : 0;
 				break;
-			case vl::Variant::VUInt8_t:
+			case vl::Variant::UInt8:
 				x->data.ui8 = copy ? *static_cast<const vuint8_t*>(copy) : 0u;
 				break;
-			case vl::Variant::VInt16:
+			case vl::Variant::Int16:
 				x->data.i16 = copy ? *static_cast<const vint16_t*>(copy) : 0;
 				break;
-			case vl::Variant::VUInt16_t:
+			case vl::Variant::UInt16:
 				x->data.ui16 = copy ? *static_cast<const vuint16_t*>(copy) : 0u;
 				break;
-			case vl::Variant::LongLong:
-			case vl::Variant::VInt64_t:
+			case vl::Variant::Int32:
+				x->data.i32 = copy ? *static_cast<const vint32_t*>(copy) : 0;
+				break;
+			case vl::Variant::UInt32:
+				x->data.ui32 = copy ? *static_cast<const vuint32_t*>(copy) : 0;
+				break;
+			case vl::Variant::Int64:
 				x->data.i64 = copy ? *static_cast<const vint64_t*>(copy) : 0;
 				break;
-			case vl::Variant::ULongLong:
-			case vl::Variant::VUInt64_t:
+			case vl::Variant::UInt64:
 				x->data.ui64 = copy ? *static_cast<const vuint64_t*>(copy) : 0u;
 				break;
 			case vl::Variant::Double:
@@ -132,17 +170,15 @@ namespace vl
 			case vl::Variant::Float:
 				x->data.f = copy ? *static_cast<const float*>(copy) : 0.0f;
 				break;
-			// 			case vl::Variant::String:
-			// 				break;
 			case vl::Variant::WString:
 				v_construct<WString>(x, copy);
 				break;
 			case vl::Variant::AString:
 				v_construct<AString>(x, copy);
 				break;
-			case vl::Variant::UString:
-				v_construct<UString>(x, copy);
-				break;
+			// 			case vl::Variant::UString:
+			// 				v_construct<UString>(x, copy);
+			// 				break;
 			case vl::Variant::DateTime:
 				v_construct<DateTime>(x, copy);
 				break;
@@ -160,19 +196,14 @@ namespace vl
 		switch (d->type)
 		{
 			case vl::Variant::Bool:
-			case vl::Variant::Short:
-			case vl::Variant::Int:
-			case vl::Variant::UInt:
-			case vl::Variant::VInt8_t:
-			case vl::Variant::VUInt8_t:
-			case vl::Variant::VInt16:
-			case vl::Variant::VUInt16_t:
-			case vl::Variant::VInt32_t:
-			case vl::Variant::VUInt32_t:
-			case vl::Variant::VInt64_t:
-			case vl::Variant::VUInt64_t:
-			case vl::Variant::LongLong:
-			case vl::Variant::ULongLong:
+			case vl::Variant::Int8:
+			case vl::Variant::UInt8:
+			case vl::Variant::Int16:
+			case vl::Variant::UInt16:
+			case vl::Variant::Int32:
+			case vl::Variant::UInt32:
+			case vl::Variant::Int64:
+			case vl::Variant::UInt64:
 			case vl::Variant::Double:
 			case vl::Variant::Char:
 			case vl::Variant::Float:
@@ -183,9 +214,9 @@ namespace vl
 			case vl::Variant::AString:
 				v_clear<AString>(d);
 				break;
-			case vl::Variant::UString:
-				v_clear<UString>(d);
-				break;
+			// 			case vl::Variant::UString:
+			// 				v_clear<UString>(d);
+			// 				break;
 			case vl::Variant::DateTime:
 				v_clear<DateTime>(d);
 				break;
@@ -213,31 +244,22 @@ namespace vl
 				return true;
 			case vl::Variant::Bool:
 				return a->data.b == b->data.b;
-			case vl::Variant::Short:
-				return a->data.s == b->data.s;
-				break;
-			case vl::Variant::VInt32_t:
-			case vl::Variant::Int:
+			case vl::Variant::Int32:
 				return	a->data.i32 == b->data.i32;
-			case vl::Variant::VUInt32_t:
-			case vl::Variant::UInt:
+			case vl::Variant::UInt32:
 				return	a->data.ui32 == b->data.ui32;
-			case vl::Variant::VInt8_t:
+			case vl::Variant::Int8:
 				return	a->data.i8 == b->data.i8;
-			case vl::Variant::VUInt8_t:
+			case vl::Variant::UInt8:
 				return	a->data.ui8 == b->data.ui8;
-			case vl::Variant::VInt16:
+			case vl::Variant::Int16:
 				return	a->data.i16 == b->data.i16;
-			case vl::Variant::VUInt16_t:
+			case vl::Variant::UInt16:
 				return	a->data.ui16 == b->data.ui16;
-			case vl::Variant::VInt64_t:
+			case vl::Variant::Int64:
 				return	a->data.i64 == b->data.i64;
-			case vl::Variant::VUInt64_t:
+			case vl::Variant::UInt64:
 				return	a->data.ui64 == b->data.ui64;
-			case vl::Variant::LongLong:
-				return	a->data.ll == b->data.ll;
-			case vl::Variant::ULongLong:
-				return	a->data.ull == b->data.ull;
 			case vl::Variant::Double:
 				return	a->data.d == b->data.d;
 			case vl::Variant::Char:
@@ -250,8 +272,8 @@ namespace vl
 				return *v_cast<WString>(a) == *v_cast<WString>(b);
 			case vl::Variant::AString:
 				return *v_cast<AString>(a) == *v_cast<AString>(b);
-			case vl::Variant::UString:
-				return *v_cast<UString>(a) == *v_cast<UString>(b);
+			// 			case vl::Variant::UString:
+			// 				return *v_cast<UString>(a) == *v_cast<UString>(b);
 			case vl::Variant::DateTime:
 				return *v_cast<DateTime>(a) == *v_cast<DateTime>(b);
 			case vl::Variant::Locale:
@@ -276,14 +298,142 @@ namespace vl
 		bool dummy = false;
 		if (!ok)
 			ok = &dummy;
+		switch (t)
+		{
+			case vl::Variant::Invalid:
+				break;
+			case vl::Variant::Bool:
 			
-			
-			
-			
-			
+				break;
+			case vl::Variant::Int8:
+				break;
+			case vl::Variant::UInt8:
+				break;
+			case vl::Variant::Int16:
+				break;
+			case vl::Variant::UInt16:
+				break;
+			case vl::Variant::Int32:
+				break;
+			case vl::Variant::UInt32:
+				break;
+			case vl::Variant::Int64:
+				break;
+			case vl::Variant::UInt64:
+				break;
+			case vl::Variant::Double:
+				break;
+			case vl::Variant::Char:
+				break;
+			case vl::Variant::WChar:
+				break;
+			case vl::Variant::Float:
+				break;
+			case vl::Variant::WString:
+				{
+					WString* wstr = static_cast<WString*>(result);
+					switch (d->type)
+					{
+						case vl::Variant::Bool:
+							*wstr = d->data.b ? L"true" : L"false";
+							break;
+						case vl::Variant::Int8:
+						case vl::Variant::Int16:
+						case vl::Variant::Int32:
+						case vl::Variant::Int64:
+							break;
+						case vl::Variant::UInt8:
+							break;
+							break;
+						case vl::Variant::UInt16:
+							break;
+							break;
+						case vl::Variant::UInt32:
+							break;
+							break;
+						case vl::Variant::UInt64:
+							break;
+							break;
+						case vl::Variant::Double:
+							break;
+						case vl::Variant::Char:
+							break;
+						case vl::Variant::WChar:
+							break;
+						case vl::Variant::Float:
+							break;
+						case vl::Variant::WString:
+						
+							break;
+						case vl::Variant::AString:
+							break;
+						// 						case vl::Variant::UString:
+						// 							break;
+						case vl::Variant::DateTime:
+							break;
+						case vl::Variant::Locale:
+							break;
+						case vl::Variant::UserType:
+							break;
+							
+						default:
+							break;
+					}
+				}
+				break;
+			case vl::Variant::AString:
+				break;
+			// 			case vl::Variant::UString:
+			// 				break;
+			case vl::Variant::DateTime:
+				break;
+			case vl::Variant::Locale:
+				break;
+			case vl::Variant::UserType:
+				break;
+			default:
+				break;
+		}
+		
+		
+		
+		
+		
 		//未完成
 		
 		return false;
+	}
+	
+	static vint64_t ConvertToNumber(const Variant::Private* d, bool* ok)
+	{
+		*ok = true;
+		
+		switch (d->type)
+		{
+			// 			case Variant::UString:
+			case Variant::AString:
+				return atoi64_test(*v_cast<AString>(d), *ok);
+			case Variant::WString:
+				return wtoi64_test(*v_cast<WString>(d), *ok);
+			case Variant::Char:
+			case Variant::WChar:
+			case Variant::Bool:
+			case Variant::Double:
+			case Variant::Float:
+			case Variant::Int8:
+			case Variant::Int16:
+			case Variant::Int32:
+			case Variant::Int64:
+				return MetaTypeNumber(d);
+			case Variant::UInt8:
+			case Variant::UInt16:
+			case Variant::UInt32:
+			case Variant::UInt64:
+				return MetaTypeUNumber(d);
+		}
+		
+		*ok = false;
+		return Q_INT64_C(0);
 	}
 	
 	const Variant::Handler qt_kernel_variant_handler =
@@ -301,12 +451,59 @@ namespace vl
 	}
 	
 	
+	void Variant::create(int type, const void* copy)
+	{
+		d.type = type;
+		handler->construct(&d, copy);
+	}
+	
 	const Variant::Handler* Variant::handler = &qt_kernel_variant_handler;
 	
 	
 	Variant::Variant(const Variant& other)
+		: d(other.d)
 	{
+		if (d.is_shared)
+		{
+			d.data.shared->ref.ref();
+		}
+		else if (other.d.type > Variant::Char && other.d.type < Variant::UserType)
+		{
+			handler->construct(&d, other.constData());
+		}
+	}
 	
+	Variant::Variant(Variant::Type type)
+	{
+		create(type, 0);
+	}
+	
+	Variant::Variant(vint8_t i8)
+	{
+		d.is_null = false;
+		d.type = Int8;
+		d.data.i8 = i8;
+	}
+	
+	Variant::Variant(vint16_t i)
+	{
+		d.is_null = false;
+		d.type = Int16;
+		d.data.i16 = i;
+	}
+	
+	Variant::Variant(vint32_t i)
+	{
+		d.is_null = false;
+		d.type = Int32;
+		d.data.i32 = i;
+	}
+	
+	Variant::Variant(vint64_t i)
+	{
+		d.is_null = false;
+		d.type = Int64;
+		d.data.i64 = i;
 	}
 	
 	void* Variant::data()
@@ -338,33 +535,34 @@ namespace vl
 		return d.is_shared ? d.data.shared->ptr : reinterpret_cast<const void*>(&d.data.ptr);
 	}
 	
-	Variant& Variant::operator=(const Variant& variant)
+	Variant& Variant::operator=(const Variant& other)
 	{
-		if (this == &variant)
+		if (this == &other)
 			return *this;
 			
 		clear();
-		if (variant.d.is_shared)
+		if (other.d.is_shared)
 		{
-			variant.d.data.shared->ref.ref();
-			d = variant.d;
+			other.d.data.shared->ref.ref();
+			d = other.d;
 		}
-		else if (variant.d.type > Char && variant.d.type < UserType)
+		else if (other.d.type > Variant::AString && other.d.type < Variant::UserType)
 		{
-			d.type = variant.d.type;
-			handler->construct(&d, variant.constData());
-			d.is_null = variant.d.is_null;
+			d.type = other.d.type;
+			handler->construct(&d, other.constData());
+			d.is_null = other.d.is_null;
 		}
 		else
 		{
-			d = variant.d;
+			d = other.d;
 		}
-		
 		return *this;
 	}
 	
 	Variant::~Variant()
 	{
+		if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type > Char && d.type < UserType))
+			handler->clear(&d);
 	}
 	
 	void Variant::clear()

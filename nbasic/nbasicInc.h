@@ -12,6 +12,7 @@
 #include "HttpUtility.h"
 #include "system.h"
 #include "Path.h"
+#include "Variant.h"
 
 #include ".\FileSystem\Folder.h"
 #include ".\FileSystem\File.h"

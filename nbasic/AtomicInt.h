@@ -117,38 +117,38 @@ namespace vl
 		return DECRC(&_q_value) != 0;
 	}
 	
-	// 	inline bool BasicAtomicInt::testAndSetOrdered(int expected, int newval)
-	// 	{
-	// 		return q_atomic_test_and_set_int(&_q_value, expected, newval) != 0;
-	// 	}
-	//
-	// 	inline int BasicAtomicInt::fetchAndStoreOrdered(int newval)
-	// 	{
-	// 		return q_atomic_set_int(&_q_value, newval);
-	// 	}
-	//
-	// 	inline int BasicAtomicInt::fetchAndAddOrdered(int aValue)
-	// 	{
-	// 		return q_atomic_fetch_and_add_int(&_q_value, aValue);
-	// 	}
-	//
-	//
-	// 	inline bool BasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
-	// 	{
-	// 		return testAndSetOrdered(expectedValue, newValue);
-	// 	}
-	//
-	// 	inline bool BasicAtomicInt::testAndSetAcquire(int expectedValue, int newValue)
-	// 	{
-	// 		return testAndSetOrdered(expectedValue, newValue);
-	// 	}
-	//
-	// 	inline bool BasicAtomicInt::testAndSetRelease(int expectedValue, int newValue)
-	// 	{
-	// 		return testAndSetOrdered(expectedValue, newValue);
-	// 	}
+	/*inline bool BasicAtomicInt::testAndSetOrdered(int expected, int newval)
+	{
+		return q_atomic_test_and_set_int(&_q_value, expected, newval) != 0;
+	}
 	
-	/*inline int BasicAtomicInt::fetchAndStoreRelaxed(int newValue)
+	inline int BasicAtomicInt::fetchAndStoreOrdered(int newval)
+	{
+		return q_atomic_set_int(&_q_value, newval);
+	}
+	
+	inline int BasicAtomicInt::fetchAndAddOrdered(int aValue)
+	{
+		return q_atomic_fetch_and_add_int(&_q_value, aValue);
+	}
+	
+	
+	inline bool BasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
+	{
+		return testAndSetOrdered(expectedValue, newValue);
+	}
+	
+	inline bool BasicAtomicInt::testAndSetAcquire(int expectedValue, int newValue)
+	{
+		return testAndSetOrdered(expectedValue, newValue);
+	}
+	
+	inline bool BasicAtomicInt::testAndSetRelease(int expectedValue, int newValue)
+	{
+		return testAndSetOrdered(expectedValue, newValue);
+	}
+	
+	inline int BasicAtomicInt::fetchAndStoreRelaxed(int newValue)
 	{
 		return fetchAndStoreOrdered(newValue);
 	}

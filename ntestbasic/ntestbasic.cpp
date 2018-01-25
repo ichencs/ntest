@@ -39,6 +39,12 @@ WString GetTestOutputPath()
 	}		\
 
 
+inline bool ref()
+{
+	DWORD d = 7;
+	
+}
+
 int main()
 {
 	{
@@ -53,6 +59,13 @@ int main()
 		CalculateSize(long);
 		CalculateSize(unsigned int);
 		CalculateSize(unsigned long long);
+		
+		double d1 = -0.0;
+		double d2 = 0.0;
+		
+		bool bRes = d1 < 0;
+		bRes = qIsNull(0.000000000001);
+		vuint64_t vi = 0x7fffffffffffffffi64;
 		
 		
 		using namespace filesystem;

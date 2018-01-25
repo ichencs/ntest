@@ -255,7 +255,7 @@ namespace vl
 	
 	vint _wtoUtf8(const wchar_t* w, char* u, vint chars)
 	{
-		return WideCharToMultiByte(CP_UTF8, 0, w, -1, u, (int)(u ? chars : 0), 0, 0);
+		return WideCharToMultiByte(CP_UTF8, 0, w, -1, (char*)u, (int)(u ? chars : 0), 0, 0);
 	}
 	
 	UString wtoUtf8(const WString& string)
@@ -264,14 +264,14 @@ namespace vl
 		char* buffer = new char[len];
 		memset(buffer, 0, len * sizeof(*buffer));
 		_wtoUtf8(string.Buffer(), buffer, (int)len);
-		AString s = buffer;
+		UString s = buffer;
 		delete[] buffer;
 		return s;
 	}
 	
 	vint _utf8tow(const char* u, wchar_t* w, vint chars)
 	{
-		return MultiByteToWideChar(CP_UTF8, 0, u, -1, w, (int)(w ? chars : 0));
+		return MultiByteToWideChar(CP_UTF8, 0, (char*)u, -1, w, (int)(w ? chars : 0));
 	}
 	
 	WString utf8tow(const UString& string)
