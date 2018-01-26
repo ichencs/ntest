@@ -11,6 +11,7 @@ TEST_CASE(TestVariant)
 	Variant var = 1;
 	Variant var8 = 10i8;
 	Variant var16 = 17i16;
-	
+	Variant varStr = WString(L"ÄãºÃÂğ£¿");
+	Variant varStr2 = varStr;
 	
 }

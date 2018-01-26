@@ -3,6 +3,23 @@
 
 namespace vl
 {
+
+#define COMPARE_EXCHANGE_POINTER(value, newValue, expectedValue)\
+	(_InterlockedCompareExchangePointer((void * volatile *)(value),\
+	    (void *)(newValue), \
+	    (void *)(expectedValue)))
+
+#define EXCHANGE_POINTER(value, newValue)\
+	(_InterlockedExchangePointer( \
+	    (void * volatile *)(value), \
+	    (void *) (newValue))
+
+#define 	EXCHANGE_ADD_POINTER(value, valueToAdd) \
+	(_InterlockedExchangeAdd64((void * volatile *)(value),(valueToAdd)))
+	// #define EXCHG(x)	(_InterlockedDecrement64(x))
+	// #define EXCHGADD() ()
+	
+	
 	class BasicAtomicInt
 	{
 		public:
@@ -48,10 +65,10 @@ namespace vl
 			//static bool isTestAndSetNative();
 			//static bool isTestAndSetWaitFree();
 			
-			/*	bool testAndSetRelaxed(int expectedValue, int newValue);
-				bool testAndSetAcquire(int expectedValue, int newValue);
-				bool testAndSetRelease(int expectedValue, int newValue);
-				bool testAndSetOrdered(int expectedValue, int newValue);*/
+			bool testAndSetRelaxed(int expectedValue, int newValue);
+			bool testAndSetAcquire(int expectedValue, int newValue);
+			bool testAndSetRelease(int expectedValue, int newValue);
+			bool testAndSetOrdered(int expectedValue, int newValue);
 			
 			//static bool isFetchAndStoreNative();
 			//static bool isFetchAndStoreWaitFree();
@@ -117,66 +134,66 @@ namespace vl
 		return DECRC(&_q_value) != 0;
 	}
 	
-	/*inline bool BasicAtomicInt::testAndSetOrdered(int expected, int newval)
-	{
-		return q_atomic_test_and_set_int(&_q_value, expected, newval) != 0;
-	}
-	
-	inline int BasicAtomicInt::fetchAndStoreOrdered(int newval)
-	{
-		return q_atomic_set_int(&_q_value, newval);
-	}
-	
-	inline int BasicAtomicInt::fetchAndAddOrdered(int aValue)
-	{
-		return q_atomic_fetch_and_add_int(&_q_value, aValue);
-	}
+	// 	inline bool BasicAtomicInt::testAndSetOrdered(int expected, int newval)
+	// 	{
+	// 		return q_atomic_test_and_set_int(&_q_value, expected, newval) != 0;
+	// 	}
+	//
+	// 	inline int BasicAtomicInt::fetchAndStoreOrdered(int newval)
+	// 	{
+	// 		return q_atomic_set_int(&_q_value, newval);
+	// 	}
+	//
+	// 	inline int BasicAtomicInt::fetchAndAddOrdered(int aValue)
+	// 	{
+	// 		return q_atomic_fetch_and_add_int(&_q_value, aValue);
+	// 	}
 	
 	
 	inline bool BasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
 	{
-		return testAndSetOrdered(expectedValue, newValue);
+		return COMPARE_EXCHANGE_POINTER(&_q_value, expectedValue, newValue) != 0;
 	}
 	
-	inline bool BasicAtomicInt::testAndSetAcquire(int expectedValue, int newValue)
-	{
-		return testAndSetOrdered(expectedValue, newValue);
-	}
-	
-	inline bool BasicAtomicInt::testAndSetRelease(int expectedValue, int newValue)
-	{
-		return testAndSetOrdered(expectedValue, newValue);
-	}
-	
-	inline int BasicAtomicInt::fetchAndStoreRelaxed(int newValue)
-	{
-		return fetchAndStoreOrdered(newValue);
-	}
-	
-	inline int BasicAtomicInt::fetchAndStoreAcquire(int newValue)
-	{
-		return fetchAndStoreOrdered(newValue);
-	}
-	
-	inline int BasicAtomicInt::fetchAndStoreRelease(int newValue)
-	{
-		return fetchAndStoreOrdered(newValue);
-	}
-	
-	inline int BasicAtomicInt::fetchAndAddRelaxed(int valueToAdd)
-	{
-		return fetchAndAddOrdered(valueToAdd);
-	}
-	
-	inline int BasicAtomicInt::fetchAndAddAcquire(int valueToAdd)
-	{
-		return fetchAndAddOrdered(valueToAdd);
-	}
-	
-	inline int BasicAtomicInt::fetchAndAddRelease(int valueToAdd)
-	{
-		return fetchAndAddOrdered(valueToAdd);
-	}*/
+	// 	inline bool BasicAtomicInt::testAndSetAcquire(int expectedValue, int newValue)
+	// 	{
+	// 		return testAndSetOrdered(expectedValue, newValue);
+	// 	}
+	//
+	// 	inline bool BasicAtomicInt::testAndSetRelease(int expectedValue, int newValue)
+	// 	{
+	// 		return testAndSetOrdered(expectedValue, newValue);
+	// 	}
+	//
+	// 	inline int BasicAtomicInt::fetchAndStoreRelaxed(int newValue)
+	// 	{
+	// 		return fetchAndStoreOrdered(newValue);
+	// 	}
+	//
+	// 	inline int BasicAtomicInt::fetchAndStoreAcquire(int newValue)
+	// 	{
+	// 		return fetchAndStoreOrdered(newValue);
+	// 	}
+	//
+	// 	inline int BasicAtomicInt::fetchAndStoreRelease(int newValue)
+	// 	{
+	// 		return fetchAndStoreOrdered(newValue);
+	// 	}
+	//
+	// 	inline int BasicAtomicInt::fetchAndAddRelaxed(int valueToAdd)
+	// 	{
+	// 		return fetchAndAddOrdered(valueToAdd);
+	// 	}
+	//
+	// 	inline int BasicAtomicInt::fetchAndAddAcquire(int valueToAdd)
+	// 	{
+	// 		return fetchAndAddOrdered(valueToAdd);
+	// 	}
+	//
+	// 	inline int BasicAtomicInt::fetchAndAddRelease(int valueToAdd)
+	// 	{
+	// 		return fetchAndAddOrdered(valueToAdd);
+	// 	}
 	
 	
 	

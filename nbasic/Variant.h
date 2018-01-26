@@ -1,25 +1,39 @@
 #pragma once
 #include "Basic.h"
 #include "AtomicInt.h"
+#include "String.h"
 
 namespace vl
 {
-
-#define COMPARE_EXCHANGE_POINTER(value, newValue, expectedValue)\
-	(_InterlockedCompareExchangePointer((void * volatile *)(value),\
-	    (void *)(newValue), \
-	    (void *)(expectedValue)))
-
-#define EXCHANGE_POINTER(value, newValue)\
-	(_InterlockedExchangePointer( \
-	    (void * volatile *)(value), \
-	    (void *) (newValue))
-
-#define 	EXCHANGE_ADD_POINTER(value, valueToAdd) \
-	(_InterlockedExchangeAdd64((void * volatile *)(value),(valueToAdd)))
-	// #define EXCHG(x)	(_InterlockedDecrement64(x))
-	// #define EXCHGADD() ()
-	
+	/*!
+	 * \class: 	Variant
+	 *
+	 * \ingroup GroupName
+	 *
+	 * \brief:
+	 *
+	 * TODO: 	新定义类型：
+	 *			1.该类型支持拷贝相关操作
+	 *			2.Type中添加定义
+	 *			3.construct函数支持
+	 *			4.clear函数支持
+	 *			5.compare函数支持
+	 *			6.convert函数支持（检查）
+	 *			7.Variant构造支持
+	 *
+	 * \note:
+	 *
+	 * \author:	Chencs
+	 *
+	 * \version:1.0
+	 *
+	 * \date: 2018/01/26
+	 *
+	 * Contact: chencs@thinkerinfo.com
+	 *
+	 */
+	class Variant;
+	class Locale;
 	
 	class Variant:
 		public Object
@@ -44,9 +58,9 @@ namespace vl
 				WChar,
 				Char,
 				
-				AString,
+				Astring,
 				// 				UString,	//
-				WString,
+				Wstring,
 				DateTime,
 				Locale,
 				
@@ -59,10 +73,29 @@ namespace vl
 			Variant(Variant::Type type);
 			Variant(const Variant& other);
 			Variant& operator=(const Variant& other);
+			
 			Variant(vint8_t i);			//8
 			Variant(vint16_t i);			//8
 			Variant(vint32_t i);			//32
 			Variant(vint64_t i);			//8
+			
+			Variant(vuint8_t u);
+			Variant(vuint16_t u);
+			Variant(vuint32_t u);
+			Variant(vuint64_t u);
+			
+			Variant(char c);
+			Variant(wchar_t wc);
+			Variant(float f);
+			Variant(double d);
+			Variant(bool val);
+			Variant(char* val);
+			Variant(wchar_t* val);
+			Variant(vl::AString val);
+			Variant(vl::WString val);
+			Variant(vl::Locale val);
+			Variant(vl::DateTime val);
+			
 			// 			Variant(vint i);
 			// 			Variant(int i);			//32
 			// 			Variant(long long i);
@@ -82,6 +115,10 @@ namespace vl
 				{
 					data.ptr = 0;
 				}
+				explicit Private(vuint variantType)
+					: type(variantType), is_shared(false), is_null(false)
+				{}
+				
 				inline Private(const Private& other)
 					: data(other.data), type(other.type),
 					  is_shared(other.is_shared), is_null(other.is_null)

@@ -170,10 +170,10 @@ namespace vl
 			case vl::Variant::Float:
 				x->data.f = copy ? *static_cast<const float*>(copy) : 0.0f;
 				break;
-			case vl::Variant::WString:
+			case vl::Variant::Wstring:
 				v_construct<WString>(x, copy);
 				break;
-			case vl::Variant::AString:
+			case vl::Variant::Astring:
 				v_construct<AString>(x, copy);
 				break;
 			// 			case vl::Variant::UString:
@@ -208,10 +208,10 @@ namespace vl
 			case vl::Variant::Char:
 			case vl::Variant::Float:
 				break;
-			case vl::Variant::WString:
+			case vl::Variant::Wstring:
 				v_clear<WString>(d);
 				break;
-			case vl::Variant::AString:
+			case vl::Variant::Astring:
 				v_clear<AString>(d);
 				break;
 			// 			case vl::Variant::UString:
@@ -268,12 +268,10 @@ namespace vl
 				return	a->data.wc == b->data.wc;
 			case vl::Variant::Float:
 				return	a->data.f == b->data.f;
-			case vl::Variant::WString:
+			case vl::Variant::Wstring:
 				return *v_cast<WString>(a) == *v_cast<WString>(b);
-			case vl::Variant::AString:
+			case vl::Variant::Astring:
 				return *v_cast<AString>(a) == *v_cast<AString>(b);
-			// 			case vl::Variant::UString:
-			// 				return *v_cast<UString>(a) == *v_cast<UString>(b);
 			case vl::Variant::DateTime:
 				return *v_cast<DateTime>(a) == *v_cast<DateTime>(b);
 			case vl::Variant::Locale:
@@ -282,7 +280,6 @@ namespace vl
 			default:
 				break;
 		}
-		
 		
 		const void* a_ptr = a->is_shared ? a->data.shared->ptr : &(a->data.ptr);
 		const void* b_ptr = b->is_shared ? b->data.shared->ptr : &(b->data.ptr);
@@ -293,6 +290,7 @@ namespace vl
 		return a_ptr == b_ptr;
 	}
 	
+	//转换
 	static bool convert(const Variant::Private* d, Variant::Type t, void* result, bool* ok)
 	{
 		bool dummy = false;
@@ -329,7 +327,7 @@ namespace vl
 				break;
 			case vl::Variant::Float:
 				break;
-			case vl::Variant::WString:
+			case vl::Variant::Wstring:
 				{
 					WString* wstr = static_cast<WString*>(result);
 					switch (d->type)
@@ -362,10 +360,10 @@ namespace vl
 							break;
 						case vl::Variant::Float:
 							break;
-						case vl::Variant::WString:
+						case vl::Variant::Wstring:
 						
 							break;
-						case vl::Variant::AString:
+						case vl::Variant::Astring:
 							break;
 						// 						case vl::Variant::UString:
 						// 							break;
@@ -381,7 +379,7 @@ namespace vl
 					}
 				}
 				break;
-			case vl::Variant::AString:
+			case vl::Variant::Astring:
 				break;
 			// 			case vl::Variant::UString:
 			// 				break;
@@ -411,9 +409,9 @@ namespace vl
 		switch (d->type)
 		{
 			// 			case Variant::UString:
-			case Variant::AString:
+			case Variant::Astring:
 				return atoi64_test(*v_cast<AString>(d), *ok);
-			case Variant::WString:
+			case Variant::Wstring:
 				return wtoi64_test(*v_cast<WString>(d), *ok);
 			case Variant::Char:
 			case Variant::WChar:
@@ -478,32 +476,119 @@ namespace vl
 		create(type, 0);
 	}
 	
+	//为了提高效率，常用简单类型的相关构造未调用construct
 	Variant::Variant(vint8_t i8)
+		: d(Int8)
 	{
-		d.is_null = false;
-		d.type = Int8;
 		d.data.i8 = i8;
 	}
 	
 	Variant::Variant(vint16_t i)
+		: d(Int16)
 	{
-		d.is_null = false;
-		d.type = Int16;
 		d.data.i16 = i;
 	}
 	
 	Variant::Variant(vint32_t i)
+		: d(Int32)
 	{
-		d.is_null = false;
-		d.type = Int32;
 		d.data.i32 = i;
 	}
 	
 	Variant::Variant(vint64_t i)
+		: d(Int64)
 	{
-		d.is_null = false;
-		d.type = Int64;
 		d.data.i64 = i;
+	}
+	
+	Variant::Variant(vuint8_t u)
+		: d(UInt8)
+	{
+		d.data.ui8 = u;
+	}
+	
+	Variant::Variant(vuint16_t u)
+		: d(UInt16)
+	{
+		d.data.ui16 = u;
+	}
+	
+	Variant::Variant(vuint32_t u)
+		: d(UInt32)
+	{
+		d.data.ui32 = u;
+	}
+	
+	Variant::Variant(vuint64_t u)
+		: d(UInt64)
+	{
+		d.data.ui64 = u;
+	}
+	
+	Variant::Variant(char c)
+		: d(Char)
+	{
+		d.data.c = c;
+	}
+	
+	Variant::Variant(wchar_t wc)
+		: d(WChar)
+	{
+		d.data.wc = wc;
+	}
+	
+	Variant::Variant(float f)
+		: d(Float)
+	{
+		d.data.f = f;
+	}
+	
+	Variant::Variant(double d)
+		: d(Double)
+	{
+		this->d.data.d = d;
+	}
+	
+	Variant::Variant(bool val)
+		: d(Bool)
+	{
+		this->d.data.b = val;
+	}
+	
+	Variant::Variant(vl::AString val)
+		: d(Variant::Astring)
+	{
+		v_construct<vl::AString>(&d, val);
+	}
+	
+	Variant::Variant(vl::WString val)
+		: d(Variant::Wstring)
+	{
+		v_construct<vl::WString>(&d, val);
+	}
+	
+	Variant::Variant(vl::Locale val)
+		: d(Variant::Locale)
+	{
+		v_construct<vl::Locale>(&d, val);
+	}
+	
+	Variant::Variant(vl::DateTime val)
+		: d(Variant::DateTime)
+	{
+		v_construct <vl::DateTime> (&d, val);
+	}
+	
+	Variant::Variant(char* val)
+	{
+		vl::AString astr = val;
+		create(Variant::Astring, &astr);
+	}
+	
+	Variant::Variant(wchar_t* val)
+	{
+		vl::WString wstr = val;
+		create(Variant::Wstring, &wstr);
 	}
 	
 	void* Variant::data()
@@ -514,7 +599,8 @@ namespace vl
 	
 	bool Variant::isNull() const
 	{
-		return false;
+		//未完成
+		return d.is_null;
 	}
 	
 	void Variant::detach()
@@ -546,7 +632,7 @@ namespace vl
 			other.d.data.shared->ref.ref();
 			d = other.d;
 		}
-		else if (other.d.type > Variant::AString && other.d.type < Variant::UserType)
+		else if (other.d.type > Variant::Char && other.d.type < Variant::UserType)
 		{
 			d.type = other.d.type;
 			handler->construct(&d, other.constData());

@@ -292,24 +292,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='RelVC9|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TestAtomicInt.cpp" />
-    <ClCompile Include="TestBasic.cpp" />
-    <ClCompile Include="TestFileInfo.cpp" />
-    <ClCompile Include="TestHttpUtility.cpp" />
-    <ClCompile Include="TestPath.cpp" />
-    <ClCompile Include="TestSystem.cpp" />
-    <ClCompile Include="TestFileSystem.cpp" />
-    <ClCompile Include="TestGlobalStorage.cpp" />
-    <ClCompile Include="TestList.cpp" />
-    <ClCompile Include="TestLocale.cpp" />
-    <ClCompile Include="TestLocaleString.cpp" />
-    <ClCompile Include="TestNumber.cpp" />
-    <ClCompile Include="TestRegex.cpp" />
-    <ClCompile Include="TestRegex2.cpp" />
-    <ClCompile Include="TestStream.cpp" />
-    <ClCompile Include="TestString.cpp" />
-    <ClCompile Include="TestThread.cpp" />
-    <ClCompile Include="TestThread2.cpp" />
     <ClCompile Include="TestVariant.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
