@@ -65,10 +65,10 @@ namespace vl
 			//static bool isTestAndSetNative();
 			//static bool isTestAndSetWaitFree();
 			
-			bool testAndSetRelaxed(int expectedValue, int newValue);
-			bool testAndSetAcquire(int expectedValue, int newValue);
-			bool testAndSetRelease(int expectedValue, int newValue);
-			bool testAndSetOrdered(int expectedValue, int newValue);
+			// 			bool testAndSetRelaxed(int expectedValue, int newValue);
+			// 			bool testAndSetAcquire(int expectedValue, int newValue);
+			// 			bool testAndSetRelease(int expectedValue, int newValue);
+			// 			bool testAndSetOrdered(int expectedValue, int newValue);
 			
 			//static bool isFetchAndStoreNative();
 			//static bool isFetchAndStoreWaitFree();
@@ -150,10 +150,10 @@ namespace vl
 	// 	}
 	
 	
-	inline bool BasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
-	{
-		return COMPARE_EXCHANGE_POINTER(&_q_value, expectedValue, newValue) != 0;
-	}
+	// 	inline bool BasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
+	// 	{
+	// 		return COMPARE_EXCHANGE_POINTER(&_q_value, expectedValue, newValue) != 0;
+	// 	}
 	
 	// 	inline bool BasicAtomicInt::testAndSetAcquire(int expectedValue, int newValue)
 	// 	{

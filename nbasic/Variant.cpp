@@ -1,19 +1,22 @@
 #include "Variant.h"
 #include "String.h"
 #include "Locale.h"
+#include <stdlib.h>
 
 
 namespace vl
 {
+#define DBL_DIG          15                      // # of decimal digits of precision
+#define FLT_DIG          6                       // # of decimal digits of precision
 
 	static vint64_t MetaTypeNumber(const Variant::Private* d)
 	{
 		switch (d->type)
 		{
-			case Variant::Int8:
-				return d->data.i16;
-			case Variant::Int16:
-				return d->data.i16;
+			// 			case Variant::Int8:
+			// 				return d->data.i16;
+			// 			case Variant::Int16:
+			// 				return d->data.i16;
 			case Variant::Int32:
 				return d->data.i32;
 			case Variant::Int64:
@@ -35,10 +38,10 @@ namespace vl
 	{
 		switch (d->type)
 		{
-			case Variant::UInt8:
-				return d->data.ui16;
-			case Variant::UInt16:
-				return d->data.ui16;
+			// 			case Variant::UInt8:
+			// 				return d->data.ui16;
+			// 			case Variant::UInt16:
+			// 				return d->data.ui16;
 			case Variant::UInt32:
 				return d->data.ui32;
 			case Variant::UInt64:
@@ -134,18 +137,18 @@ namespace vl
 			case vl::Variant::Bool:
 				x->data.b = copy ? *static_cast<const bool*>(copy) : false;
 				break;
-			case vl::Variant::Int8:
-				x->data.i8 = copy ? *static_cast<const vint8_t*>(copy) : 0;
-				break;
-			case vl::Variant::UInt8:
-				x->data.ui8 = copy ? *static_cast<const vuint8_t*>(copy) : 0u;
-				break;
-			case vl::Variant::Int16:
-				x->data.i16 = copy ? *static_cast<const vint16_t*>(copy) : 0;
-				break;
-			case vl::Variant::UInt16:
-				x->data.ui16 = copy ? *static_cast<const vuint16_t*>(copy) : 0u;
-				break;
+			// 			case vl::Variant::Int8:
+			// 				x->data.i8 = copy ? *static_cast<const vint8_t*>(copy) : 0;
+			// 				break;
+			// 			case vl::Variant::UInt8:
+			// 				x->data.ui8 = copy ? *static_cast<const vuint8_t*>(copy) : 0u;
+			// 				break;
+			// 			case vl::Variant::Int16:
+			// 				x->data.i16 = copy ? *static_cast<const vint16_t*>(copy) : 0;
+			// 				break;
+			// 			case vl::Variant::UInt16:
+			// 				x->data.ui16 = copy ? *static_cast<const vuint16_t*>(copy) : 0u;
+			// 				break;
 			case vl::Variant::Int32:
 				x->data.i32 = copy ? *static_cast<const vint32_t*>(copy) : 0;
 				break;
@@ -196,10 +199,10 @@ namespace vl
 		switch (d->type)
 		{
 			case vl::Variant::Bool:
-			case vl::Variant::Int8:
-			case vl::Variant::UInt8:
-			case vl::Variant::Int16:
-			case vl::Variant::UInt16:
+			// 			case vl::Variant::Int8:
+			// 			case vl::Variant::UInt8:
+			// 			case vl::Variant::Int16:
+			// 			case vl::Variant::UInt16:
 			case vl::Variant::Int32:
 			case vl::Variant::UInt32:
 			case vl::Variant::Int64:
@@ -248,14 +251,14 @@ namespace vl
 				return	a->data.i32 == b->data.i32;
 			case vl::Variant::UInt32:
 				return	a->data.ui32 == b->data.ui32;
-			case vl::Variant::Int8:
-				return	a->data.i8 == b->data.i8;
-			case vl::Variant::UInt8:
-				return	a->data.ui8 == b->data.ui8;
-			case vl::Variant::Int16:
-				return	a->data.i16 == b->data.i16;
-			case vl::Variant::UInt16:
-				return	a->data.ui16 == b->data.ui16;
+			// 			case vl::Variant::Int8:
+			// 				return	a->data.i8 == b->data.i8;
+			// 			case vl::Variant::UInt8:
+			// 				return	a->data.ui8 == b->data.ui8;
+			// 			case vl::Variant::Int16:
+			// 				return	a->data.i16 == b->data.i16;
+			// 			case vl::Variant::UInt16:
+			// 				return	a->data.ui16 == b->data.ui16;
 			case vl::Variant::Int64:
 				return	a->data.i64 == b->data.i64;
 			case vl::Variant::UInt64:
@@ -290,6 +293,18 @@ namespace vl
 		return a_ptr == b_ptr;
 	}
 	
+	template <typename T>
+	inline T VariantToHelper(const Variant::Private& d, Variant::Type t,
+	  const Variant::Handler* handler, T* = 0)
+	{
+		if (d.type == t)
+			return *v_cast<T>(&d);
+			
+		T ret;
+		handler->convert(&d, t, &ret, 0);
+		return ret;
+	}
+	
 	//转换
 	static bool convert(const Variant::Private* d, Variant::Type t, void* result, bool* ok)
 	{
@@ -303,14 +318,14 @@ namespace vl
 			case vl::Variant::Bool:
 			
 				break;
-			case vl::Variant::Int8:
-				break;
-			case vl::Variant::UInt8:
-				break;
-			case vl::Variant::Int16:
-				break;
-			case vl::Variant::UInt16:
-				break;
+			// 			case vl::Variant::Int8:
+			// 				break;
+			// 			case vl::Variant::UInt8:
+			// 				break;
+			// 			case vl::Variant::Int16:
+			// 				break;
+			// 			case vl::Variant::UInt16:
+			// 				break;
 			case vl::Variant::Int32:
 				break;
 			case vl::Variant::UInt32:
@@ -335,35 +350,48 @@ namespace vl
 						case vl::Variant::Bool:
 							*wstr = d->data.b ? L"true" : L"false";
 							break;
-						case vl::Variant::Int8:
-						case vl::Variant::Int16:
 						case vl::Variant::Int32:
+							{
+								wchar_t buffer[100];
+								_itow_s(d->data.i32, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+								*wstr = buffer;
+							}
+							break;
 						case vl::Variant::Int64:
-							break;
-						case vl::Variant::UInt8:
-							break;
-							break;
-						case vl::Variant::UInt16:
-							break;
+							{
+								*wstr = i64tow(d->data.i64);
+							}
 							break;
 						case vl::Variant::UInt32:
-							break;
+							{
+								wchar_t buffer[100];
+								_ultow_s(d->data.i32, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+								*wstr = buffer;
+							}
 							break;
 						case vl::Variant::UInt64:
-							break;
+							{
+								*wstr = u64tow(d->data.ui64);
+							}
 							break;
 						case vl::Variant::Double:
+							{
+								*wstr = ftow(d->data.d);
+							}
 							break;
 						case vl::Variant::Char:
 							break;
 						case vl::Variant::WChar:
 							break;
 						case vl::Variant::Float:
-							break;
-						case vl::Variant::Wstring:
-						
+							{
+								*wstr = ftow(d->data.f);
+							}
 							break;
 						case vl::Variant::Astring:
+							{
+								*wstr = atow(*v_cast<vl::AString>(d));
+							}
 							break;
 						// 						case vl::Variant::UString:
 						// 							break;
@@ -418,13 +446,13 @@ namespace vl
 			case Variant::Bool:
 			case Variant::Double:
 			case Variant::Float:
-			case Variant::Int8:
-			case Variant::Int16:
+			// 			case Variant::Int8:
+			// 			case Variant::Int16:
 			case Variant::Int32:
 			case Variant::Int64:
 				return MetaTypeNumber(d);
-			case Variant::UInt8:
-			case Variant::UInt16:
+			// 			case Variant::UInt8:
+			// 			case Variant::UInt16:
 			case Variant::UInt32:
 			case Variant::UInt64:
 				return MetaTypeUNumber(d);
@@ -477,17 +505,6 @@ namespace vl
 	}
 	
 	//为了提高效率，常用简单类型的相关构造未调用construct
-	Variant::Variant(vint8_t i8)
-		: d(Int8)
-	{
-		d.data.i8 = i8;
-	}
-	
-	Variant::Variant(vint16_t i)
-		: d(Int16)
-	{
-		d.data.i16 = i;
-	}
 	
 	Variant::Variant(vint32_t i)
 		: d(Int32)
@@ -501,17 +518,6 @@ namespace vl
 		d.data.i64 = i;
 	}
 	
-	Variant::Variant(vuint8_t u)
-		: d(UInt8)
-	{
-		d.data.ui8 = u;
-	}
-	
-	Variant::Variant(vuint16_t u)
-		: d(UInt16)
-	{
-		d.data.ui16 = u;
-	}
 	
 	Variant::Variant(vuint32_t u)
 		: d(UInt32)
@@ -589,6 +595,11 @@ namespace vl
 	{
 		vl::WString wstr = val;
 		create(Variant::Wstring, &wstr);
+	}
+	
+	vl::AString Variant::toAString(bool* ok /*= 0*/)
+	{
+		return VariantToHelper<AString>(d, Astring, handler);
 	}
 	
 	void* Variant::data()

@@ -44,10 +44,10 @@ namespace vl
 				Invalid = 0,
 				Bool,
 				
-				Int8,
-				UInt8,
-				Int16,
-				UInt16,
+				// 				Int8,
+				// 				UInt8,
+				// 				Int16,
+				// 				UInt16,
 				Int32,
 				UInt32,
 				Int64,	//8*8		long long
@@ -74,13 +74,13 @@ namespace vl
 			Variant(const Variant& other);
 			Variant& operator=(const Variant& other);
 			
-			Variant(vint8_t i);			//8
-			Variant(vint16_t i);			//8
+			// 			Variant(vint8_t i);			//8
+			// 			Variant(vint16_t i);			//8
 			Variant(vint32_t i);			//32
 			Variant(vint64_t i);			//8
 			
-			Variant(vuint8_t u);
-			Variant(vuint16_t u);
+			// 			Variant(vuint8_t u);
+			// 			Variant(vuint16_t u);
 			Variant(vuint32_t u);
 			Variant(vuint64_t u);
 			
@@ -99,6 +99,10 @@ namespace vl
 			// 			Variant(vint i);
 			// 			Variant(int i);			//32
 			// 			Variant(long long i);
+			
+			
+		public:		//转换
+			vl::AString toAString(bool* ok = NULL);
 			
 			
 		public:		//内部类型定义
@@ -128,11 +132,11 @@ namespace vl
 					  bool b;
 					  char c;
 					  wchar_t wc;
-					  vint8_t i8;
-					  vuint8_t ui8;
-					  
-					  vint16_t i16;			//short
-					  vuint16_t ui16;
+					  // 					  vint8_t i8;
+					  // 					  vuint8_t ui8;
+					  //
+					  // 					  vint16_t i16;			//short
+					  // 					  vuint16_t ui16;
 					  
 					  vint32_t i32;			//int
 					  vuint32_t ui32;
