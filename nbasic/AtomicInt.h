@@ -152,7 +152,7 @@ namespace vl
 	
 	inline bool BasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
 	{
-		return COMPARE_EXCHANGE_POINTER(&_q_value, expectedValue, newValue) != 0;
+		return COMPARE_EXCHANGE_POINTER(&_q_value, expectedValue, newValue) != NULL;
 	}
 	
 	// 	inline bool BasicAtomicInt::testAndSetAcquire(int expectedValue, int newValue)

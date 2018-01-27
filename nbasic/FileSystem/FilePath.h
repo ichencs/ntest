@@ -41,6 +41,7 @@ namespace vl
 			FilePath(const FilePath& _filePath);
 			~FilePath();
 			
+			FilePath&						operator=(const FilePath& filePath);
 		 public:
 			static FilePath CurrentPath();
 			static FilePath ModuleFolder(void* pAddress = NULL);		//app(exe) path

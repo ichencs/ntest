@@ -108,7 +108,7 @@ namespace vl
 		FilePath::FilePath(const FilePath& _filePath)
 			: Path(_filePath.fullPath)
 		{
-			Initialize();
+// 			Initialize();
 		}
 		
 		FilePath::FilePath(const Path& _path)
@@ -122,6 +122,15 @@ namespace vl
 		{
 		}
 		
+		vl::filesystem::FilePath& FilePath::operator=(const FilePath& filePath)
+		{
+			if (this != &filePath)
+			{
+				fullPath = filePath.fullPath;
+			}
+			return *this;
+		}
+
 		FilePath FilePath::CurrentPath()
 		{
 			wchar_t buffer[NICE_MAX_PATH] = { 0 };
