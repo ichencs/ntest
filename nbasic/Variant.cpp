@@ -396,6 +396,9 @@ namespace vl
 						// 						case vl::Variant::UString:
 						// 							break;
 						case vl::Variant::DateTime:
+							{
+								*wstr = *v_cast<vl::DateTime>(d)->ToLocalTime();
+							}
 							break;
 						case vl::Variant::Locale:
 							break;
