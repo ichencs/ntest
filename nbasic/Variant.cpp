@@ -13,10 +13,6 @@ namespace vl
 	{
 		switch (d->type)
 		{
-			// 			case Variant::Int8:
-			// 				return d->data.i16;
-			// 			case Variant::Int16:
-			// 				return d->data.i16;
 			case Variant::Int32:
 				return d->data.i32;
 			case Variant::Int64:
@@ -38,10 +34,6 @@ namespace vl
 	{
 		switch (d->type)
 		{
-			// 			case Variant::UInt8:
-			// 				return d->data.ui16;
-			// 			case Variant::UInt16:
-			// 				return d->data.ui16;
 			case Variant::UInt32:
 				return d->data.ui32;
 			case Variant::UInt64:
@@ -137,18 +129,6 @@ namespace vl
 			case vl::Variant::Bool:
 				x->data.b = copy ? *static_cast<const bool*>(copy) : false;
 				break;
-			// 			case vl::Variant::Int8:
-			// 				x->data.i8 = copy ? *static_cast<const vint8_t*>(copy) : 0;
-			// 				break;
-			// 			case vl::Variant::UInt8:
-			// 				x->data.ui8 = copy ? *static_cast<const vuint8_t*>(copy) : 0u;
-			// 				break;
-			// 			case vl::Variant::Int16:
-			// 				x->data.i16 = copy ? *static_cast<const vint16_t*>(copy) : 0;
-			// 				break;
-			// 			case vl::Variant::UInt16:
-			// 				x->data.ui16 = copy ? *static_cast<const vuint16_t*>(copy) : 0u;
-			// 				break;
 			case vl::Variant::Int32:
 				x->data.i32 = copy ? *static_cast<const vint32_t*>(copy) : 0;
 				break;
@@ -179,9 +159,6 @@ namespace vl
 			case vl::Variant::Astring:
 				v_construct<AString>(x, copy);
 				break;
-			// 			case vl::Variant::UString:
-			// 				v_construct<UString>(x, copy);
-			// 				break;
 			case vl::Variant::DateTime:
 				v_construct<DateTime>(x, copy);
 				break;
@@ -199,10 +176,6 @@ namespace vl
 		switch (d->type)
 		{
 			case vl::Variant::Bool:
-			// 			case vl::Variant::Int8:
-			// 			case vl::Variant::UInt8:
-			// 			case vl::Variant::Int16:
-			// 			case vl::Variant::UInt16:
 			case vl::Variant::Int32:
 			case vl::Variant::UInt32:
 			case vl::Variant::Int64:
@@ -217,9 +190,6 @@ namespace vl
 			case vl::Variant::Astring:
 				v_clear<AString>(d);
 				break;
-			// 			case vl::Variant::UString:
-			// 				v_clear<UString>(d);
-			// 				break;
 			case vl::Variant::DateTime:
 				v_clear<DateTime>(d);
 				break;
@@ -251,14 +221,6 @@ namespace vl
 				return	a->data.i32 == b->data.i32;
 			case vl::Variant::UInt32:
 				return	a->data.ui32 == b->data.ui32;
-			// 			case vl::Variant::Int8:
-			// 				return	a->data.i8 == b->data.i8;
-			// 			case vl::Variant::UInt8:
-			// 				return	a->data.ui8 == b->data.ui8;
-			// 			case vl::Variant::Int16:
-			// 				return	a->data.i16 == b->data.i16;
-			// 			case vl::Variant::UInt16:
-			// 				return	a->data.ui16 == b->data.ui16;
 			case vl::Variant::Int64:
 				return	a->data.i64 == b->data.i64;
 			case vl::Variant::UInt64:
@@ -318,14 +280,6 @@ namespace vl
 			case vl::Variant::Bool:
 			
 				break;
-			// 			case vl::Variant::Int8:
-			// 				break;
-			// 			case vl::Variant::UInt8:
-			// 				break;
-			// 			case vl::Variant::Int16:
-			// 				break;
-			// 			case vl::Variant::UInt16:
-			// 				break;
 			case vl::Variant::Int32:
 				break;
 			case vl::Variant::UInt32:
@@ -397,7 +351,7 @@ namespace vl
 						// 							break;
 						case vl::Variant::DateTime:
 							{
-								*wstr = *v_cast<vl::DateTime>(d)->ToLocalTime();
+								*v_cast<vl::DateTime>(d);
 							}
 							break;
 						case vl::Variant::Locale:
