@@ -150,10 +150,17 @@ namespace vl
 	// 	}
 	
 	
+<<<<<<< HEAD
 	// 	inline bool BasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
 	// 	{
 	// 		return COMPARE_EXCHANGE_POINTER(&_q_value, expectedValue, newValue) != 0;
 	// 	}
+=======
+	inline bool BasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
+	{
+		return COMPARE_EXCHANGE_POINTER(&_q_value, expectedValue, newValue) != NULL;
+	}
+>>>>>>> 7a68d9dc5e4664bd56fd42a1d5bd14a83e0836ed
 	
 	// 	inline bool BasicAtomicInt::testAndSetAcquire(int expectedValue, int newValue)
 	// 	{

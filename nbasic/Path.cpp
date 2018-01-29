@@ -30,7 +30,7 @@ namespace vl
 		Path::Path(const Path& _filePath)
 			: fullPath(_filePath.fullPath)
 		{
-			Initialize();
+// 			Initialize();
 		}
 		
 		Path::~Path()
