@@ -88,10 +88,24 @@ namespace vl
 			Variant(vl::Locale val);
 			Variant(vl::DateTime val);
 			
+			inline bool operator==(const Variant& v) const
+			{
+				return cmp(v);
+			}
+			inline bool operator!=(const Variant& v) const
+			{
+				return !cmp(v);
+			}
 			
 		public:		//转换
-			vl::AString toAString(bool* ok = NULL);
+			vl::AString toAString(bool* ok = NULL)const;
+			vl::WString toWString(bool* ok = NULL)const;
+			vl::vint64_t toInt64(bool* ok = NULL)const;
+			vl::vuint64_t toUInt64(bool* ok = NULL)const;
+			double toDouble(bool* ok = NULL)const;
+			bool toBool(bool* ok = NULL)const;
 			
+			vl::Variant type();
 			
 		public:		//内部类型定义
 			struct PrivateShared
@@ -155,33 +169,102 @@ namespace vl
 		protected:
 			void Variant::clear();
 			void create(int type, const void* copy);
+			bool cmp(const Variant& other) const;
 		protected:
 			Private d;
 			static const Handler* handler;
 			
+		public:
 			void* data();
 			const void* constData() const;
 			inline const void* data() const
 			{
 				return constData();
 			}
-			
-			inline bool isValid() const;
-			bool isNull() const;
+			bool convert(Variant::Type t);
+			bool canConvert(Type t) const;
 			
 			void detach();
+		public:	//判断
+			inline bool isValid() const;
+			bool isNull() const;
 			inline bool isDetached() const;
-			
+			inline bool isInt()const;	//int
+			inline bool isUInt()const;	//unsinged int
+			inline bool isFloatingPoint()const;	//Float double
+			inline bool isNumber()const;
+			inline bool isChar()const;
+			inline bool isWChar()const;
+			inline bool isDatetime()const;
+			inline bool isLocal()const;
+			inline bool isAString()const;
+			inline bool isWString()const;
+			inline bool isString()const;
+			inline bool isBool()const;
 	};
 	inline bool Variant::isValid() const
 	{
-		return d.type != Invalid;
+		return d.type != Variant::Invalid;
 	}
 	inline bool Variant::isDetached() const
 	{
 		return !d.is_shared || d.data.shared->ref == 1;
 	}
 	
+	inline bool Variant::isInt()const
+	{
+		return d.type == Variant::Int32 || d.type == Variant::Int64;
+	}
 	
+	inline bool Variant::isUInt()const
+	{
+		return d.type == Variant::UInt32 || d.type == Variant::UInt64;
+	}
+	
+	inline bool Variant::isFloatingPoint()const
+	{
+		return d.type == Variant::Float || d.type == Variant::Double;
+	}
+	
+	inline bool Variant::isNumber()const
+	{
+		return isInt() || isUInt() || isFloatingPoint();
+	}
+	
+	inline bool Variant::isChar()const
+	{
+		return d.type == Variant::Char;
+	}
+	
+	inline bool Variant::isWChar()const
+	{
+		return d.type == Variant::WChar;
+	}
+	
+	inline bool Variant::isDatetime()const
+	{
+		return d.type == Variant::DateTime;
+	}
+	
+	inline bool Variant::isLocal()const
+	{
+		return d.type == Variant::Locale;
+	}
+	inline bool Variant::isAString()const
+	{
+		return d.type == Variant::Astring;
+	}
+	inline bool Variant::isWString()const
+	{
+		return d.type == Variant::Wstring;
+	}
+	inline bool Variant::isString()const
+	{
+		return isAString() || isWString();
+	}
+	inline bool Variant::isBool()const
+	{
+		return d.type == Variant::Bool;
+	}
 }
 

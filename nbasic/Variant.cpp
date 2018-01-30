@@ -334,8 +334,13 @@ namespace vl
 							}
 							break;
 						case vl::Variant::Char:
+							{
+								wchar_t wc = d->data.c;
+								*wstr = wc;
+							}
 							break;
 						case vl::Variant::WChar:
+							*wstr = d->data.wc;
 							break;
 						case vl::Variant::Float:
 							{
@@ -347,14 +352,15 @@ namespace vl
 								*wstr = atow(*v_cast<vl::AString>(d));
 							}
 							break;
-						// 						case vl::Variant::UString:
-						// 							break;
 						case vl::Variant::DateTime:
 							{
 								*v_cast<vl::DateTime>(d);
 							}
 							break;
 						case vl::Variant::Locale:
+							{
+								*v_cast<vl::Locale>(d);
+							}
 							break;
 						case vl::Variant::UserType:
 							break;
@@ -365,9 +371,86 @@ namespace vl
 				}
 				break;
 			case vl::Variant::Astring:
+				{
+					AString* astr = static_cast<AString*>(result);
+					switch (d->type)
+					{
+						case vl::Variant::Bool:
+							*astr = d->data.b ? "true" : "false";
+							break;
+						case vl::Variant::Int32:
+							{
+								char buffer[100];
+								_itoa_s(d->data.i32, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+								*astr = buffer;
+							}
+							break;
+						case vl::Variant::Int64:
+							{
+								*astr = i64toa(d->data.i64);
+							}
+							break;
+						case vl::Variant::UInt32:
+							{
+								char buffer[100];
+								_ultoa_s(d->data.i32, buffer, sizeof(buffer) / sizeof(*buffer), 10);
+								*astr = buffer;
+							}
+							break;
+						case vl::Variant::UInt64:
+							{
+								*astr = u64toa(d->data.ui64);
+							}
+							break;
+						case vl::Variant::Double:
+							{
+								*astr = ftoa(d->data.d);
+							}
+							break;
+						case vl::Variant::Char:
+							{
+								*astr = d->data.c;
+							}
+							break;
+						case vl::Variant::WChar:
+							{
+								vl::WString wstr = d->data.wc;
+								*astr = wtoa(wstr);
+							}
+							break;
+						case vl::Variant::Float:
+							{
+								*astr = ftoa(d->data.f);
+							}
+							break;
+						case vl::Variant::Astring:
+							{
+								*astr = *v_cast<vl::AString>(d);
+							}
+						case vl::Variant::Wstring:
+							{
+								*astr = wtoa(*v_cast<vl::WString>(d));
+							}
+							break;
+						case vl::Variant::DateTime:
+							{
+								*v_cast<vl::DateTime>(d);
+							}
+							break;
+						case vl::Variant::Locale:
+							{
+								*v_cast<vl::Locale>(d);
+							}
+							break;
+						case vl::Variant::UserType:
+							break;
+							
+						default:
+							break;
+					}
+				}
+				
 				break;
-			// 			case vl::Variant::UString:
-			// 				break;
 			case vl::Variant::DateTime:
 				break;
 			case vl::Variant::Locale:
@@ -438,6 +521,101 @@ namespace vl
 	{
 		d.type = type;
 		handler->construct(&d, copy);
+	}
+	
+	bool Variant::cmp(const Variant& v) const
+	{
+		Variant v2 = v;
+		if (d.type != v2.d.type)
+		{
+			if (isNumber() && v2.isNumber())
+			{
+				if (isFloatingPoint() || v2.isFloatingPoint())
+					return qFuzzyCompare(toDouble(), v.toDouble());
+				else
+					return toInt64() == v.toInt64();
+			}
+			if (!v2.canConvert(Type(d.type)) || !v2.convert(Type(d.type)))
+				return false;
+		}
+		return handler->compare(&d, &v2.d);
+	}
+	
+	bool Variant::convert(Variant::Type t)
+	{
+		if (d.type == t)
+			return true;
+			
+		Variant oldValue = *this;
+		
+		clear();
+		if (!oldValue.canConvert(t))
+			return false;
+			
+		create(t, 0);
+		if (oldValue.isNull())
+			return false;
+			
+		bool isOk = true;
+		if (!handler->convert(&oldValue.d, t, data(), &isOk))
+			isOk = false;
+		d.is_null = !isOk;
+		return isOk;
+	}
+	
+	bool Variant::canConvert(Type t) const
+	{
+		const vuint currentType = d.type;
+		if (currentType == vint(t))
+			return true;
+			
+		switch (t)
+		{
+			case vl::Variant::Bool:
+				{
+					return currentType == Int32 ||
+					  currentType == UInt32 ||
+					  currentType == Int64 ||
+					  currentType == UInt64 ||
+					  currentType == Float ||
+					  currentType == WChar ||
+					  currentType == Char ||
+					  currentType == Double;
+				}
+				break;
+			case vl::Variant::Int32:
+			
+				break;
+			case vl::Variant::UInt32:
+				break;
+			case vl::Variant::Int64:
+				break;
+			case vl::Variant::UInt64:
+				break;
+			case vl::Variant::Double:
+				break;
+			case vl::Variant::Float:
+				break;
+			case vl::Variant::WChar:
+				break;
+			case vl::Variant::Char:
+				break;
+			case vl::Variant::Astring:
+				break;
+			case vl::Variant::Wstring:
+				break;
+			case vl::Variant::DateTime:
+				break;
+			case vl::Variant::Locale:
+				break;
+			case vl::Variant::UserType:
+				break;
+			default:
+				break;
+		}
+		
+		//未完成
+		return false;
 	}
 	
 	const Variant::Handler* Variant::handler = &qt_kernel_variant_handler;
@@ -554,9 +732,39 @@ namespace vl
 		create(Variant::Wstring, &wstr);
 	}
 	
-	vl::AString Variant::toAString(bool* ok /*= 0*/)
+	vl::AString Variant::toAString(bool* ok /*= 0*/)const
 	{
-		return VariantToHelper<AString>(d, Astring, handler);
+		return VariantToHelper<AString>(d, Variant::Astring, handler);
+	}
+	
+	vl::WString Variant::toWString(bool* ok /*= NULL*/)const
+	{
+		return VariantToHelper<WString>(d, Variant::Wstring, handler);
+	}
+	
+	vl::vint64_t Variant::toInt64(bool* ok)const
+	{
+		return vl::vint64_t();
+	}
+	
+	vl::vuint64_t Variant::toUInt64(bool* ok)const
+	{
+		return vl::vuint64_t();
+	}
+	
+	double Variant::toDouble(bool* ok)const
+	{
+		return 0.0;
+	}
+	
+	bool Variant::toBool(bool* ok)const
+	{
+		return false;
+	}
+	
+	vl::Variant Variant::type()
+	{
+		return d.type >= Variant::UserType ? Variant::UserType : d.type;
 	}
 	
 	void* Variant::data()
@@ -570,6 +778,8 @@ namespace vl
 		//未完成
 		return d.is_null;
 	}
+	
+	
 	
 	void Variant::detach()
 	{
