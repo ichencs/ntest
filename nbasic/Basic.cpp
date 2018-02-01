@@ -57,6 +57,8 @@ namespace vl
 	DateTime SystemTimeToDateTime(const SYSTEMTIME& systemTime)
 	{
 		DateTime dateTime;
+		memset(&dateTime, 0, sizeof(dateTime));
+		
 		dateTime.year = systemTime.wYear;
 		dateTime.month = systemTime.wMonth;
 		dateTime.dayOfWeek = systemTime.wDayOfWeek;
@@ -67,13 +69,14 @@ namespace vl
 		dateTime.milliseconds = systemTime.wMilliseconds;
 		
 		FILETIME fileTime;
+		memset(&fileTime, 0, sizeof(fileTime));
+		
 		SystemTimeToFileTime(&systemTime, &fileTime);
 		ULARGE_INTEGER largeInteger;
 		largeInteger.HighPart = fileTime.dwHighDateTime;
 		largeInteger.LowPart = fileTime.dwLowDateTime;
 		dateTime.filetime = largeInteger.QuadPart;
 		dateTime.totalMilliseconds = dateTime.filetime / 10000;
-		
 		return dateTime;
 	}
 	
@@ -86,6 +89,8 @@ namespace vl
 		fileTime.dwLowDateTime = largeInteger.LowPart;
 		
 		SYSTEMTIME systemTime;
+		memset(&systemTime, 0, sizeof(systemTime));
+		
 		FileTimeToSystemTime(&fileTime, &systemTime);
 		return systemTime;
 	}
@@ -95,6 +100,7 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		SYSTEMTIME systemTime;
+		memset(&systemTime, 0, sizeof(systemTime));
 		GetLocalTime(&systemTime);
 		return SystemTimeToDateTime(systemTime);
 #endif
@@ -104,6 +110,7 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		SYSTEMTIME utcTime;
+		memset(&utcTime, 0, sizeof(utcTime));
 		GetSystemTime(&utcTime);
 		return SystemTimeToDateTime(utcTime);
 #endif
@@ -139,6 +146,7 @@ namespace vl
 		fileTime.dwLowDateTime = largeInteger.LowPart;
 		
 		SYSTEMTIME systemTime;
+		memset(&systemTime, 0, sizeof(systemTime));
 		FileTimeToSystemTime(&fileTime, &systemTime);
 		return SystemTimeToDateTime(systemTime);
 #endif
@@ -161,6 +169,7 @@ namespace vl
 #if defined VCZH_MSVC
 		SYSTEMTIME utcTime = DateTimeToSystemTime(*this);
 		SYSTEMTIME localTime;
+		memset(&localTime, 0, sizeof(localTime));
 		SystemTimeToTzSpecificLocalTime(NULL, &utcTime, &localTime);
 		return SystemTimeToDateTime(localTime);
 #endif
@@ -171,6 +180,7 @@ namespace vl
 #if defined VCZH_MSVC
 		SYSTEMTIME localTime = DateTimeToSystemTime(*this);
 		SYSTEMTIME utcTime;
+		memset(&utcTime, 0, sizeof(utcTime));
 		TzSpecificLocalTimeToSystemTime(NULL, &localTime, &utcTime);
 		return SystemTimeToDateTime(utcTime);
 #endif
@@ -180,8 +190,6 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FromFileTime(filetime + milliseconds * 10000);
-#elif defined VCZH_GCC
-		return FromFileTime(filetime + milliseconds);
 #endif
 	}
 	
@@ -189,8 +197,6 @@ namespace vl
 	{
 #if defined VCZH_MSVC
 		return FromFileTime(filetime - milliseconds * 10000);
-#elif defined VCZH_GCC
-		return FromFileTime(filetime - milliseconds);
 #endif
 	}
 	

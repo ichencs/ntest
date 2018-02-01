@@ -16,15 +16,15 @@ namespace vl
 			case Variant::Int32:
 				return d->data.i32;
 			case Variant::Int64:
-				return d->data.i32;
+				return d->data.i64;
 			case Variant::Float:
 				return qRound64(d->data.f);
 			case Variant::Double:
 				return qRound64(d->data.d);
-			case Variant::Char:
-				return vint(d->data.c);
+			// 			case Variant::Char:
+			// 				return vint(d->data.c);
 			case Variant::WChar:
-				return d->data.wc;
+				return d->data.c;
 		}
 		CHECK_ERROR(false, L"MetaTypeNumber::value type error!");
 		return 0;
@@ -42,7 +42,6 @@ namespace vl
 		CHECK_ERROR(false, L"MetaTypeUNumber::value type error!");
 		return 0;
 	}
-	
 	
 	
 	//为什么使用 T*=0 这样的参数
@@ -144,11 +143,11 @@ namespace vl
 			case vl::Variant::Double:
 				x->data.d = copy ? *static_cast<const double*>(copy) : 0.0;
 				break;
-			case vl::Variant::Char:
-				x->data.c = copy ? *static_cast<const char*>(copy) : 0;
-				break;
+			// 			case vl::Variant::Char:
+			// 				x->data.c = copy ? *static_cast<const char*>(copy) : 0;
+			// 				break;
 			case vl::Variant::WChar:
-				x->data.wc = copy ? *static_cast<const wchar_t*>(copy) : 0;
+				x->data.c = copy ? *static_cast<const wchar_t*>(copy) : 0;
 				break;
 			case vl::Variant::Float:
 				x->data.f = copy ? *static_cast<const float*>(copy) : 0.0f;
@@ -181,7 +180,7 @@ namespace vl
 			case vl::Variant::Int64:
 			case vl::Variant::UInt64:
 			case vl::Variant::Double:
-			case vl::Variant::Char:
+			// 			case vl::Variant::Char:
 			case vl::Variant::Float:
 				break;
 			case vl::Variant::Wstring:
@@ -227,10 +226,10 @@ namespace vl
 				return	a->data.ui64 == b->data.ui64;
 			case vl::Variant::Double:
 				return	a->data.d == b->data.d;
-			case vl::Variant::Char:
-				return	a->data.c == b->data.c;
+			// 			case vl::Variant::Char:
+			// 				return	a->data.c == b->data.c;
 			case vl::Variant::WChar:
-				return	a->data.wc == b->data.wc;
+				return	a->data.c == b->data.c;
 			case vl::Variant::Float:
 				return	a->data.f == b->data.f;
 			case vl::Variant::Wstring:
@@ -267,35 +266,147 @@ namespace vl
 		return ret;
 	}
 	
+	template <typename T>
+	inline T NumVariantToHelper(const Variant::Private& d,
+	  const Variant::Handler* handler, Variant::Type t, bool* ok, const T& val)
+	{
+		// 		uint t = qMetaTypeId<T>();
+		if (ok)
+			*ok = true;
+		if (d.type == t)
+			return val;
+			
+		T ret;
+		if (!handler->convert(&d, Variant::Type(t), &ret, ok) && ok)
+			*ok = false;
+		return ret;
+	}
+	
+	
+	static vint64_t ConvertToNumber(const Variant::Private* d, bool* ok)
+	{
+		*ok = true;
+		switch (d->type)
+		{
+			// 			case Variant::UString:
+			case Variant::Astring:
+				return atoi64_test(*v_cast<AString>(d), *ok);
+			case Variant::Wstring:
+				return wtoi64_test(*v_cast<WString>(d), *ok);
+			// 			case Variant::Char:
+			case Variant::WChar:
+			case Variant::Bool:
+			case Variant::Double:
+			case Variant::Float:
+			case Variant::Int32:
+			case Variant::Int64:
+				return MetaTypeNumber(d);
+			case Variant::UInt32:
+			case Variant::UInt64:
+				return MetaTypeUNumber(d);
+		}
+		
+		*ok = false;
+		return Q_INT64_C(0);
+	}
+	
+	
 	//转换
 	static bool convert(const Variant::Private* d, Variant::Type t, void* result, bool* ok)
 	{
-		bool dummy = false;
+		bool dummy;
 		if (!ok)
 			ok = &dummy;
+		*ok = false;
 		switch (t)
 		{
-			case vl::Variant::Invalid:
-				break;
 			case vl::Variant::Bool:
-			
+				{
+					bool* b = static_cast<bool*>(result);
+					switch (d->type)
+					{
+						case vl::Variant::Int32:
+						case vl::Variant::Int64:
+						case vl::Variant::Float:
+						case vl::Variant::Double:
+							{
+								*b = MetaTypeNumber(d) != Q_INT64_C(0);
+							}
+							break;
+						case vl::Variant::UInt32:
+						case vl::Variant::UInt64:
+							*b = MetaTypeUNumber(d) != Q_UINT64_C(0);
+							break;
+						case vl::Variant::WChar:
+							*b = d->data.c != L'0';
+							break;
+						case vl::Variant::Astring:
+							{
+								AString str = *v_cast<vl::AString>(d);
+								str = alower(str);
+								*b = !(str == "false" || str == "0" || str == AString::Empty);
+							}
+							break;
+						case vl::Variant::Wstring:
+							{
+								WString str = *v_cast<vl::WString>(d);
+								str = wlower(str);
+								*b = !(str == L"false" || str == L"0" || str == WString::Empty);
+							}
+							break;
+						default:
+							*b = false;
+							break;
+					}
+				}
 				break;
 			case vl::Variant::Int32:
-				break;
+				*static_cast<vint32_t*>(result) = vint32_t(ConvertToNumber(d, ok));
+				return *ok;
 			case vl::Variant::UInt32:
-				break;
+				*static_cast<vuint32_t*>(result) = vuint32_t(ConvertToNumber(d, ok));
+				return *ok;
 			case vl::Variant::Int64:
-				break;
+				*static_cast<vint64_t*>(result) = vint64_t(ConvertToNumber(d, ok));
+				return *ok;
 			case vl::Variant::UInt64:
-				break;
+				*static_cast<vuint64_t*>(result) = vuint64_t(ConvertToNumber(d, ok));
+				return *ok;
 			case vl::Variant::Double:
-				break;
-			case vl::Variant::Char:
-				break;
+				*static_cast<double*>(result) = double(ConvertToNumber(d, ok));
+				return *ok;
 			case vl::Variant::WChar:
+				{
+					char* c = static_cast<char*>(result);
+					switch (d->type)
+					{
+						case vl::Variant::Bool:
+							*c = d->data.b;
+							break;
+						case vl::Variant::Int32:
+							{
+							
+							}
+							break;
+						case vl::Variant::UInt32:
+							break;
+						case vl::Variant::Int64:
+							break;
+						case vl::Variant::UInt64:
+							break;
+						case vl::Variant::Double:
+							break;
+						case vl::Variant::Float:
+							break;
+						default:
+							return false;
+					}
+					
+				}
 				break;
 			case vl::Variant::Float:
-				break;
+				*static_cast<float*>(result) = float(ConvertToNumber(d, ok));
+				return *ok;
 			case vl::Variant::Wstring:
 				{
 					WString* wstr = static_cast<WString*>(result);
@@ -333,14 +444,8 @@ namespace vl
 								*wstr = ftow(d->data.d);
 							}
 							break;
-						case vl::Variant::Char:
-							{
-								wchar_t wc = d->data.c;
-								*wstr = wc;
-							}
-							break;
 						case vl::Variant::WChar:
-							*wstr = d->data.wc;
+							*wstr = d->data.c;
 							break;
 						case vl::Variant::Float:
 							{
@@ -407,14 +512,9 @@ namespace vl
 								*astr = ftoa(d->data.d);
 							}
 							break;
-						case vl::Variant::Char:
-							{
-								*astr = d->data.c;
-							}
-							break;
 						case vl::Variant::WChar:
 							{
-								vl::WString wstr = d->data.wc;
+								vl::WString wstr = d->data.c;
 								*astr = wtoa(wstr);
 							}
 							break;
@@ -462,44 +562,9 @@ namespace vl
 		}
 		
 		
-		
-		
-		
 		//未完成
 		
-		return false;
-	}
-	
-	static vint64_t ConvertToNumber(const Variant::Private* d, bool* ok)
-	{
-		*ok = true;
-		
-		switch (d->type)
-		{
-			// 			case Variant::UString:
-			case Variant::Astring:
-				return atoi64_test(*v_cast<AString>(d), *ok);
-			case Variant::Wstring:
-				return wtoi64_test(*v_cast<WString>(d), *ok);
-			case Variant::Char:
-			case Variant::WChar:
-			case Variant::Bool:
-			case Variant::Double:
-			case Variant::Float:
-			// 			case Variant::Int8:
-			// 			case Variant::Int16:
-			case Variant::Int32:
-			case Variant::Int64:
-				return MetaTypeNumber(d);
-			// 			case Variant::UInt8:
-			// 			case Variant::UInt16:
-			case Variant::UInt32:
-			case Variant::UInt64:
-				return MetaTypeUNumber(d);
-		}
-		
-		*ok = false;
-		return Q_INT64_C(0);
+		return true;
 	}
 	
 	const Variant::Handler qt_kernel_variant_handler =
@@ -573,48 +638,61 @@ namespace vl
 		{
 			case vl::Variant::Bool:
 				{
-					return currentType == Int32 ||
-					  currentType == UInt32 ||
-					  currentType == Int64 ||
-					  currentType == UInt64 ||
-					  currentType == Float ||
-					  currentType == WChar ||
-					  currentType == Char ||
-					  currentType == Double;
+					return isNumber() || isChar() || isWChar();
+				}
+			case vl::Variant::Int32:
+				{
+					return isNumber() || isChar() || isWChar();
+				}
+			case vl::Variant::UInt32:
+				{
+					return isNumber() || isChar() || isWChar();
+				}
+			case vl::Variant::Int64:
+				{
+					return isNumber() || isChar() || isWChar();
+				}
+			case vl::Variant::UInt64:
+				{
+					return isNumber() || isChar() || isWChar();
+				}
+			case vl::Variant::Double:
+				{
+					return isNumber() || isChar() || isWChar();
+				}
+			case vl::Variant::Float:
+				{
+					return isNumber() || isChar() || isWChar();
+				}
+			case vl::Variant::WChar:
+				{
+					return isNumber() || isChar() || isWChar();
+				}
+			// 			case vl::Variant::Char:
+			// 				{
+			// 					return isNumber() || isChar() || isWChar();
+			// 				}
+			case vl::Variant::Astring:
+				{
+					return true;
 				}
 				break;
-			case vl::Variant::Int32:
-			
-				break;
-			case vl::Variant::UInt32:
-				break;
-			case vl::Variant::Int64:
-				break;
-			case vl::Variant::UInt64:
-				break;
-			case vl::Variant::Double:
-				break;
-			case vl::Variant::Float:
-				break;
-			case vl::Variant::WChar:
-				break;
-			case vl::Variant::Char:
-				break;
-			case vl::Variant::Astring:
-				break;
 			case vl::Variant::Wstring:
+				{
+					return true;
+				}
 				break;
 			case vl::Variant::DateTime:
+				{
+					return d.type == UInt64;
+				}
 				break;
 			case vl::Variant::Locale:
-				break;
-			case vl::Variant::UserType:
-				break;
-			default:
+				{
+					return isString();
+				}
 				break;
 		}
-		
-		//未完成
 		return false;
 	}
 	
@@ -628,7 +706,7 @@ namespace vl
 		{
 			d.data.shared->ref.ref();
 		}
-		else if (other.d.type > Variant::Char && other.d.type < Variant::UserType)
+		else if (other.d.type > Variant::WChar && other.d.type < Variant::UserType)
 		{
 			handler->construct(&d, other.constData());
 		}
@@ -667,7 +745,7 @@ namespace vl
 	}
 	
 	Variant::Variant(char c)
-		: d(Char)
+		: d(Variant::WChar)
 	{
 		d.data.c = c;
 	}
@@ -675,7 +753,7 @@ namespace vl
 	Variant::Variant(wchar_t wc)
 		: d(WChar)
 	{
-		d.data.wc = wc;
+		d.data.c = wc;
 	}
 	
 	Variant::Variant(float f)
@@ -742,24 +820,57 @@ namespace vl
 		return VariantToHelper<WString>(d, Variant::Wstring, handler);
 	}
 	
+	vl::vint32_t Variant::toInt32(bool* ok /*= NULL*/) const
+	{
+		return NumVariantToHelper<vl::vint32_t>(d, handler, Variant::Int32, ok, d.data.i32);
+	}
+	
+	vl::vuint32_t Variant::toUInt32(bool* ok /*= NULL*/) const
+	{
+		return NumVariantToHelper<vl::vuint32_t>(d, handler, Variant::UInt32, ok, d.data.ui32);
+	}
+	
 	vl::vint64_t Variant::toInt64(bool* ok)const
 	{
-		return vl::vint64_t();
+		return NumVariantToHelper<vl::vint64_t>(d, handler, Variant::Int64, ok, d.data.i64);
 	}
 	
 	vl::vuint64_t Variant::toUInt64(bool* ok)const
 	{
-		return vl::vuint64_t();
+		return NumVariantToHelper<vl::vint64_t>(d, handler, Variant::UInt64, ok, d.data.ui64);
+	}
+	
+	char Variant::toChar(bool* ok) const
+	{
+		// 		return NumVariantToHelper<wchar_t>(d, handler, Variant::WChar, ok, d.data.ui64);
+		return 0;
+	}
+	
+	wchar_t Variant::toWChar(bool* ok) const
+	{
+		return NumVariantToHelper<wchar_t>(d, handler, Variant::WChar, ok, d.data.ui32);
 	}
 	
 	double Variant::toDouble(bool* ok)const
 	{
-		return 0.0;
+		return NumVariantToHelper<double>(d, handler, Variant::Double, ok, d.data.d);
 	}
 	
 	bool Variant::toBool(bool* ok)const
 	{
-		return false;
+		if (d.type == Variant::Bool)
+		{
+			return d.data.b;
+		}
+		
+		bool res = false;
+		bool val = false;
+		if (!ok)
+		{
+			ok = &res;
+		}
+		handler->convert(&d, Variant::Bool, &val, ok);
+		return val;
 	}
 	
 	vl::Variant Variant::type()
@@ -808,9 +919,9 @@ namespace vl
 		if (other.d.is_shared)
 		{
 			other.d.data.shared->ref.ref();
-			d = other.d;
+			d = other.d;		//需要拷贝data,type,is_shared,is_null等所有信息
 		}
-		else if (other.d.type > Variant::Char && other.d.type < Variant::UserType)
+		else if (other.d.type > Variant::WChar && other.d.type < Variant::UserType)
 		{
 			d.type = other.d.type;
 			handler->construct(&d, other.constData());
@@ -825,13 +936,13 @@ namespace vl
 	
 	Variant::~Variant()
 	{
-		if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type > Char && d.type < UserType))
+		if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type > WChar && d.type < UserType))
 			handler->clear(&d);
 	}
 	
 	void Variant::clear()
 	{
-		if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type < UserType && d.type > Char))
+		if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type < UserType && d.type > WChar))
 			handler->clear(&d);
 		d.type = Invalid;
 		d.is_null = true;

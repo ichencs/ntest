@@ -52,10 +52,9 @@ namespace vl
 				Float,		//4*8
 				
 				WChar,
-				Char,
+				// 				Char,	//统一由WChar存储
 				
 				Astring,
-				// 				UString,	//
 				Wstring,
 				DateTime,
 				Locale,
@@ -76,7 +75,7 @@ namespace vl
 			Variant(vuint32_t u);
 			Variant(vuint64_t u);
 			
-			Variant(char c);
+			Variant(char c);		//存储为wchar_t
 			Variant(wchar_t wc);
 			Variant(float f);
 			Variant(double d);
@@ -100,8 +99,16 @@ namespace vl
 		public:		//转换
 			vl::AString toAString(bool* ok = NULL)const;
 			vl::WString toWString(bool* ok = NULL)const;
+			int toInt(bool* ok = NULL)const
+			{
+				return toInt32(ok);
+			};
+			vl::vint32_t toInt32(bool* ok = NULL)const;
+			vl::vuint32_t toUInt32(bool* ok = NULL)const;
 			vl::vint64_t toInt64(bool* ok = NULL)const;
 			vl::vuint64_t toUInt64(bool* ok = NULL)const;
+			char toChar(bool* ok = NULL)const;
+			wchar_t toWChar(bool* ok = NULL)const;
 			double toDouble(bool* ok = NULL)const;
 			bool toBool(bool* ok = NULL)const;
 			
@@ -119,7 +126,7 @@ namespace vl
 			{
 				inline Private() : type(Invalid), is_shared(false), is_null(true)
 				{
-					data.ptr = 0;
+					data.ptr = NULL;
 				}
 				explicit Private(vuint variantType)
 					: type(variantType), is_shared(false), is_null(false)
@@ -132,8 +139,8 @@ namespace vl
 				union Data
 					{
 					  bool b;
-					  char c;
-					  wchar_t wc;
+					  // 					  char c;
+					  wchar_t c;
 					  
 					  vint32_t i32;			//int
 					  vuint32_t ui32;
@@ -233,7 +240,7 @@ namespace vl
 	
 	inline bool Variant::isChar()const
 	{
-		return d.type == Variant::Char;
+		return isWChar();
 	}
 	
 	inline bool Variant::isWChar()const
