@@ -21,8 +21,6 @@ namespace vl
 				return qRound64(d->data.f);
 			case Variant::Double:
 				return qRound64(d->data.d);
-			// 			case Variant::Char:
-			// 				return vint(d->data.c);
 			case Variant::WChar:
 				return d->data.c;
 		}
@@ -143,9 +141,6 @@ namespace vl
 			case vl::Variant::Double:
 				x->data.d = copy ? *static_cast<const double*>(copy) : 0.0;
 				break;
-			// 			case vl::Variant::Char:
-			// 				x->data.c = copy ? *static_cast<const char*>(copy) : 0;
-			// 				break;
 			case vl::Variant::WChar:
 				x->data.c = copy ? *static_cast<const wchar_t*>(copy) : 0;
 				break;
@@ -317,11 +312,11 @@ namespace vl
 		bool dummy;
 		if (!ok)
 			ok = &dummy;
-		*ok = false;
 		switch (t)
 		{
 			case vl::Variant::Bool:
 				{
+					*ok = true;
 					bool* b = static_cast<bool*>(result);
 					switch (d->type)
 					{
@@ -356,6 +351,7 @@ namespace vl
 							break;
 						default:
 							*b = false;
+							*ok = false;
 							break;
 					}
 				}
@@ -378,6 +374,7 @@ namespace vl
 			case vl::Variant::WChar:
 				{
 					char* c = static_cast<char*>(result);
+					*ok = true;
 					switch (d->type)
 					{
 						case vl::Variant::Bool:
@@ -399,6 +396,7 @@ namespace vl
 						case vl::Variant::Float:
 							break;
 						default:
+							*ok = false;
 							return false;
 					}
 					
@@ -409,6 +407,7 @@ namespace vl
 				return *ok;
 			case vl::Variant::Wstring:
 				{
+					*ok = true;
 					WString* wstr = static_cast<WString*>(result);
 					switch (d->type)
 					{
@@ -467,16 +466,17 @@ namespace vl
 								*v_cast<vl::Locale>(d);
 							}
 							break;
-						case vl::Variant::UserType:
-							break;
-							
+// 						case vl::Variant::UserType:
+// 							break;
 						default:
+							*ok = false;
 							break;
 					}
 				}
 				break;
 			case vl::Variant::Astring:
 				{
+					*ok = true;
 					AString* astr = static_cast<AString*>(result);
 					switch (d->type)
 					{
@@ -542,10 +542,11 @@ namespace vl
 								*v_cast<vl::Locale>(d);
 							}
 							break;
-						case vl::Variant::UserType:
-							break;
+// 						case vl::Variant::UserType:
+// 							break;
 							
 						default:
+							*ok = false;
 							break;
 					}
 				}
@@ -555,8 +556,8 @@ namespace vl
 				break;
 			case vl::Variant::Locale:
 				break;
-			case vl::Variant::UserType:
-				break;
+// 			case vl::Variant::UserType:
+// 				break;
 			default:
 				break;
 		}
@@ -630,8 +631,8 @@ namespace vl
 	
 	bool Variant::canConvert(Type t) const
 	{
-		const vuint currentType = d.type;
-		if (currentType == vint(t))
+		const  vuint32_t currentType = d.type;
+		if (currentType == t)
 			return true;
 			
 		switch (t)
@@ -668,10 +669,6 @@ namespace vl
 				{
 					return isNumber() || isChar() || isWChar();
 				}
-			// 			case vl::Variant::Char:
-			// 				{
-			// 					return isNumber() || isChar() || isWChar();
-			// 				}
 			case vl::Variant::Astring:
 				{
 					return true;
@@ -706,7 +703,7 @@ namespace vl
 		{
 			d.data.shared->ref.ref();
 		}
-		else if (other.d.type > Variant::WChar && other.d.type < Variant::UserType)
+		else if (other.d.type > Variant::WChar/* && other.d.type < Variant::UserType*/)
 		{
 			handler->construct(&d, other.constData());
 		}
@@ -774,37 +771,37 @@ namespace vl
 		this->d.data.b = val;
 	}
 	
-	Variant::Variant(vl::AString val)
+	Variant::Variant(const vl::AString& val)
 		: d(Variant::Astring)
 	{
 		v_construct<vl::AString>(&d, val);
 	}
 	
-	Variant::Variant(vl::WString val)
+	Variant::Variant(const vl::WString& val)
 		: d(Variant::Wstring)
 	{
 		v_construct<vl::WString>(&d, val);
 	}
 	
-	Variant::Variant(vl::Locale val)
+	Variant::Variant(const vl::Locale& val)
 		: d(Variant::Locale)
 	{
 		v_construct<vl::Locale>(&d, val);
 	}
 	
-	Variant::Variant(vl::DateTime val)
+	Variant::Variant(const vl::DateTime& val)
 		: d(Variant::DateTime)
 	{
 		v_construct <vl::DateTime> (&d, val);
 	}
 	
-	Variant::Variant(char* val)
+	Variant::Variant(const char* val)
 	{
 		vl::AString astr = val;
 		create(Variant::Astring, &astr);
 	}
 	
-	Variant::Variant(wchar_t* val)
+	Variant::Variant(const wchar_t* val)
 	{
 		vl::WString wstr = val;
 		create(Variant::Wstring, &wstr);
@@ -873,9 +870,9 @@ namespace vl
 		return val;
 	}
 	
-	vl::Variant Variant::type()
+	vl::Variant Variant::type()const
 	{
-		return d.type >= Variant::UserType ? Variant::UserType : d.type;
+		return d.type /*>= Variant::UserType ? Variant::UserType : d.type*/;
 	}
 	
 	void* Variant::data()
@@ -921,7 +918,7 @@ namespace vl
 			other.d.data.shared->ref.ref();
 			d = other.d;		//需要拷贝data,type,is_shared,is_null等所有信息
 		}
-		else if (other.d.type > Variant::WChar && other.d.type < Variant::UserType)
+		else if (other.d.type > Variant::WChar /*&& other.d.type < Variant::UserType*/)
 		{
 			d.type = other.d.type;
 			handler->construct(&d, other.constData());
@@ -936,13 +933,13 @@ namespace vl
 	
 	Variant::~Variant()
 	{
-		if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type > WChar && d.type < UserType))
+		if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type > WChar/* && d.type < UserType*/))
 			handler->clear(&d);
 	}
 	
 	void Variant::clear()
 	{
-		if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared && d.type < UserType && d.type > WChar))
+		if ((d.is_shared && !d.data.shared->ref.deref()) || (!d.is_shared /*&& d.type < UserType*/ && d.type > WChar))
 			handler->clear(&d);
 		d.type = Invalid;
 		d.is_null = true;

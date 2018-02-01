@@ -21,10 +21,13 @@ namespace vl
 	 *			6.convert函数支持（检查）
 	 *			7.Variant构造支持
 	 *
-	 * \note:
-	 *
-	 * \author:	Chencs
-	 *
+	 * \note:	x86或x64下均占用24个字节
+	 *			x86:	data 8字节，type,is_shared,is_null三个变量会占用4个字节（在结构体内部实际会分配8字节）
+	 *					Private 16字节，
+	 *					Variant 中虚函数指针4字节（虚函数指针会分配在类的前四个字节）
+	 *			x64: data 8字节，type,is_shared,is_null三个变量会占用4个字节（在结构体内部实际会分配8字节）	
+	 * \author:	Chencs			 		
+	 *								
 	 * \version:1.0
 	 *
 	 * \date: 2018/01/26
@@ -49,7 +52,7 @@ namespace vl
 				Int64,	//8*8		long long
 				UInt64,
 				Double,		//8*8
-				Float,		//4*8
+ 				Float,		//4*8
 				
 				WChar,
 				// 				Char,	//统一由WChar存储
@@ -59,7 +62,7 @@ namespace vl
 				DateTime,
 				Locale,
 				
-				UserType = 127,			//暂时不支持
+// 				UserType = 127,			//暂时不支持
 				
 			};
 		public:
@@ -80,12 +83,12 @@ namespace vl
 			Variant(float f);
 			Variant(double d);
 			Variant(bool val);
-			Variant(char* val);
-			Variant(wchar_t* val);
-			Variant(vl::AString val);
-			Variant(vl::WString val);
-			Variant(vl::Locale val);
-			Variant(vl::DateTime val);
+			Variant(const char* val);
+			Variant(const wchar_t* val);
+			Variant(const vl::AString& val);
+			Variant(const vl::WString& val);
+			Variant(const vl::Locale& val);
+			Variant(const vl::DateTime& val);
 			
 			inline bool operator==(const Variant& v) const
 			{
@@ -109,10 +112,11 @@ namespace vl
 			vl::vuint64_t toUInt64(bool* ok = NULL)const;
 			char toChar(bool* ok = NULL)const;
 			wchar_t toWChar(bool* ok = NULL)const;
+
 			double toDouble(bool* ok = NULL)const;
 			bool toBool(bool* ok = NULL)const;
 			
-			vl::Variant type();
+			vl::Variant type()const;
 			
 		public:		//内部类型定义
 			struct PrivateShared
@@ -128,7 +132,7 @@ namespace vl
 				{
 					data.ptr = NULL;
 				}
-				explicit Private(vuint variantType)
+				explicit Private(vuint32_t variantType)
 					: type(variantType), is_shared(false), is_null(false)
 				{}
 				
@@ -136,10 +140,10 @@ namespace vl
 					: data(other.data), type(other.type),
 					  is_shared(other.is_shared), is_null(other.is_null)
 				{}
+			
 				union Data
 					{
 					  bool b;
-					  // 					  char c;
 					  wchar_t c;
 					  
 					  vint32_t i32;			//int
@@ -153,9 +157,9 @@ namespace vl
 					  void* ptr;
 					  PrivateShared* shared;
 					} data;
-				vuint type : 30;
-				vuint is_shared : 1;
-				vuint is_null : 1;
+				vuint32_t type : 30;			//占用30个二进制位;
+				vuint32_t is_shared : 1;		//占用1个二进制位;
+				vuint32_t is_null : 1;			//占用1个二进制位;		//type,is_shared,is_null 共占用32个二进制位
 			};
 			
 			typedef void(*f_construct)(Private*, const void*);
@@ -189,8 +193,7 @@ namespace vl
 				return constData();
 			}
 			bool convert(Variant::Type t);
-			bool canConvert(Type t) const;
-			
+			bool canConvert(Type t) const;			
 			void detach();
 		public:	//判断
 			inline bool isValid() const;

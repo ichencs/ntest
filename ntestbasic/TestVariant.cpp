@@ -1,5 +1,12 @@
 #include "stdafx.h"
 
+#define CalculateSize(type)\
+	{	   \
+		WString strLine = wformat(L"%s类型占 %d 字节",L_(#type),sizeof(type));\
+		vl::console::Console::WriteLine(strLine);	\
+	}		\
+
+
 TEST_CASE(TestVariant)
 {
 	// 	void* ptr = 0;
@@ -64,6 +71,70 @@ TEST_CASE(TestVariantJ)
 	var_a = 'a';
 	var_b = L'a';
 	TEST_ASSERT(var_a == var_b);
-	
+	TEST_ASSERT(var_a.toAString() == "a");
+	TEST_ASSERT(var_a.toWString() == L"a");
+	console::Console::WriteLine(var_a.toWString());
+	TEST_ASSERT(var_a.toInt() == 'a');
+
+
 }
 
+namespace test_size
+{
+class Variant_size
+{
+public:
+	Variant_size();
+	virtual ~Variant_size();
+
+private:
+	vuint64_t num;
+//  	Variant::Private d;
+//	static const Variant::Handler* handler;
+
+};
+	Variant_size::Variant_size()
+	{
+	}
+	
+	Variant_size::~Variant_size()
+	{
+	}
+	struct s1
+	{
+		char j : 4;
+		int i : 8;
+		struct s2
+		{
+			int a : 4;
+			double b;
+		}d1;
+	};
+}
+TEST_CASE(BitField)
+{
+	using namespace test_size;
+	CalculateSize(void*);
+	CalculateSize(Variant);
+	CalculateSize(Variant::Private);
+	CalculateSize(Variant::Private::Data);
+	CalculateSize(Variant::PrivateShared);
+
+	struct BitField
+	{
+		unsigned int a : 4;  //占用4个二进制位;
+ 		unsigned int : 0;  //空位域,自动置0;
+ 		unsigned int b : 4;  //占用4个二进制位,从下一个存储单元开始存放;
+ 		unsigned int c : 4;  //占用4个二进制位;
+// 		unsigned int d : 5;  //占用5个二进制位,剩余的4个bit不够存储4个bit的数据,从下一个存储单元开始存放;
+// 		unsigned int : 0;  //空位域,自动置0;
+// 		unsigned int e : 4;  //占用4个二进制位,从这个存储单元开始存放;
+	};
+	CalculateSize(BitField);
+	CalculateSize(s1);
+	CalculateSize(s1::s2);
+	CalculateSize(Variant_size);
+
+
+
+}
