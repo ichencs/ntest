@@ -38,6 +38,9 @@
     <ClCompile Include="TestVariant.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TestBasic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="POD.md">

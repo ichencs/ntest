@@ -25,14 +25,14 @@ namespace vl
 	 *			x86:	data 8字节，type,is_shared,is_null三个变量会占用4个字节（在结构体内部实际会分配8字节）
 	 *					Private 16字节，
 	 *					Variant 中虚函数指针4字节（虚函数指针会分配在类的前四个字节）
-	 *			x64: data 8字节，type,is_shared,is_null三个变量会占用4个字节（在结构体内部实际会分配8字节）	
-	 * \author:	Chencs			 		
-	 *								
+	 *			x64: data 8字节，type,is_shared,is_null三个变量会占用4个字节（在结构体内部实际会分配8字节）
+	 * \author:	Chencs
+	 *
 	 * \version:1.0
 	 *
 	 * \date: 2018/01/26
 	 *
-	 * Contact: chencs@thinkerinfo.com
+	 * Contact: chencs@163.com
 	 *
 	 */
 	class Variant;
@@ -52,7 +52,7 @@ namespace vl
 				Int64,	//8*8		long long
 				UInt64,
 				Double,		//8*8
- 				Float,		//4*8
+				Float,		//4*8
 				
 				WChar,
 				// 				Char,	//统一由WChar存储
@@ -62,7 +62,7 @@ namespace vl
 				DateTime,
 				Locale,
 				
-// 				UserType = 127,			//暂时不支持
+				// 				UserType = 127,			//暂时不支持
 				
 			};
 		public:
@@ -102,6 +102,7 @@ namespace vl
 		public:		//转换
 			vl::AString toAString(bool* ok = NULL)const;
 			vl::WString toWString(bool* ok = NULL)const;
+			vl::UString toUString(bool* ok = NULL)const;	//转换至Utf8字符串，由WString转换
 			int toInt(bool* ok = NULL)const
 			{
 				return toInt32(ok);
@@ -112,8 +113,9 @@ namespace vl
 			vl::vuint64_t toUInt64(bool* ok = NULL)const;
 			char toChar(bool* ok = NULL)const;
 			wchar_t toWChar(bool* ok = NULL)const;
-
+			
 			double toDouble(bool* ok = NULL)const;
+			float toFloat(bool* ok = NULL)const;
 			bool toBool(bool* ok = NULL)const;
 			
 			vl::Variant type()const;
@@ -140,7 +142,7 @@ namespace vl
 					: data(other.data), type(other.type),
 					  is_shared(other.is_shared), is_null(other.is_null)
 				{}
-			
+				
 				union Data
 					{
 					  bool b;
@@ -193,7 +195,7 @@ namespace vl
 				return constData();
 			}
 			bool convert(Variant::Type t);
-			bool canConvert(Type t) const;			
+			bool canConvert(Type t) const;
 			void detach();
 		public:	//判断
 			inline bool isValid() const;
@@ -202,6 +204,8 @@ namespace vl
 			inline bool isInt()const;	//int
 			inline bool isUInt()const;	//unsinged int
 			inline bool isFloatingPoint()const;	//Float double
+			inline bool isDouble()const;
+			inline bool isFloat()const;
 			inline bool isNumber()const;
 			inline bool isChar()const;
 			inline bool isWChar()const;
@@ -233,7 +237,17 @@ namespace vl
 	
 	inline bool Variant::isFloatingPoint()const
 	{
-		return d.type == Variant::Float || d.type == Variant::Double;
+		return isFloat() || isDouble();
+	}
+	
+	inline bool Variant::isDouble() const
+	{
+		return d.type == Variant::Double;
+	}
+	
+	inline bool Variant::isFloat() const
+	{
+		return d.type == Variant::Float;
 	}
 	
 	inline bool Variant::isNumber()const

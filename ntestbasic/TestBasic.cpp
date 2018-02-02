@@ -162,4 +162,16 @@ TEST_CASE(TestDateTime)
 	TEST_ASSERT(dt.second == 0);
 	TEST_ASSERT(dt.milliseconds == 0);
 	// 	TEST_ASSERT(false);
+
+	dt = DateTime::LocalTime();
+
+	DateTime utc = DateTime::UtcTime();
+//  	TEST_ASSERT(dt.year == utc.year);
+	TEST_ASSERT(dt.minute == utc.minute);
+	TEST_ASSERT(dt.milliseconds == utc.milliseconds);
+// 	TEST_ASSERT(dt.year == utc.year);
+// 	TEST_ASSERT(dt.year == utc.year);
+
+
+
 }

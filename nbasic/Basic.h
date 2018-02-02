@@ -571,7 +571,7 @@ namespace vl
 		vint				second;
 		vint				milliseconds;
 		
-		vuint64_t			totalMilliseconds;
+		//vuint64_t			totalMilliseconds;
 		
 		// in gcc, this will be mktime(t) * 1000 + gettimeofday().tv_usec / 1000
 		vuint64_t			filetime;
@@ -614,6 +614,8 @@ namespace vl
 		/// <returns>The moved time.</returns>
 		/// <param name="milliseconds">The delta in milliseconds.</param>
 		DateTime			Backward(vuint64_t milliseconds);
+
+		vuint64_t			TotalMilliseconds();
 		
 		bool operator==(const DateTime& value)const
 		{

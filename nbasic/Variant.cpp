@@ -369,31 +369,110 @@ namespace vl
 				*static_cast<vuint64_t*>(result) = vuint64_t(ConvertToNumber(d, ok));
 				return *ok;
 			case vl::Variant::Double:
-				*static_cast<double*>(result) = double(ConvertToNumber(d, ok));
-				return *ok;
-			case vl::Variant::WChar:
 				{
-					char* c = static_cast<char*>(result);
+					double* f = static_cast<double*>(result);
 					*ok = true;
 					switch (d->type)
 					{
 						case vl::Variant::Bool:
-							*c = d->data.b;
+							*f = double(d->data.b);
 							break;
 						case vl::Variant::Int32:
-							{
-							
-							}
+							*f = double(d->data.i32);
 							break;
 						case vl::Variant::UInt32:
+							*f = double(d->data.ui32);
 							break;
 						case vl::Variant::Int64:
+							*f = double(d->data.i64);
 							break;
 						case vl::Variant::UInt64:
-							break;
-						case vl::Variant::Double:
+							*f = double(d->data.ui64);
 							break;
 						case vl::Variant::Float:
+							*f = double(d->data.f);
+							break;
+						case vl::Variant::WChar:
+							*f = double(MetaTypeNumber(d));
+							break;
+						case vl::Variant::Astring:
+							*f = atof_test(*v_cast<vl::AString>(d), *ok);
+							break;
+						case vl::Variant::Wstring:
+							*f = wtof_test(*v_cast<vl::WString>(d), *ok);
+							break;
+						default:
+							*ok = false;
+							break;
+					}
+					// 					*static_cast<double*>(result) = double(ConvertToNumber(d, ok));
+				}
+				return *ok;
+			case vl::Variant::Float:
+				{
+					float* f = static_cast<float*>(result);
+					*ok = true;
+					switch (d->type)
+					{
+						case vl::Variant::Bool:
+							*f = float(d->data.b);
+							break;
+						case vl::Variant::Int32:
+							*f = float(d->data.i32);
+							break;
+						case vl::Variant::UInt32:
+							*f = float(d->data.ui32);
+							break;
+						case vl::Variant::Int64:
+							*f = float(d->data.i64);
+							break;
+						case vl::Variant::UInt64:
+							*f = float(d->data.ui64);
+							break;
+						case vl::Variant::Double:
+							*f = float(d->data.d);
+							break;
+						case vl::Variant::WChar:
+							*f = float(MetaTypeNumber(d));
+							break;
+						case vl::Variant::Astring:
+							*f = float(atof_test(*v_cast<vl::AString>(d), *ok));
+							break;
+						case vl::Variant::Wstring:
+							*f = float(wtof_test(*v_cast<vl::WString>(d), *ok));
+							break;
+						default:
+							*ok = false;
+							break;
+					}
+				}
+				return *ok;
+			case vl::Variant::WChar:
+				{
+					wchar_t* c = static_cast<wchar_t*>(result);
+					*ok = true;
+					switch (d->type)
+					{
+						case vl::Variant::Bool:
+							*c = wchar_t(d->data.b);
+							break;
+						case vl::Variant::Int32:
+							*c = wchar_t(d->data.i32);
+							break;
+						case vl::Variant::UInt32:
+							*c = wchar_t(d->data.ui32);
+							break;
+						case vl::Variant::Int64:
+							*c = wchar_t(d->data.i64);
+							break;
+						case vl::Variant::UInt64:
+							*c = wchar_t(d->data.ui64);
+							break;
+						case vl::Variant::Double:
+							*c = wchar_t(d->data.d);
+							break;
+						case vl::Variant::Float:
+							*c = wchar_t(d->data.f);
 							break;
 						default:
 							*ok = false;
@@ -402,9 +481,6 @@ namespace vl
 					
 				}
 				break;
-			case vl::Variant::Float:
-				*static_cast<float*>(result) = float(ConvertToNumber(d, ok));
-				return *ok;
 			case vl::Variant::Wstring:
 				{
 					*ok = true;
@@ -466,8 +542,8 @@ namespace vl
 								*v_cast<vl::Locale>(d);
 							}
 							break;
-// 						case vl::Variant::UserType:
-// 							break;
+						// 						case vl::Variant::UserType:
+						// 							break;
 						default:
 							*ok = false;
 							break;
@@ -542,9 +618,9 @@ namespace vl
 								*v_cast<vl::Locale>(d);
 							}
 							break;
-// 						case vl::Variant::UserType:
-// 							break;
-							
+						// 						case vl::Variant::UserType:
+						// 							break;
+						
 						default:
 							*ok = false;
 							break;
@@ -556,8 +632,8 @@ namespace vl
 				break;
 			case vl::Variant::Locale:
 				break;
-// 			case vl::Variant::UserType:
-// 				break;
+			// 			case vl::Variant::UserType:
+			// 				break;
 			default:
 				break;
 		}
@@ -639,31 +715,31 @@ namespace vl
 		{
 			case vl::Variant::Bool:
 				{
-					return isNumber() || isChar() || isWChar();
+					return isNumber() || isChar() || isWChar() || isString();
 				}
 			case vl::Variant::Int32:
 				{
-					return isNumber() || isChar() || isWChar();
+					return isNumber() || isChar() || isWChar() || isString();
 				}
 			case vl::Variant::UInt32:
 				{
-					return isNumber() || isChar() || isWChar();
+					return isNumber() || isChar() || isWChar() || isString();
 				}
 			case vl::Variant::Int64:
 				{
-					return isNumber() || isChar() || isWChar();
+					return isNumber() || isChar() || isWChar() || isString();
 				}
 			case vl::Variant::UInt64:
 				{
-					return isNumber() || isChar() || isWChar();
+					return isNumber() || isChar() || isWChar() || isString();
 				}
 			case vl::Variant::Double:
 				{
-					return isNumber() || isChar() || isWChar();
+					return isNumber() || isChar() || isWChar() || isString();
 				}
 			case vl::Variant::Float:
 				{
-					return isNumber() || isChar() || isWChar();
+					return isNumber() || isChar() || isWChar() || isString();
 				}
 			case vl::Variant::WChar:
 				{
@@ -817,6 +893,12 @@ namespace vl
 		return VariantToHelper<WString>(d, Variant::Wstring, handler);
 	}
 	
+	vl::UString Variant::toUString(bool* ok /*= NULL*/) const
+	{
+		WString wstr = toWString(ok);
+		return wtoUtf8(wstr);
+	}
+	
 	vl::vint32_t Variant::toInt32(bool* ok /*= NULL*/) const
 	{
 		return NumVariantToHelper<vl::vint32_t>(d, handler, Variant::Int32, ok, d.data.i32);
@@ -851,6 +933,11 @@ namespace vl
 	double Variant::toDouble(bool* ok)const
 	{
 		return NumVariantToHelper<double>(d, handler, Variant::Double, ok, d.data.d);
+	}
+	
+	float Variant::toFloat(bool* ok /*= NULL*/) const
+	{
+		return NumVariantToHelper<float>(d, handler, Variant::Float, ok, d.data.f);
 	}
 	
 	bool Variant::toBool(bool* ok)const

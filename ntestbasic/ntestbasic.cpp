@@ -34,8 +34,10 @@ WString GetTestOutputPath()
 
 #define CalculateSize(type)\
 	{	   \
-		WString strLine = wformat(L"%s类型占 %d 字节",L_(#type),sizeof(type));\
+		vl::console::Console::SetColor(true,true,false,true);			\
+		WString strLine = wformat(L"%s\t类型占 %d 字节",L_(#type),sizeof(type));\
 		vl::console::Console::WriteLine(strLine);	\
+		vl::console::Console::SetColor(true, true, true, true);	\
 	}		\
 
 

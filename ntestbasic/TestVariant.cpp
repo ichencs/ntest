@@ -2,8 +2,10 @@
 
 #define CalculateSize(type)\
 	{	   \
-		WString strLine = wformat(L"%s类型占 %d 字节",L_(#type),sizeof(type));\
+		vl::console::Console::SetColor(true,true,false,true);			\
+		WString strLine = wformat(L"%s\t类型占 %d 字节",L_(#type),sizeof(type));\
 		vl::console::Console::WriteLine(strLine);	\
+		vl::console::Console::SetColor(true, true, true, true);	\
 	}		\
 
 
@@ -75,24 +77,47 @@ TEST_CASE(TestVariantJ)
 	TEST_ASSERT(var_a.toWString() == L"a");
 	console::Console::WriteLine(var_a.toWString());
 	TEST_ASSERT(var_a.toInt() == 'a');
-
-
+	
+	var_a = L"didi滴滴答didi";
+	UString ustr = var_a.toUString();
+	AString astr = var_a.toAString();
+	WString watr = var_a.toWString();
+	WString wstr2 = utf8tow(ustr);
+	TEST_ASSERT(var_a == wstr2);
+	
+	var_b = "789";
+	TEST_ASSERT(var_b.toInt() == 789);
+	double dval = var_b.toDouble();
+	var_a = dval;
+	TEST_ASSERT(qFuzzyCompare(var_b.toDouble(), 789.0));
+	
+	TEST_ASSERT(qFuzzyCompare(var_a.toDouble(), 789.0));
+	TEST_ASSERT(var_a == var_b);
+	
+	var_b = "789.123456";
+	TEST_ASSERT(var_b.toInt() == int(789.123456));
+	dval = var_b.toDouble();
+	var_a = dval;
+	TEST_ASSERT(qFuzzyCompare(var_b.toDouble(), 789.123456));
+	
+	TEST_ASSERT(qFuzzyCompare(var_a.toDouble(), 789.123456));
+	TEST_ASSERT(var_a == var_b);
 }
 
 namespace test_size
 {
-class Variant_size
-{
-public:
-	Variant_size();
-	virtual ~Variant_size();
-
-private:
-	vuint64_t num;
-//  	Variant::Private d;
-//	static const Variant::Handler* handler;
-
-};
+	class Variant_size
+	{
+		public:
+			Variant_size();
+			virtual ~Variant_size();
+			
+		private:
+			vuint64_t num;
+			//  	Variant::Private d;
+			//	static const Variant::Handler* handler;
+			
+	};
 	Variant_size::Variant_size()
 	{
 	}
@@ -108,7 +133,7 @@ private:
 		{
 			int a : 4;
 			double b;
-		}d1;
+		} d1;
 	};
 }
 TEST_CASE(BitField)
@@ -119,22 +144,22 @@ TEST_CASE(BitField)
 	CalculateSize(Variant::Private);
 	CalculateSize(Variant::Private::Data);
 	CalculateSize(Variant::PrivateShared);
-
+	
 	struct BitField
 	{
 		unsigned int a : 4;  //占用4个二进制位;
- 		unsigned int : 0;  //空位域,自动置0;
- 		unsigned int b : 4;  //占用4个二进制位,从下一个存储单元开始存放;
- 		unsigned int c : 4;  //占用4个二进制位;
-// 		unsigned int d : 5;  //占用5个二进制位,剩余的4个bit不够存储4个bit的数据,从下一个存储单元开始存放;
-// 		unsigned int : 0;  //空位域,自动置0;
-// 		unsigned int e : 4;  //占用4个二进制位,从这个存储单元开始存放;
+		unsigned int : 0;  //空位域,自动置0;
+		unsigned int b : 4;  //占用4个二进制位,从下一个存储单元开始存放;
+		unsigned int c : 4;  //占用4个二进制位;
+		// 		unsigned int d : 5;  //占用5个二进制位,剩余的4个bit不够存储4个bit的数据,从下一个存储单元开始存放;
+		// 		unsigned int : 0;  //空位域,自动置0;
+		// 		unsigned int e : 4;  //占用4个二进制位,从这个存储单元开始存放;
 	};
 	CalculateSize(BitField);
 	CalculateSize(s1);
 	CalculateSize(s1::s2);
 	CalculateSize(Variant_size);
-
-
-
+	
+	
+	
 }
