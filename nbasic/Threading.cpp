@@ -675,30 +675,30 @@ namespace vl
 	// 			return 0;
 	// 		}
 	
-	ThreadPoolLite::ThreadPoolLite()
-	{
-	}
-	
-	ThreadPoolLite::~ThreadPoolLite()
-	{
-	}
-	
-	bool ThreadPoolLite::Queue(void(*proc)(void*), void* argument)
-	{
-		ThreadPoolQueueProcArgument* p = new ThreadPoolQueueProcArgument;
-		p->proc = proc;
-		p->argument = argument;
-		
-		if (QueueUserWorkItem(&ThreadPoolQueueProc, p, WT_EXECUTEDEFAULT))
-		{
-			return true;
-		}
-		else
-		{
-			delete p;
-			return false;
-		}
-	}
+// 	ThreadPoolLite::ThreadPoolLite()
+// 	{
+// 	}
+// 	
+// 	ThreadPoolLite::~ThreadPoolLite()
+// 	{
+// 	}
+// 	
+// 	bool ThreadPoolLite::Queue(void(*proc)(void*), void* argument)
+// 	{
+// 		ThreadPoolQueueProcArgument* p = new ThreadPoolQueueProcArgument;
+// 		p->proc = proc;
+// 		p->argument = argument;
+// 		
+// 		if (QueueUserWorkItem(&ThreadPoolQueueProc, p, WT_EXECUTEDEFAULT))
+// 		{
+// 			return true;
+// 		}
+// 		else
+// 		{
+// 			delete p;
+// 			return false;
+// 		}
+// 	}
 	
 	// 		bool ThreadPoolLite::Queue(const Func<void()>& proc)
 	// 		{

@@ -250,32 +250,32 @@ namespace vl
 	***********************************************************************/
 	
 	/// <summary>A light-weight thread pool.</summary>
-	class ThreadPoolLite : public Object
-	{
-	 private:
-		ThreadPoolLite();
-		~ThreadPoolLite();
-	 public:
-		/// <summary>Queue a function pointer.</summary>
-		/// <returns>Returns true if this operation succeeded.</returns>
-		/// <param name="proc">The function pointer.</param>
-		/// <param name="argument">The argument to call the function pointer.</param>
-		static bool									Queue(void(*proc)(void*), void* argument);
-		/// <summary>Queue a function object.</summary>
-		/// <returns>Returns true if this operation succeeded.</returns>
-		/// <param name="proc">The function object.</param>
-		// 			static bool									Queue(const Func<void()>& proc);
-		
-		/// <summary>Queue a lambda expression.</summary>
-		/// <typeparam name="T">The type of the lambda expression.</typeparam>
-		/// <param name="proc">The lambda expression.</param>
-		template<typename T>
-		static void QueueLambda(const T& proc)
-		{
-			Queue(Func<void()>(proc));
-		}
-		
-	};
+// 	class ThreadPoolLite : public Object
+// 	{
+// 	 private:
+// 		ThreadPoolLite();
+// 		~ThreadPoolLite();
+// 	 public:
+// 		/// <summary>Queue a function pointer.</summary>
+// 		/// <returns>Returns true if this operation succeeded.</returns>
+// 		/// <param name="proc">The function pointer.</param>
+// 		/// <param name="argument">The argument to call the function pointer.</param>
+// 		static bool									Queue(void(*proc)(void*), void* argument);
+// 		/// <summary>Queue a function object.</summary>
+// 		/// <returns>Returns true if this operation succeeded.</returns>
+// 		/// <param name="proc">The function object.</param>
+// 		// 			static bool									Queue(const Func<void()>& proc);
+// 		
+// 		/// <summary>Queue a lambda expression.</summary>
+// 		/// <typeparam name="T">The type of the lambda expression.</typeparam>
+// 		/// <param name="proc">The lambda expression.</param>
+// 		template<typename T>
+// 		static void QueueLambda(const T& proc)
+// 		{
+// 			Queue(Func<void()>(proc));
+// 		}
+// 		
+// 	};
 	
 	/***********************************************************************
 	进程内对象

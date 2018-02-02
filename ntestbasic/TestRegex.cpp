@@ -1538,7 +1538,7 @@ void FindRows(WString* lines, int count, const WString& pattern)
 	}
 	
 	DateTime dt2 = DateTime::LocalTime();
-	vuint64_t ms = dt2.totalMilliseconds - dt1.totalMilliseconds;
+	vuint64_t ms = dt2.TotalMilliseconds() - dt1.TotalMilliseconds();
 	UnitTest::PrintInfo(L"Running 10000000 times of Regex::TestHead uses: " + i64tow(ms) + L" milliseconds.");
 }
 }
