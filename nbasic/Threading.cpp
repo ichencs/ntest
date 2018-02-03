@@ -37,7 +37,7 @@ namespace vl
 	
 	bool WaitableObject::IsCreated()
 	{
-		return waitableData != 0;
+		return waitableData != NULL;
 	}
 	
 	bool WaitableObject::Wait()
