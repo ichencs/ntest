@@ -10,15 +10,6 @@ namespace vl
 		struct ProcessMemory
 		{
 			ProcessMemory()
-				: pageFaultCount(0),
-				  peakWorkingSetSize(0),
-				  workingSetSize(0),
-				  quotaPeakPagedPoolUsage(0),
-				  quotaPagedPoolUsage(0),
-				  quotaPeakNonPagedPoolUsage(0),
-				  quotaNonPagedPoolUsage(0),
-				  pagefileUsage(0),
-				  peakPagefileUsage(0)
 			{
 			}
 			vuint		pageFaultCount;						// È±Ò³ÖÐ¶Ï´ÎÊý
@@ -100,14 +91,14 @@ namespace vl
 		struct GlobalMemory
 		{
 			GlobalMemory()
-				: dwMemoryLoad(0),
-				  ullTotalPhys(0),
-				  ullAvailPhys(0),
-				  ullTotalPageFile(0),
-				  ullAvailPageFile(0),
-				  ullTotalVirtual(0),
-				  ullAvailVirtual(0),
-				  ullAvailExtendedVirtual(0)
+// 				: dwMemoryLoad(0),
+// 				  ullTotalPhys(0),
+// 				  ullAvailPhys(0),
+// 				  ullTotalPageFile(0),
+// 				  ullAvailPageFile(0),
+// 				  ullTotalVirtual(0),
+// 				  ullAvailVirtual(0),
+// 				  ullAvailExtendedVirtual(0)
 			{
 			}
 			vuint		dwMemoryLoad;

@@ -38,55 +38,7 @@
     <ClCompile Include="TestVariant.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TestBasic.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="TestThread.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestAtomicInt.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestFileInfo.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestFileSystem.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestGlobalStorage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestHttpUtility.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestList.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestLocale.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestLocaleString.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestNumber.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestPath.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestRegex.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestRegex2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestStream.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestString.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="TestThread2.cpp">
