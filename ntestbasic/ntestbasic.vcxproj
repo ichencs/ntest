@@ -292,6 +292,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='RelVC9|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TestFileSystem.cpp" />
     <ClCompile Include="TestThread.cpp" />
     <ClCompile Include="TestThread2.cpp" />
     <ClCompile Include="TestVariant.cpp" />

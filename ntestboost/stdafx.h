@@ -15,5 +15,4 @@
 
 #include "vlpp/Vlpp.h"
 
-#include <boost\regex.hpp>
 using namespace std;

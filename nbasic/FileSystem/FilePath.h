@@ -20,13 +20,12 @@ namespace vl
 			
 			void						Initialize()override;
 			
-			static void					GetPathComponents(WString path, collections::List<WString>& components);
-			static WString				ComponentsToPath(const collections::List<WString>& components);
-		 public:
+			 static void					GetPathComponents(WString path, collections::List<WString>& components);
+			 static WString				ComponentsToPath(const collections::List<WString>& components);
 #if defined VCZH_MSVC
 			static const wchar_t		Delimiter = L'\\';
 #endif
-			
+		public:
 			/// <summary>Create a root path.</summary>
 			FilePath();
 			FilePath(const Path& _path);

@@ -525,4 +525,16 @@ void OutPutHead(FilePath headPath, FilePath libPath)
 	writer.WriteLine(EndDefine());
 }
 
+TEST_CASE(TestListComponents)
+{
+	WString wstr_path = L"E:\\project_git\\ntest";
+	collections::List<WString> components;
+	/*FilePath::GetPathComponents(wstr_path,components);*/
 
+	FOREACH(WString,path, components)
+	{
+		Console::WriteLine(path);
+
+	}
+
+}

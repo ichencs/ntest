@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <windows.h>
-#include <vld.h>
+// #include <vld.h>
 
 WString GetExePath()
 {

@@ -70,4 +70,5 @@ class Cntestdlg : public CDialogEx
 		
 		afx_msg void OnBnClickedBtnGetStyle();
 		CEdit m_edt;
+		afx_msg void OnEnChangeEditTest1();
 };

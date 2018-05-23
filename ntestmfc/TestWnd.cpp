@@ -16,3 +16,14 @@ TEST_CASE(TestFindWndDlg)
 	}
 	
 }
+
+TEST_CASE(CurrentUser)
+{
+	wchar_t buffer[MAX_PATH] = {0};
+	DWORD dw = GetEnvironmentVariable(L"USERPROFILE", buffer, MAX_PATH);
+
+
+
+
+}
+
