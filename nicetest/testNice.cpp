@@ -1,48 +1,16 @@
 #include "stdafx.h"
-#include "testNice.h"
 #include "Bloger.h"
 // #include <ncrypt.h>
 
 #include "winsock2.h"
 #include <cmath>
+#include "fFileDetail.h"
 #pragma comment(lib,"ws2_32.lib")
 
-
-testNice::testNice()
-{
-	test();
-}
+#pragma comment(lib,"Mincore.lib")
+#pragma comment(lib,"version.lib")
 
 
-testNice::~testNice()
-{
-}
-
-void testNice::test()
-{
-	double d1 = 1.23456789;
-	double d2 = dPrecision(d1);
-	
-	testSizeof();
-	testDomain();
-	// 	testIP();
-	// 	testObserve();
-	// 	testMd5();
-}
-
-void funSizeof(int* P)
-{
-	cout << "数组（或指针）在函数中：" << sizeof(P) << endl;
-}
-
-void testNice::testSizeof()
-{
-	int A[10] = {0};
-	int* B = new int[10];
-	cout << "数组长度" << sizeof(A) << endl;
-	cout << "指针长度" << sizeof(B) << endl;
-	funSizeof(A);
-}
 
 
 // void testNice::testIP()
@@ -66,16 +34,7 @@ void testNice::testSizeof()
 // 	}
 // }
 
-void testNice::testDomain()
-{
-}
 
-double testNice::dPrecision(double d, int npre)
-{
-	double dp = pow(10.0, npre);
-	d = floor(d * dp + 0.5) / dp;
-	return d;
-}
 
 TEST_CASE(TestObservable)
 {
@@ -100,4 +59,81 @@ TEST_CASE(TestObservable)
 }
 
 
+TEST_CASE(FileInfoReader)
+{
+	wchar_t* szFileName = L"D:\\Qt\\5.6.3\\msvc2015_64\\bin\\assistant.exe";
+	
+	using namespace fFileAttribute;
+	fFileDetail fdtl;
+	fdtl.Initialize(szFileName);
+	wstring iname = fdtl.InternalName();
+	wstring pname = fdtl.ProductName();
+	wstring pver = fdtl.ProductVersion();
+	wstring ofname = fdtl.OriginalFileName();
+	wstring ltmarks = fdtl.LegalTradeMarks();
+	wstring cname = fdtl.CompanyName();
+	wstring fdesc = fdtl.FileDescription();
+
+	return;
+
+	
+	
+	
+	DWORD dwSize = GetFileVersionInfoSize(szFileName, NULL);
+	LPVOID pBlock = malloc(dwSize*sizeof(wchar_t));
+	GetFileVersionInfo(szFileName, 0, dwSize, pBlock);
+	DWORD* pVerValue = NULL;
+	UINT nSize = 0;
+	VerQueryValue(pBlock, TEXT("\\VarFileInfo\\Translation"),	(LPVOID*)&pVerValue, &nSize);
+	DWORD dErr =	GetLastError();
+ 	DWORD LangCharset = MAKELONG(HIWORD(pVerValue[0]), LOWORD(pVerValue[0]));
+//	DWORD LangCharset = MAKELONG(LOWORD(pVerValue[0]),HIWORD(pVerValue[0]));
+
+	CString strBlockName;
+	strBlockName.Format(_T("//StringFileInfo//%08lx"),	LangCharset);
+	CString str123;
+	CString strSubBlock, strTranslation, strTemp;
+	strTemp.Format(L"000%x", pVerValue[0]);
+	str123.Format(L"000%x", LOWORD(pVerValue[0]));
+	strTranslation = strTemp.Right(4);
+	strTemp.Format(L"000%x", pVerValue[1]);
+	strTranslation += strTemp.Right(4);
+	wstring wstr_123 = std::to_wstring(LangCharset);
+	wchar_t str[256] = {0};
+	int nlen = swprintf(str,sizeof(str), L"%08lx", LangCharset);//10进制转换成16进制，如果输出大写的字母是sprintf(str,"%X",a)
+
+
+	//080404b0为中文，040904E4为英文
+	//文件描述
+	//strSubBlock.Format(L"\\StringFileInfo\\%s\\FileDescription",strTranslation);
+	//	VerQueryValue(pBlock, strSubBlock.GetString(), (LPVOID*)&pVerValue, &nSize);
+	//strTemp.Format(L"文件描述: %s", pVerValue);
+// 	AfxMessageBox(strTemp);
+	//内部名称
+	strSubBlock.Format(L"\\StringFileInfo\\%s\\InternalName",strTranslation);
+		VerQueryValue(pBlock, strSubBlock.GetString(), (LPVOID*)&pVerValue, &nSize);
+	strTemp.Format(L"文件描述: %s", pVerValue);
+// 	AfxMessageBox(strTemp);
+	//合法版权
+	strSubBlock.Format(L"\\StringFileInfo\\%s\\LegalTradeMarks",strTranslation);
+		VerQueryValue(pBlock, strSubBlock.GetString(), (LPVOID*)&pVerValue, &nSize);
+	strTemp.Format(L"合法版权: %s", pVerValue);
+// 	AfxMessageBox(strTemp);
+	//原始文件名
+	strSubBlock.Format(L"\\StringFileInfo\\%s\\OriginalFileName",strTranslation);
+		VerQueryValue(pBlock, strSubBlock.GetString(), (LPVOID*)&pVerValue, &nSize);
+	strTemp.Format(L"原始文件名: %s", pVerValue);
+// 	AfxMessageBox(strTemp);
+	//产品名称
+	strSubBlock.Format(L"\\StringFileInfo\\%s\\ProductName",strTranslation);
+		VerQueryValue(pBlock, strSubBlock.GetString(), (LPVOID*)&pVerValue, &nSize);
+	strTemp.Format(L"产品名称: %s", pVerValue);
+// 	AfxMessageBox(strTemp);
+	//产品版本
+	strSubBlock.Format(L"\\StringFileInfo\\%s\\ProductVersion",strTranslation);
+		VerQueryValue(pBlock, strSubBlock.GetString(), (LPVOID*)&pVerValue, &nSize);
+	strTemp.Format(L"产品版本: %s", pVerValue);
+// 	AfxMessageBox(strTemp);
+	free(pBlock);	
+}
 

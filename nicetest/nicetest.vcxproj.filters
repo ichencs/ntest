@@ -36,17 +36,14 @@
     <ClInclude Include="Bloger.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="testNice.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="testAes.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="TestUsing.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="vlpp\Vlpp.h">
       <Filter>vlpp</Filter>
+    </ClInclude>
+    <ClInclude Include="fFileDetail.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -92,25 +89,13 @@
     <ClCompile Include="TestFloatNumber.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TestDevice.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="AES.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ntestg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TestHookMouse.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="testMemoryAlignment.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="testPod.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TestQRCode.cpp">
+    <ClCompile Include="fFileDetail.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

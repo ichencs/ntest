@@ -19,7 +19,7 @@ testPod::~testPod()
 void testPod::test()
 {
 	Console::SetColor(true, true, false, true);
-	Console::WriteLine(L"测试POD~~~~");
+	Console::WriteLine(L"??POD~~~~");
 	test_trival();
 	test_layout();
 }
@@ -38,9 +38,9 @@ class d
 		d operator=(d&) {}
 };
 // class e { e operator=(e&&) {} };
-class f
+class fFileAttribute
 {
-		~f() {}
+		~fFileAttribute() {}
 };
 class g
 {
@@ -52,16 +52,16 @@ class i {};
 void testPod::test_trival()
 {
 	Console::WriteLine(L"POD1~~~~");
-	// 	std::cout << std::is_trivial<a>::value << std::endl;  // 有不平凡的构造函数
-	// 	std::cout << std::is_trivial<b>::value << std::endl;  // 有不平凡的拷贝构造函数
-	// 	std::cout << std::is_trivial<c>::value << std::endl;  // 有不平凡的拷贝赋值运算符
-	// 	std::cout << std::is_trivial<d>::value << std::endl;  // 有不平凡的拷贝赋值运算符
-	// 	std::cout << std::is_trivial<e>::value << std::endl;  // 有不平凡的移动赋值运算符
-	// 	std::cout << std::is_trivial<f>::value << std::endl;  // 有不平凡的析构函数
-	// 	std::cout << std::is_trivial<g>::value << std::endl;  // 有虚函数
-	// 	std::cout << std::is_trivial<h>::value << std::endl;  // 有虚基类
+	// 	std::cout << std::is_trivial<a>::value << std::endl;  // ?????????
+	// 	std::cout << std::is_trivial<b>::value << std::endl;  // ???????????
+	// 	std::cout << std::is_trivial<c>::value << std::endl;  // ????????????
+	// 	std::cout << std::is_trivial<d>::value << std::endl;  // ????????????
+	// 	std::cout << std::is_trivial<e>::value << std::endl;  // ????????????
+	// 	std::cout << std::is_trivial<f>::value << std::endl;  // ?????????
+	// 	std::cout << std::is_trivial<g>::value << std::endl;  // ????
+	// 	std::cout << std::is_trivial<h>::value << std::endl;  // ????
 	//
-	// 	std::cout << std::is_trivial<i>::value << std::endl;  // 平凡的类
+	// 	std::cout << std::is_trivial<i>::value << std::endl;  // ????
 	// 	Console::SetColor(true, true, true	, false);
 }
 
@@ -108,12 +108,12 @@ void testPod::test_layout()
 {
 	// 	Console::SetColor(true, true, false, true);
 	Console::WriteLine(L"POD2~~~~");
-	// 	std::cout << std::is_standard_layout<A>::value << std::endl;  // 违反定义1。成员a和b具有不同的访问权限
-	// 	std::cout << std::is_standard_layout<B>::value << std::endl;  // 违反定义2。继承树有两个(含)以上的类有非静态成员
-	// 	std::cout << std::is_standard_layout<C>::value << std::endl;  // 违反定义3。第一个非静态成员是基类类型
-	// 	std::cout << std::is_standard_layout<D>::value << std::endl;  // 违反定义4。有虚函数
-	// 	std::cout << std::is_standard_layout<E>::value << std::endl;  // 违反定义5。有虚基类
-	// 	std::cout << std::is_standard_layout<F>::value << std::endl;  // 违反定义6。非静态成员x不符合标准布局类型
+	// 	std::cout << std::is_standard_layout<A>::value << std::endl;  // ????1???a?b?????????
+	// 	std::cout << std::is_standard_layout<B>::value << std::endl;  // ????2???????(?)??????????
+	// 	std::cout << std::is_standard_layout<C>::value << std::endl;  // ????3??????????????
+	// 	std::cout << std::is_standard_layout<D>::value << std::endl;  // ????4?????
+	// 	std::cout << std::is_standard_layout<E>::value << std::endl;  // ????5?????
+	// 	std::cout << std::is_standard_layout<F>::value << std::endl;  // ????6??????x?????????
 	// 	Console::SetColor(true, true, true, false);
-	// 	Console::WriteLine("结束POD2~~~~");
+	// 	Console::WriteLine("??POD2~~~~");
 }
