@@ -6,8 +6,8 @@
 
 namespace vl
 {
-#define DBL_DIG          15                      // # of decimal digits of precision
-#define FLT_DIG          6                       // # of decimal digits of precision
+//#define DBL_DIG          15                      // # of decimal digits of precision
+//#define FLT_DIG          6                       // # of decimal digits of precision
 
 	static vint64_t MetaTypeNumber(const Variant::Private* d)
 	{

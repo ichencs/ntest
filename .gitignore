@@ -39,3 +39,4 @@ bin/Output/Locale.txt
 bin
 bin/Output/Locale.txt
 bin/Output/Locale.txt
+/bin/Output/*.txt
