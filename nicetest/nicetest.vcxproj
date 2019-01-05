@@ -148,40 +148,40 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(boost)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DbgVC9|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(boost)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(boost)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(boost)\vc14.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DbgVC9|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(boost)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(boost)\vc14.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(boost)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(boost)\vc14.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelVC9|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(boost)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(boost)\vc14.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(boost)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(boost)\vc14.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelVC9|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(boost)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(boost)\vc14.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -329,7 +329,9 @@
     <ClInclude Include="vlpp\Vlpp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AES.cpp" />
     <ClCompile Include="Bloger.cpp" />
+    <ClCompile Include="ntestg.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -342,10 +344,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='RelVC9|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="testAes.cpp" />
+    <ClCompile Include="TestDevice.cpp" />
     <ClCompile Include="TestFloatNumber.cpp" />
     <ClCompile Include="TestHook.cpp" />
+    <ClCompile Include="TestHookMouse.cpp" />
+    <ClCompile Include="testMemoryAlignment.cpp" />
     <ClCompile Include="testNice.cpp" />
+    <ClCompile Include="testPod.cpp" />
     <ClCompile Include="TestPtrDelete.cpp" />
+    <ClCompile Include="TestQRCode.cpp" />
     <ClCompile Include="TestRegex808Info.cpp" />
     <ClCompile Include="TestShareMemory.cpp" />
     <ClCompile Include="TestUsing.cpp" />

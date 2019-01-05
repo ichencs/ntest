@@ -66,13 +66,16 @@ namespace vl
 		bool Process::GetMemoryInfo(ProcessMemory& memory)
 		{
 			HANDLE handle = ::GetCurrentProcess();
-			PROCESS_MEMORY_COUNTERS info;
-			memset(&info, 0, sizeof(PROCESS_MEMORY_COUNTERS));
+			PROCESS_MEMORY_COUNTERS info = {0};
+// 			memset(&info, 0, sizeof(PROCESS_MEMORY_COUNTERS));
+			memset(&memory, 0, sizeof(ProcessMemory));
 			info.cb = sizeof(PROCESS_MEMORY_COUNTERS);
 			BOOL bres = ::GetProcessMemoryInfo(handle, &info, sizeof(info));
 			
 			if (bres)
 			{
+				CloseHandle(handle);
+
 				memory.pageFaultCount = info.PageFaultCount;
 				memory.peakWorkingSetSize = info.PeakWorkingSetSize;
 				memory.workingSetSize = info.WorkingSetSize;
@@ -83,7 +86,6 @@ namespace vl
 				memory.pagefileUsage = info.PagefileUsage;
 				memory.peakPagefileUsage = info.PeakPagefileUsage;
 			}
-			CloseHandle(handle);
 			return bres == TRUE;
 		}
 		
@@ -148,7 +150,7 @@ namespace vl
 		
 		void System::SystemInfo()
 		{
-			SYSTEM_INFO info;                                   //用SYSTEM_INFO结构判断64位AMD处理器
+			SYSTEM_INFO info = {0};                                   //用SYSTEM_INFO结构判断64位AMD处理器
 			::GetSystemInfo(&info);
 			ProcessorArchitecture(info.wProcessorArchitecture);
 			
@@ -231,7 +233,8 @@ namespace vl
 		
 		bool System::GetGlobalMemory(GlobalMemory& memory)
 		{
-			MEMORYSTATUSEX memo;
+			MEMORYSTATUSEX memo = {0};
+			memset(&memory,0, sizeof(GlobalMemory));
 			BOOL bres = GlobalMemoryStatusEx(&memo);
 			
 			if (bres)

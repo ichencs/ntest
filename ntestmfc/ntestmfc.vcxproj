@@ -106,6 +106,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,11 +160,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CMyTimer.h" />
+    <ClInclude Include="CRegistry.h" />
+    <ClInclude Include="EnablePrivilege.h" />
     <ClInclude Include="ntest.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CMyTimer.cpp" />
+    <ClCompile Include="CRegistry.cpp" />
+    <ClCompile Include="EnablePrivilege.cpp" />
     <ClCompile Include="ntest.cpp" />
     <ClCompile Include="ntestmfc.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -173,7 +180,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TestCString.cpp" />
+    <ClCompile Include="TestEnablePrivileges.cpp" />
     <ClCompile Include="TestNet.cpp" />
+    <ClCompile Include="TestOnTimer.cpp" />
+    <ClCompile Include="TestWinReg.cpp" />
     <ClCompile Include="TestWnd.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
